@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Her Digital Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/variables.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/animations.css">
+<link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/v1785080349/file_000000009c0081f48dcc40d21f023239_s1rus9.png" alt="Contact Her Digital Playbook">
+    <h1>Let's talk, girl.</h1>
+    <p>Questions, partnership ideas, or just want to say hi? Drop us a note below.</p>
+  </div>
+</section>
+
+<div class="container">
+  <form class="contact-form" id="contact-form">
+    <input type="text" placeholder="Your name" required>
+    <input type="email" placeholder="Your email" required>
+    <textarea placeholder="Your message" required></textarea>
+    <button class="btn btn-primary" type="submit">Send Message</button>
+    <p class="newsletter-note" id="contact-note"></p>
+  </form>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script type="module" src="/js/static-page.js"></script>
+<script type="module">
+  const form = document.getElementById('contact-form');
+  const note = document.getElementById('contact-note');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    note.textContent = "Thank you — we'll get back to you soon! 💌";
+  });
+</script>
+</body>
+                                                    </html>
+                                                    
