@@ -1,0 +1,39 @@
+<!--
+  CARD TEMPLATES
+  These <template> tags are never rendered directly. js/render.js
+  clones the one it needs, fills in the text/image/link, and appends
+  the result into a grid (#featured-grid, #latest-grid, #tools-grid).
+
+  Edit the markup here once and every card of that type updates —
+  this is the single "product card" file the rest of the site maps from.
+-->
+
+<template id="tpl-story-card">
+  <article class="card story-card">
+    <a class="card-img-link" href="#">
+      <div class="card-img"><img src="" alt=""></div>
+    </a>
+    <div class="card-body">
+      <span class="card-category"></span>
+      <h3 class="card-title"></h3>
+      <p class="card-desc"></p>
+      <div class="card-footer">
+        <span class="read-time"></span>
+        <a class="read-more" href="#">Read More →</a>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-tool-card">
+  <article class="card tool-card">
+    <a class="card-img-link" href="#">
+      <div class="card-img"><img src="" alt=""></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title"></h3>
+      <p class="card-desc"></p>
+      <a class="btn btn-tool" href="#">Try It Free</a>
+    </div>
+  </article>
+</template>
