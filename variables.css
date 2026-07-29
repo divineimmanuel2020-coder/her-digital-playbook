@@ -1,0 +1,226 @@
+/* =============================================
+   VARIABLES.CSS
+   Global Design System for Her Digital Playbook
+   ============================================= */
+
+:root {
+    /* =============================================
+       1. BRAND COLORS
+       ============================================= */
+
+    /* Primary Pinks */
+    --color-soft-pink: #f8e8e8;
+    --color-blush-pink: #f2d5d5;
+    --color-baby-pink: #fce4e4;
+    --color-rose-pink: #e8b4b4;
+    --color-pink-light: #fdf2f2;
+
+    /* Warm Neutrals */
+    --color-cream: #fef7f0;
+    --color-warm-white: #fdfaf7;
+    --color-beige: #ede0d4;
+
+    /* Gold Accent */
+    --color-gold: #d4af37;
+    --color-gold-light: #e8c87b;
+    --color-gold-dark: #b8952a;
+
+    /* Text Colors */
+    --color-text-primary: #3d2f2f;      /* Dark brownish-grey */
+    --color-text-secondary: #6b5f5f;    /* Muted brown */
+    --color-text-muted: #7a6b6b;        /* Lighter */
+    --color-text-light: #a08888;        /* For subtle text */
+
+    /* Border Colors */
+    --color-border-light: #e8ddd5;
+    --color-border-medium: #d6c8c0;
+
+    /* Functional Colors */
+    --color-success: #4caf50;
+    --color-warning: #f2b84b;
+    --color-error: #e57373;
+
+    /* =============================================
+       2. GRADIENTS
+       ============================================= */
+
+    --gradient-hero: linear-gradient(135deg, #fce4e4 0%, #f8e8e8 50%, #fef7f0 100%);
+    --gradient-splash: linear-gradient(135deg, #fce4e4 0%, #f2d5d5 40%, #e8b4b4 100%);
+    --gradient-soft: linear-gradient(145deg, #fdfaf7, #fcefe6);
+    --gradient-gold: linear-gradient(135deg, #d4af37, #e8c87b);
+    --gradient-pink-gold: linear-gradient(135deg, #fce4e4, #e8b4b4, #d4af37);
+    --gradient-warm: linear-gradient(145deg, #fef7f0, #ede0d4);
+
+    /* =============================================
+       3. TYPOGRAPHY
+       ============================================= */
+
+    /* Font Families */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Heading Sizes (clamp for responsiveness) */
+    --h1-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    --h2-size: clamp(2.2rem, 4vw, 3.5rem);
+    --h3-size: clamp(1.6rem, 3vw, 2.4rem);
+    --h4-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    --h5-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    --h6-size: clamp(0.9rem, 1.2vw, 1.1rem);
+
+    /* Hero Heading */
+    --hero-heading-size: clamp(2.8rem, 5.5vw, 4.8rem);
+
+    /* Paragraph & Body Sizes */
+    --body-size: 1rem;
+    --body-large: 1.125rem;
+    --body-small: 0.875rem;
+    --body-xsmall: 0.75rem;
+
+    /* Font Weights */
+    --weight-light: 300;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Letter Spacing */
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.05em;
+    --letter-spacing-wider: 0.1em;
+
+    /* Line Heights */
+    --line-height-tight: 1.1;
+    --line-height-normal: 1.6;
+    --line-height-loose: 2;
+
+    /* =============================================
+       4. SPACING SCALE
+       ============================================= */
+
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 2rem;      /* 32px */
+    --spacing-xl: 4rem;      /* 64px */
+    --spacing-2xl: 6rem;     /* 96px */
+    --spacing-3xl: 8rem;     /* 128px */
+
+    /* =============================================
+       5. BORDER RADIUS
+       ============================================= */
+
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-pill: 50px;
+    --radius-circle: 50%;
+
+    /* =============================================
+       6. SHADOWS
+       ============================================= */
+
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.08);
+    --shadow-large: 0 20px 60px rgba(0, 0, 0, 0.10);
+    --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.12);
+    --shadow-glow: 0 0 30px rgba(212, 175, 55, 0.15);
+
+    /* =============================================
+       7. TRANSITION VARIABLES
+       ============================================= */
+
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-extra-slow: 0.8s ease;
+    --transition-bounce: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    /* =============================================
+       8. ANIMATION DURATION VARIABLES
+       ============================================= */
+
+    --duration-fast: 0.3s;
+    --duration-base: 0.6s;
+    --duration-slow: 1s;
+    --duration-extra-slow: 2s;
+
+    /* =============================================
+       9. Z-INDEX VARIABLES
+       ============================================= */
+
+    --z-backdrop: 0;
+    --z-content: 10;
+    --z-header: 100;
+    --z-overlay: 500;
+    --z-modal: 1000;
+    --z-splash: 9999;
+
+    /* =============================================
+       10. CONTAINER WIDTHS
+       ============================================= */
+
+    --container-max: 1280px;
+    --container-padding: 1.5rem;
+
+    /* =============================================
+       11. HEADER HEIGHT
+       ============================================= */
+
+    --header-height: 70px;
+
+    /* =============================================
+       12. FOOTER SPACING
+       ============================================= */
+
+    --footer-padding-top: var(--spacing-2xl);
+    --footer-padding-bottom: var(--spacing-md);
+    --footer-inner-gap: var(--spacing-xl);
+
+    /* =============================================
+       13. CARD PADDING
+       ============================================= */
+
+    --card-padding: var(--spacing-lg);
+    --card-img-aspect-ratio: 16 / 10;
+
+    /* =============================================
+       14. BUTTON HEIGHTS
+       ============================================= */
+
+    --btn-height: 48px;
+    --btn-height-small: 40px;
+    --btn-height-large: 56px;
+
+    /* =============================================
+       15. IMAGE BORDER RADIUS
+       ============================================= */
+
+    --image-radius: var(--radius-lg);
+
+    /* =============================================
+       16. GLASSMORPHISM VARIABLES
+       ============================================= */
+
+    --glass-bg: rgba(255, 255, 255, 0.60);
+    --glass-border: rgba(255, 255, 255, 0.30);
+    --glass-blur: blur(12px);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+
+    /* =============================================
+       17. RESPONSIVE BREAKPOINT VARIABLES
+       ============================================= */
+
+    /* Breakpoint documentation:
+        - mobile-small:  < 480px
+        - mobile:        < 768px
+        - tablet:        < 1024px
+        - laptop:        < 1280px
+        - desktop:       >= 1280px
+    */
+    --breakpoint-mobile-small: 480px;
+    --breakpoint-mobile: 768px;
+    --breakpoint-tablet: 1024px;
+    --breakpoint-laptop: 1280px;
+}
