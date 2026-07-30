@@ -216,6 +216,16 @@ select {
     50% { transform: scale(1.04); }
 }
 
+@keyframes splashFloatGentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmerDrift {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to { transform: translate(-40px, -40px) rotate(360deg); }
+}
+
 @keyframes splashBgGlow {
     0%   { background: var(--gradient-splash); }
     50%  { background: linear-gradient(135deg, #fce4e4, #e8b4b4, #d4af37); }
