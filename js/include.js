@@ -29,4 +29,4 @@ export async function loadComponent(placeholderId, url) {
     console.error('[include]', err);
     return false;
   }
-  }
+}
