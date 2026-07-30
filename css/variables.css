@@ -21,9 +21,10 @@
     --color-accent: #ec5c82;
     --color-accent-dark: #d43e68;
 
-    /* Warm Neutrals */
-    --color-cream: #fff8f2;
-    --color-warm-white: #fffdf9;
+    /* Warm Neutrals — pink-tinted rather than stark white/cream, for an all-pink feel */
+    --color-cream: #fdeef2;
+    --color-warm-white: #fff5f8;
+    --color-pure-white: #ffffff; /* reserved for button/icon foreground text only */
     --color-beige: #f3e3cf;
 
     /* Gold Accent (used sparingly — small flourishes only) */
@@ -212,7 +213,7 @@
        16. GLASSMORPHISM VARIABLES
        ============================================= */
 
-    --glass-bg: rgba(255, 251, 248, 0.72);
+    --glass-bg: rgba(253, 235, 240, 0.75);
     --glass-border: rgba(236, 92, 130, 0.16);
     --glass-blur: blur(14px);
     --glass-shadow: 0 8px 32px rgba(233, 90, 130, 0.08);
@@ -225,4 +226,4 @@
     --breakpoint-mobile: 768px;
     --breakpoint-tablet: 1024px;
     --breakpoint-laptop: 1280px;
-}
+      }
