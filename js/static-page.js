@@ -12,6 +12,7 @@ import { loadComponent } from './include.js';
 import { initNav } from './nav.js';
 import { rewriteRootLinks } from './base.js';
 import { initSearch } from './search.js';
+import { optimizeImages } from './images.js';
 
 async function init() {
   await Promise.all([
@@ -27,6 +28,7 @@ async function init() {
 
   initNav();
   initSearch();
+  optimizeImages(document);
 }
 
 document.addEventListener('DOMContentLoaded', init);
