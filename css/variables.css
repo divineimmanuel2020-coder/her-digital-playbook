@@ -1,6 +1,8 @@
 /* =============================================
    VARIABLES.CSS
    Global Design System for Her Digital Playbook
+   Palette + type matched to the official brand reference:
+   hot pink, blush, cream, Anton display caps, Caveat script.
    ============================================= */
 
 :root {
@@ -9,31 +11,35 @@
        ============================================= */
 
     /* Primary Pinks */
-    --color-soft-pink: #f8e8e8;
-    --color-blush-pink: #f2d5d5;
-    --color-baby-pink: #fce4e4;
-    --color-rose-pink: #e8b4b4;
-    --color-pink-light: #fdf2f2;
+    --color-soft-pink: #fdeef2;
+    --color-blush-pink: #fbe0e8;
+    --color-baby-pink: #f6c9d6;
+    --color-rose-pink: #ec5c82;
+    --color-pink-light: #fff5f8;
+
+    /* Hot Pink Accent (buttons, links, badges, active states) */
+    --color-accent: #ec5c82;
+    --color-accent-dark: #d43e68;
 
     /* Warm Neutrals */
-    --color-cream: #fef7f0;
-    --color-warm-white: #fdfaf7;
-    --color-beige: #ede0d4;
+    --color-cream: #fff8f2;
+    --color-warm-white: #fffdf9;
+    --color-beige: #f3e3cf;
 
-    /* Gold Accent */
-    --color-gold: #d4af37;
-    --color-gold-light: #e8c87b;
-    --color-gold-dark: #b8952a;
+    /* Gold Accent (used sparingly — small flourishes only) */
+    --color-gold: #c9a253;
+    --color-gold-light: #e3c37e;
+    --color-gold-dark: #a9823a;
 
     /* Text Colors */
-    --color-text-primary: #3d2f2f;      /* Dark brownish-grey */
-    --color-text-secondary: #6b5f5f;    /* Muted brown */
-    --color-text-muted: #7a6b6b;        /* Lighter */
-    --color-text-light: #a08888;        /* For subtle text */
+    --color-text-primary: #241219;      /* Near-black warm ink */
+    --color-text-secondary: #7a626a;    /* Muted rose-brown */
+    --color-text-muted: #8f7a80;
+    --color-text-light: #ad939a;
 
     /* Border Colors */
-    --color-border-light: #e8ddd5;
-    --color-border-medium: #d6c8c0;
+    --color-border-light: #f4dce3;
+    --color-border-medium: #e9b9c8;
 
     /* Functional Colors */
     --color-success: #4caf50;
@@ -44,20 +50,22 @@
        2. GRADIENTS
        ============================================= */
 
-    --gradient-hero: linear-gradient(135deg, #fce4e4 0%, #f8e8e8 50%, #fef7f0 100%);
-    --gradient-splash: linear-gradient(135deg, #fce4e4 0%, #f2d5d5 40%, #e8b4b4 100%);
-    --gradient-soft: linear-gradient(145deg, #fdfaf7, #fcefe6);
-    --gradient-gold: linear-gradient(135deg, #d4af37, #e8c87b);
-    --gradient-pink-gold: linear-gradient(135deg, #fce4e4, #e8b4b4, #d4af37);
-    --gradient-warm: linear-gradient(145deg, #fef7f0, #ede0d4);
+    --gradient-hero: linear-gradient(135deg, #fdeef2 0%, #fbe0e8 50%, #fff8f2 100%);
+    --gradient-splash: radial-gradient(circle at 30% 20%, #fddbe4 0%, #f6a9c0 45%, #ec5c82 100%);
+    --gradient-soft: linear-gradient(145deg, #fffdf9, #fdeef2);
+    --gradient-gold: linear-gradient(135deg, #ec5c82, #d43e68); /* name kept for compatibility — now the hot-pink CTA gradient */
+    --gradient-pink-gold: linear-gradient(135deg, #fbe0e8, #ec5c82, #c9a253);
+    --gradient-warm: linear-gradient(145deg, #fff8f2, #f3e3cf);
 
     /* =============================================
        3. TYPOGRAPHY
        ============================================= */
 
     /* Font Families */
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-heading: 'Plus Jakarta Sans', sans-serif;   /* bold sans for card/article titles */
+    --font-display: 'Anton', sans-serif;                /* big condensed caps — hero headline, splash, logo mark */
+    --font-script: 'Caveat', cursive;                   /* pink handwritten accents — "Hey girl,", "Elevate.", section titles */
 
     /* Heading Sizes (clamp for responsiveness) */
     --h1-size: clamp(2.8rem, 5.5vw, 4.8rem);
@@ -68,7 +76,7 @@
     --h6-size: clamp(0.9rem, 1.2vw, 1.1rem);
 
     /* Hero Heading */
-    --hero-heading-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    --hero-heading-size: clamp(3rem, 7vw, 5.2rem);
 
     /* Paragraph & Body Sizes */
     --body-size: 1rem;
@@ -82,6 +90,7 @@
     --weight-medium: 500;
     --weight-semibold: 600;
     --weight-bold: 700;
+    --weight-extrabold: 800;
 
     /* Letter Spacing */
     --letter-spacing-tight: -0.02em;
@@ -98,13 +107,13 @@
        4. SPACING SCALE
        ============================================= */
 
-    --spacing-xs: 0.25rem;   /* 4px */
-    --spacing-sm: 0.5rem;    /* 8px */
-    --spacing-md: 1rem;      /* 16px */
-    --spacing-lg: 2rem;      /* 32px */
-    --spacing-xl: 4rem;      /* 64px */
-    --spacing-2xl: 6rem;     /* 96px */
-    --spacing-3xl: 8rem;     /* 128px */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 4rem;
+    --spacing-2xl: 6rem;
+    --spacing-3xl: 8rem;
 
     /* =============================================
        5. BORDER RADIUS
@@ -121,11 +130,11 @@
        6. SHADOWS
        ============================================= */
 
-    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
-    --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.08);
-    --shadow-large: 0 20px 60px rgba(0, 0, 0, 0.10);
-    --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.12);
-    --shadow-glow: 0 0 30px rgba(212, 175, 55, 0.15);
+    --shadow-soft: 0 8px 24px rgba(233, 90, 130, 0.10);
+    --shadow-medium: 0 12px 40px rgba(233, 90, 130, 0.16);
+    --shadow-large: 0 20px 60px rgba(233, 90, 130, 0.22);
+    --shadow-xl: 0 30px 80px rgba(233, 90, 130, 0.28);
+    --shadow-glow: 0 0 30px rgba(236, 92, 130, 0.35);
 
     /* =============================================
        7. TRANSITION VARIABLES
@@ -168,7 +177,7 @@
        11. HEADER HEIGHT
        ============================================= */
 
-    --header-height: 70px;
+    --header-height: 76px;
 
     /* =============================================
        12. FOOTER SPACING
@@ -183,7 +192,7 @@
        ============================================= */
 
     --card-padding: var(--spacing-lg);
-    --card-img-aspect-ratio: 16 / 10;
+    --card-img-aspect-ratio: 4 / 3;
 
     /* =============================================
        14. BUTTON HEIGHTS
@@ -203,22 +212,15 @@
        16. GLASSMORPHISM VARIABLES
        ============================================= */
 
-    --glass-bg: rgba(255, 255, 255, 0.60);
-    --glass-border: rgba(255, 255, 255, 0.30);
-    --glass-blur: blur(12px);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    --glass-bg: rgba(255, 251, 248, 0.72);
+    --glass-border: rgba(236, 92, 130, 0.16);
+    --glass-blur: blur(14px);
+    --glass-shadow: 0 8px 32px rgba(233, 90, 130, 0.08);
 
     /* =============================================
        17. RESPONSIVE BREAKPOINT VARIABLES
        ============================================= */
 
-    /* Breakpoint documentation:
-        - mobile-small:  < 480px
-        - mobile:        < 768px
-        - tablet:        < 1024px
-        - laptop:        < 1280px
-        - desktop:       >= 1280px
-    */
     --breakpoint-mobile-small: 480px;
     --breakpoint-mobile: 768px;
     --breakpoint-tablet: 1024px;
