@@ -169,6 +169,7 @@
     .newsletter-wrapper {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
+        padding: var(--spacing-lg);
     }
 
     .newsletter-image {
@@ -307,6 +308,7 @@
     .newsletter-wrapper {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
+        padding: var(--spacing-md);
     }
 
     .newsletter-image {
@@ -488,6 +490,7 @@
     .newsletter-wrapper {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
+        padding: var(--spacing-sm);
     }
 
     .newsletter-image {
@@ -566,5 +569,5 @@
     .logo-icon {
         font-size: 3rem;
     }
-   }
+           }
        
