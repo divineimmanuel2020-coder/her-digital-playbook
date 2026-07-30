@@ -15,6 +15,7 @@ import { initNav } from './nav.js';
 import { renderFeatured, renderCategories, renderLatest, renderTools } from './render.js';
 import { rewriteRootLinks } from './base.js';
 import { initSearch } from './search.js';
+import { optimizeImages } from './images.js';
 
 async function init() {
   await Promise.all([
@@ -50,6 +51,8 @@ async function init() {
   renderLatest();
   renderTools();
 
+  optimizeImages(document);
+
   const form = document.getElementById('newsletter-form');
   const note = document.getElementById('newsletter-note');
   if (form && note) {
@@ -61,4 +64,4 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
-     
+                          
