@@ -14,6 +14,39 @@ import { findItemById } from '../data/store.js';
 import { rewriteRootLinks } from './base.js';
 import { renderTool } from './tools.js';
 import { initSearch } from './search.js';
+import { optimizeImages } from './images.js';
+
+// Turns the lightweight markup used in data/store.js into real HTML:
+//   "## Heading"     -> subhead
+//   "- one\n- two"   -> bullet list
+//   "💖 Big Sis..."  -> highlighted callout box
+//   anything else    -> plain paragraph
+function formatArticleBody(content) {
+  const blocks = content.split('\n\n');
+  return blocks
+    .map((block) => {
+      const trimmed = block.trim();
+
+      if (trimmed.startsWith('## ')) {
+        return `<h2 class="article-h2">${trimmed.slice(3)}</h2>`;
+      }
+
+      if (trimmed.startsWith('- ')) {
+        const items = trimmed
+          .split('\n')
+          .map((line) => line.replace(/^-\s*/, '').trim())
+          .filter(Boolean);
+        return `<ul class="article-list">${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+      }
+
+      if (trimmed.startsWith('💖')) {
+        return `<div class="big-sis-box">${trimmed}</div>`;
+      }
+
+      return `<p>${trimmed}</p>`;
+    })
+    .join('');
+}
 
 async function init() {
   await Promise.all([
@@ -45,10 +78,7 @@ async function init() {
 
   const isTool = item.type === 'tool';
   const backHref = isTool ? '../index.html#tools' : '../index.html#articles';
-  const paragraphs = item.content
-    .split('\n\n')
-    .map((p) => `<p>${p}</p>`)
-    .join('');
+  const paragraphs = formatArticleBody(item.content);
 
   container.innerHTML = `
     <a class="back-link" href="${backHref}">← Back</a>
@@ -67,7 +97,9 @@ async function init() {
       toolContainer.innerHTML = `<p class="section-sub">This tool is coming soon — check back shortly!</p>`;
     }
   }
+
+  optimizeImages(document);
 }
 
 document.addEventListener('DOMContentLoaded', init);
-       
+      
