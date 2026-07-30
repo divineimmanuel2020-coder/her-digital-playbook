@@ -33,5 +33,4 @@ export function initNav() {
       link.classList.add('active');
     }
   });
-                            }
-    
+}
