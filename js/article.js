@@ -4,20 +4,26 @@
    page for every Featured Story, Latest Article, and Free
    Tool. Reads the id carried in the URL's query string,
    looks it up in data/store.js, and renders its full
-   properties (image, title, category, body, etc).
+   properties (image, title, category, body, etc). Tools get
+   a live interactive widget from js/tools.js when one exists.
    ============================================= */
 
-import { loadComponent } from '/js/include.js';
-import { initNav } from '/js/nav.js';
-import { findItemById } from '/data/store.js';
+import { loadComponent } from './include.js';
+import { initNav } from './nav.js';
+import { findItemById } from '../data/store.js';
+import { rewriteRootLinks } from './base.js';
+import { renderTool } from './tools.js';
+import { initSearch } from './search.js';
 
 async function init() {
   await Promise.all([
-    loadComponent('header-placeholder', '/components/header.html'),
-    loadComponent('footer-placeholder', '/components/footer.html'),
+    loadComponent('header-placeholder', '../components/header.html'),
+    loadComponent('footer-placeholder', '../components/footer.html'),
   ]);
-  await loadComponent('nav-placeholder', '/components/nav.html');
+  await loadComponent('nav-placeholder', '../components/nav.html');
+  rewriteRootLinks(document);
   initNav();
+  initSearch();
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -30,7 +36,7 @@ async function init() {
       <div class="article-empty">
         <h1 class="section-title">We couldn't find that page</h1>
         <p class="section-sub">It might have moved, or the link is off.</p>
-        <a class="btn btn-primary mt-lg" href="/index.html">Back to Home</a>
+        <a class="btn btn-primary mt-lg" href="../index.html">Back to Home</a>
       </div>`;
     return;
   }
@@ -38,7 +44,7 @@ async function init() {
   document.title = `${item.title} — Her Digital Playbook`;
 
   const isTool = item.type === 'tool';
-  const backHref = isTool ? '/index.html#tools' : '/index.html#articles';
+  const backHref = isTool ? '../index.html#tools' : '../index.html#articles';
   const paragraphs = item.content
     .split('\n\n')
     .map((p) => `<p>${p}</p>`)
@@ -46,14 +52,22 @@ async function init() {
 
   container.innerHTML = `
     <a class="back-link" href="${backHref}">← Back</a>
-    <span class="card-category">${item.category}</span>
+    <span class="card-category card-category-static">${item.category}</span>
     <h1 class="article-title">${item.title}</h1>
     ${item.readTime ? `<p class="read-time">${item.readTime}</p>` : ''}
     <div class="article-hero-img"><img src="${item.image}" alt="${item.title}"></div>
     <div class="article-body">${paragraphs}</div>
-    ${isTool ? `<a class="btn btn-primary mt-lg" href="#">Try ${item.title}</a>` : ''}
+    ${isTool ? '<div id="tool-container" class="mt-lg"></div>' : ''}
   `;
+
+  if (isTool) {
+    const toolContainer = document.getElementById('tool-container');
+    const rendered = renderTool(item.id, toolContainer);
+    if (!rendered) {
+      toolContainer.innerHTML = `<p class="section-sub">This tool is coming soon — check back shortly!</p>`;
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
-                                     
+       
