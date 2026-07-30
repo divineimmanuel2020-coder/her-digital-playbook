@@ -1,12 +1,29 @@
 /* =============================================
    SPLASH.JS
-   Times the splash screen fade-out and scatters the
-   floating sparkle dots (.sparkle-dot, styled in style.css).
+   Shows the splash animation once per browser session —
+   never on back/forward navigation or a page you've already
+   seen this visit. That's what makes the browser Back button
+   return you to where you actually were, instead of replaying
+   the intro like a first-time visit.
    ============================================= */
+
+const SESSION_KEY = 'hdp-splash-shown';
 
 export function initSplash() {
   const splash = document.getElementById('splash');
   if (!splash) return;
+
+  const alreadyShown = sessionStorage.getItem(SESSION_KEY) === '1';
+
+  if (alreadyShown) {
+    // Skip the intro entirely and reveal the homepage instantly —
+    // this is what makes Back/Forward and repeat visits feel normal.
+    splash.classList.add('skip-intro');
+    splash.classList.add('hidden');
+    return;
+  }
+
+  sessionStorage.setItem(SESSION_KEY, '1');
 
   const sparkleLayer = document.getElementById('splashSparkles');
   if (sparkleLayer) {
@@ -23,3 +40,13 @@ export function initSplash() {
 
   window.setTimeout(() => splash.classList.add('hidden'), 2400);
 }
+
+// If the browser restores this page from its back/forward cache
+// (bfcache) — which is common when pressing Back — make sure the
+// splash stays hidden rather than replaying.
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('hidden');
+});
+         
