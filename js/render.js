@@ -58,6 +58,8 @@ export function renderFeatured() {
   });
 }
 
+const CATEGORY_COLORS = ['#ffd6e3', '#ffe8cc', '#e0d4fb', '#d3f0e6', '#ffe0ec', '#fde2d0', '#e4d9fb', '#ffd9df'];
+
 export function renderCategories(onSelect) {
   const grid = document.getElementById('categories-grid');
   if (!grid) return;
@@ -67,15 +69,16 @@ export function renderCategories(onSelect) {
   allPill.type = 'button';
   allPill.className = 'category-pill active';
   allPill.dataset.category = 'all';
-  allPill.innerHTML = '<span class="category-icon">✦</span><span class="category-label">All</span>';
+  allPill.innerHTML = '<span class="category-icon" style="background:#ffd6e3">✦</span><span class="category-label">All</span>';
   grid.appendChild(allPill);
 
-  CATEGORIES.forEach((cat) => {
+  CATEGORIES.forEach((cat, i) => {
     const pill = document.createElement('button');
     pill.type = 'button';
     pill.className = 'category-pill';
     pill.dataset.category = cat.label;
-    pill.innerHTML = `<span class="category-icon">${cat.icon}</span><span class="category-label">${cat.label}</span>`;
+    const color = CATEGORY_COLORS[i % CATEGORY_COLORS.length];
+    pill.innerHTML = `<span class="category-icon" style="background:${color}">${cat.icon}</span><span class="category-label">${cat.label}</span>`;
     grid.appendChild(pill);
   });
 
@@ -122,5 +125,4 @@ export function renderTools() {
     const card = fillToolCard(item);
     if (card) grid.appendChild(card);
   });
-     }
-     
+}
