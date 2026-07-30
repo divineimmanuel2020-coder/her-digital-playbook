@@ -90,8 +90,12 @@
         height: 60px;
     }
 
-    .logo a {
-        font-size: 1.2rem;
+    .logo-script {
+        font-size: 1.7rem;
+    }
+
+    .logo-tagline {
+        display: none;
     }
 
     /* Hamburger menu */
@@ -104,7 +108,7 @@
         top: 60px;
         left: 0;
         width: 100%;
-        background: var(--glass-bg);
+        background: rgba(255, 253, 250, 0.98);
         backdrop-filter: var(--glass-blur);
         flex-direction: column;
         align-items: center;
@@ -114,7 +118,7 @@
         transform: translateY(-120%);
         transition: transform 0.3s ease;
         z-index: 99;
-        border-bottom: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--color-border-light);
     }
 
     .nav-list.open {
@@ -206,8 +210,12 @@
         height: 56px;
     }
 
-    .logo a {
-        font-size: 1.1rem;
+    .logo-script {
+        font-size: 1.5rem;
+    }
+
+    .logo-tagline {
+        display: none;
     }
 
     .hamburger {
@@ -219,7 +227,7 @@
         top: 56px;
         left: 0;
         width: 100%;
-        background: var(--glass-bg);
+        background: rgba(255, 253, 250, 0.98);
         backdrop-filter: var(--glass-blur);
         flex-direction: column;
         align-items: center;
@@ -229,7 +237,7 @@
         transform: translateY(-120%);
         transition: transform 0.3s ease;
         z-index: 99;
-        border-bottom: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--color-border-light);
     }
 
     .nav-list.open {
@@ -349,8 +357,12 @@
         height: 50px;
     }
 
-    .logo a {
-        font-size: 1rem;
+    .logo-script {
+        font-size: 1.35rem;
+    }
+
+    .logo-tagline {
+        display: none;
     }
 
     .hamburger {
@@ -367,7 +379,7 @@
         top: 50px;
         left: 0;
         width: 100%;
-        background: var(--glass-bg);
+        background: rgba(255, 253, 250, 0.98);
         backdrop-filter: var(--glass-blur);
         flex-direction: column;
         align-items: center;
@@ -377,7 +389,7 @@
         transform: translateY(-120%);
         transition: transform 0.3s ease;
         z-index: 99;
-        border-bottom: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--color-border-light);
     }
 
     .nav-list.open {
@@ -554,5 +566,5 @@
     .logo-icon {
         font-size: 3rem;
     }
-      }
-  
+   }
+       
