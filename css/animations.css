@@ -196,6 +196,26 @@ select {
 }
 
 /* Background glow pulse */
+@keyframes splashFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splashLogoScale {
+    0% { opacity: 0; transform: scale(0.85); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes splashTaglineFade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splashPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
 @keyframes splashBgGlow {
     0%   { background: var(--gradient-splash); }
     50%  { background: linear-gradient(135deg, #fce4e4, #e8b4b4, #d4af37); }
@@ -257,7 +277,7 @@ select {
 
 /* Category badge subtle animation */
 .card:hover .card-category {
-    color: var(--color-gold-dark);
+    color: var(--color-accent-dark);
     transition: color var(--transition-base);
 }
 
@@ -267,15 +287,15 @@ select {
 }
 .read-more:hover {
     transform: translateX(4px);
-    color: var(--color-gold-dark);
+    color: var(--color-accent-dark);
 }
 
 /* Tool button hover (transition) */
 .btn-tool:hover {
     transform: translateY(-2px);
-    background: var(--color-gold);
+    background: var(--color-accent);
     color: #fff;
-    border-color: var(--color-gold);
+    border-color: var(--color-accent);
 }
 
 /* =============================================
@@ -320,10 +340,10 @@ select {
     transition: all var(--transition-base);
 }
 .btn-secondary:hover {
-    background: var(--color-gold);
+    background: var(--color-accent);
     color: #fff;
     transform: translateY(-2px);
-    border-color: var(--color-gold);
+    border-color: var(--color-accent);
 }
 
 /* Newsletter button (same as primary) */
@@ -363,7 +383,7 @@ select {
     transition: color var(--transition-base);
 }
 .search-btn:hover {
-    color: var(--color-gold);
+    color: var(--color-accent);
 }
 
 /* =============================================
@@ -377,7 +397,7 @@ select {
 
 /* Input focus glow */
 .newsletter-form input:focus {
-    border-color: var(--color-gold);
+    border-color: var(--color-accent);
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
 }
 
@@ -398,7 +418,7 @@ select {
 }
 .footer-links a:hover,
 .footer-socials a:hover {
-    color: var(--color-gold);
+    color: var(--color-accent);
 }
 
 /* Back-to-top hover */
@@ -540,5 +560,5 @@ select {
         transform: none !important;
         transition: none !important;
     }
-  }
-  
+          }
+          
