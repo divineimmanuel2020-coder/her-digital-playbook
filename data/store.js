@@ -178,5 +178,5 @@ export const ALL_ITEMS = [...FEATURED_STORIES, ...LATEST_ARTICLES, ...FREE_TOOLS
 
 export function findItemById(id) {
   return ALL_ITEMS.find((item) => item.id === id) || null;
-  }
-    
+     }
+     
