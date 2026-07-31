@@ -17,10 +17,25 @@ import { initSearch } from './search.js';
 import { optimizeImages } from './images.js';
 
 // Turns the lightweight markup used in data/store.js into real HTML:
-//   "## Heading"     -> subhead
-//   "- one\n- two"   -> bullet list
-//   "💖 Big Sis..."  -> highlighted callout box
-//   anything else    -> plain paragraph
+//   "## Heading"        -> subhead
+//   "- one\n- two"      -> bullet list
+//   "**bold**"          -> <strong>bold</strong> (works inside any block)
+//   "💖 Big Sis..."     -> Big Sis Advice callout
+//   "👀 Reality..."     -> Reality Check callout
+//   "✨ Hidden..."       -> Hidden Opportunity callout
+//   "🚀 Next..."        -> Next Challenge callout
+//   anything else        -> plain paragraph
+const CALLOUTS = {
+  '💖': 'callout-bigsis',
+  '👀': 'callout-reality',
+  '✨': 'callout-hidden',
+  '🚀': 'callout-challenge',
+};
+
+function applyBold(text) {
+  return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
 function formatArticleBody(content) {
   const blocks = content.split('\n\n');
   return blocks
@@ -28,7 +43,7 @@ function formatArticleBody(content) {
       const trimmed = block.trim();
 
       if (trimmed.startsWith('## ')) {
-        return `<h2 class="article-h2">${trimmed.slice(3)}</h2>`;
+        return `<h2 class="article-h2">${applyBold(trimmed.slice(3))}</h2>`;
       }
 
       if (trimmed.startsWith('- ')) {
@@ -36,14 +51,15 @@ function formatArticleBody(content) {
           .split('\n')
           .map((line) => line.replace(/^-\s*/, '').trim())
           .filter(Boolean);
-        return `<ul class="article-list">${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+        return `<ul class="article-list">${items.map((i) => `<li>${applyBold(i)}</li>`).join('')}</ul>`;
       }
 
-      if (trimmed.startsWith('💖')) {
-        return `<div class="big-sis-box">${trimmed}</div>`;
+      const calloutClass = CALLOUTS[[...trimmed][0]];
+      if (calloutClass) {
+        return `<div class="big-sis-box ${calloutClass}">${applyBold(trimmed)}</div>`;
       }
 
-      return `<p>${trimmed}</p>`;
+      return `<p>${applyBold(trimmed)}</p>`;
     })
     .join('');
 }
@@ -102,4 +118,4 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
-      
+   
