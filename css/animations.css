@@ -211,6 +211,22 @@ select {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes logoCircleBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-14px) scale(1.03); }
+}
+
+@keyframes wordBounceIn {
+    0% { opacity: 0; transform: translateY(18px) scale(0.85); }
+    60% { opacity: 1; transform: translateY(-4px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes splashWordJump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
 @keyframes splashPulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.04); }
@@ -570,5 +586,5 @@ select {
         transform: none !important;
         transition: none !important;
     }
-          }
+       }
           
