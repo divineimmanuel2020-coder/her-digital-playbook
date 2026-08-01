@@ -16,6 +16,7 @@ import { renderFeatured, renderCategories, renderLatest, renderTools } from './r
 import { rewriteRootLinks } from './base.js';
 import { initSearch } from './search.js';
 import { optimizeImages } from './images.js';
+import { initNewsletter } from './newsletter.js';
 
 async function init() {
   await Promise.all([
@@ -52,16 +53,7 @@ async function init() {
   renderTools();
 
   optimizeImages(document);
-
-  const form = document.getElementById('newsletter-form');
-  const note = document.getElementById('newsletter-note');
-  if (form && note) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      note.textContent = "Yay — you're on the list! 🎉";
-    });
-  }
+  initNewsletter();
 }
 
 document.addEventListener('DOMContentLoaded', init);
-                          
