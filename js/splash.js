@@ -1,19 +1,19 @@
 /* =============================================
    SPLASH.JS
-   Shows the splash animation once per browser session —
-   never on back/forward navigation or a page you've already
-   seen this visit. That's what makes the browser Back button
-   return you to where you actually were, instead of replaying
-   the intro like a first-time visit.
+   Shows the splash animation once per device — never again
+   on back/forward navigation or a repeat visit. Uses
+   localStorage (not sessionStorage) specifically so this
+   holds up regardless of how a given mobile browser handles
+   back-navigation, tabs, or session boundaries.
    ============================================= */
 
-const SESSION_KEY = 'hdp-splash-shown';
+const SPLASH_KEY = 'hdp-splash-shown';
 
 export function initSplash() {
   const splash = document.getElementById('splash');
   if (!splash) return;
 
-  const alreadyShown = sessionStorage.getItem(SESSION_KEY) === '1';
+  const alreadyShown = localStorage.getItem(SPLASH_KEY) === '1';
 
   if (alreadyShown) {
     // Skip the intro entirely and reveal the homepage instantly —
@@ -23,7 +23,7 @@ export function initSplash() {
     return;
   }
 
-  sessionStorage.setItem(SESSION_KEY, '1');
+  localStorage.setItem(SPLASH_KEY, '1');
 
   const sparkleLayer = document.getElementById('splashSparkles');
   if (sparkleLayer) {
@@ -49,4 +49,4 @@ window.addEventListener('pageshow', (event) => {
   const splash = document.getElementById('splash');
   if (splash) splash.classList.add('hidden');
 });
-         
+       
