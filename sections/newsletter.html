@@ -5,43 +5,37 @@
       <div class="blob blob-4"></div>
       <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_900,q_auto,f_auto,dpr_auto/v1785070911/file_00000000755c81f48fe00be78b23c5d5_e6ice9.png" alt="Join the Her Digital Playbook community">
     </div>
-    <div>
-      <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
-      <p class="newsletter-desc">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, girl to girl.</p>
-      <ul class="newsletter-perks">
-        <li>♡ Expert insights</li>
-        <li>✎ Practical tips</li>
-        <li>✦ Exclusive resources</li>
-        <li>🎁 Free tools &amp; templates</li>
-      </ul>
+    <div class="newsletter-panel-wrap">
+      <div class="newsletter-fx" id="newsletter-fx" aria-hidden="true"></div>
+      <div id="newsletter-panel" aria-live="polite">
+        <!-- Default "form" state — newsletter.js swaps this whole
+             panel's content for success/duplicate/error states, and
+             can re-render this exact markup again via renderFormState(). -->
+        <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
+        <p class="newsletter-desc">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, girl to girl.</p>
+        <ul class="newsletter-perks">
+          <li>♡ Expert insights</li>
+          <li>✎ Practical tips</li>
+          <li>✦ Exclusive resources</li>
+          <li>🎁 Free tools &amp; templates</li>
+        </ul>
 
-      <form class="newsletter-form" id="newsletter-form" novalidate>
-        <div class="newsletter-field">
-          <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name">
-          <span class="newsletter-field-error" id="newsletter-name-error"></span>
-        </div>
-        <div class="newsletter-field">
-          <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email">
-          <span class="newsletter-field-error" id="newsletter-email-error"></span>
-        </div>
-        <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
-      </form>
-
-      <div class="newsletter-feedback" id="newsletter-feedback" hidden></div>
-      <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+        <form class="newsletter-form" id="newsletter-form" novalidate>
+          <div class="newsletter-field">
+            <label for="newsletter-name" class="sr-only">Your name</label>
+            <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name" aria-describedby="newsletter-name-error">
+            <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
+          </div>
+          <div class="newsletter-field">
+            <label for="newsletter-email" class="sr-only">Your email address</label>
+            <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
+            <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
+          </div>
+          <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
+        </form>
+        <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+      </div>
     </div>
   </div>
-</section>
-
-<!-- Success modal -->
-<div class="newsletter-modal" id="newsletter-modal">
-  <div class="newsletter-modal-card">
-    <div class="newsletter-confetti" id="newsletter-confetti"></div>
-    <p class="newsletter-modal-emoji">💖</p>
-    <h3 class="newsletter-modal-title">Welcome to the Girl Gang!</h3>
-    <p class="newsletter-modal-text">You're officially part of Her Digital Playbook. Your first Big Sis Letter will arrive soon.</p>
-    <p class="newsletter-modal-text">Until then... go explore the Playbooks.</p>
-    <button class="btn btn-primary" id="newsletter-modal-close" type="button">✨ Continue Reading</button>
-  </div>
-  </div>
-  
+  </section>
+                                                                                            
