@@ -31,25 +31,27 @@ function isValidEmail(email) {
 
 /* =============================================
    DATA LAYER
-   Talks to Supabase only. Throws a small, typed error so the
-   UI layer can decide what to show without knowing anything
-   about Postgres error codes itself.
+   Talks to our own /api/subscribe serverless function — never
+   directly to Supabase or Resend from the browser. That function
+   saves the subscriber and sends the welcome email server-side,
+   where the Resend API key and Supabase service_role key can stay
+   hidden in Vercel's environment variables.
+
+   Throws a small, typed error so the UI layer can decide what to
+   show without knowing anything about HTTP status codes itself.
    ============================================= */
 
 async function insertSubscriber(name, email) {
-  const supabase = window.hdpSupabase;
-  if (!supabase) {
-    const err = new Error('Supabase client not available');
-    err.kind = 'unexpected';
-    throw err;
-  }
-
-  let result;
+  let res;
   try {
-    result = await supabase.from('subscribers').insert({ name, email, status: 'active' });
+    res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email }),
+    });
   } catch (networkErr) {
     // fetch() throws a TypeError when the network itself fails
-    // (offline, DNS, CORS-from-nowhere) — before Supabase ever
+    // (offline, DNS, CORS-from-nowhere) — before our function ever
     // gets a chance to return a structured error.
     console.error('[newsletter] network error', networkErr);
     const err = new Error('network failure');
@@ -57,18 +59,27 @@ async function insertSubscriber(name, email) {
     throw err;
   }
 
-  const { error } = result;
-  if (error) {
-    console.error('[newsletter] supabase error', error);
-    if (error.code === '23505') {
-      const err = new Error('duplicate subscriber');
-      err.kind = 'duplicate';
-      throw err;
-    }
-    const err = new Error('unexpected supabase error');
-    err.kind = 'unexpected';
+  let data = null;
+  try {
+    data = await res.json();
+  } catch (_) {
+    // ignore — handled by the res.ok / status checks below
+  }
+
+  if (res.ok && data && data.success) {
+    return;
+  }
+
+  if (res.status === 409 || (data && data.error === 'duplicate')) {
+    const err = new Error('duplicate subscriber');
+    err.kind = 'duplicate';
     throw err;
   }
+
+  console.error('[newsletter] /api/subscribe error', res.status, data);
+  const err = new Error('unexpected subscribe error');
+  err.kind = 'unexpected';
+  throw err;
 }
 
 /* =============================================
@@ -313,4 +324,5 @@ export function initNewsletter() {
   }
 
   bindFormEvents();
-}
+                          }
+       
