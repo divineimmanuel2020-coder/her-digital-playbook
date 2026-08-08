@@ -86,7 +86,7 @@ async function insertSubscriber(name, email) {
 async function sendWelcomeEmail(name, email) {
   const personalizedHtml = WELCOME_EMAIL_TEMPLATE
     .replaceAll('{{SUBSCRIBER_NAME}}', name)
-    .replaceAll('{{UNSUBSCRIBE_URL}}', `${SITE_URL}/pages/contact.html?unsubscribe=${encodeURIComponent(email)}`);
+    .replaceAll('{{UNSUBSCRIBE_URL}}', `${SITE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}`);
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -97,8 +97,18 @@ async function sendWelcomeEmail(name, email) {
     body: JSON.stringify({
       from: FROM_EMAIL,
       to: email,
+      // A real, monitored reply-to address (rather than a bare
+      // "noreply") signals a genuine sender-recipient relationship
+      // to Gmail — and lets people actually write back to you.
+      reply_to: FROM_EMAIL,
       subject: '✨ Welcome to Her Digital Playbook ✨',
       html: personalizedHtml,
+      headers: {
+        // One-click unsubscribe headers, expected by Gmail/Yahoo's
+        // bulk-sender rules and generally good for sender trust.
+        'List-Unsubscribe': `<${SITE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
     }),
   });
 
@@ -180,5 +190,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ success: true, emailSent: true });
-  }
-    
+}
