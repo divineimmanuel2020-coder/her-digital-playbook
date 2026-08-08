@@ -24,6 +24,7 @@
    ============================================= */
 
 import { WELCOME_EMAIL_TEMPLATE } from './welcome-email-template.js';
+import { WELCOME_EMAIL_TEMPLATE_PLAIN } from './welcome-email-template-plain.js';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -31,6 +32,11 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL;
 // Optional — falls back to a sensible default if not set in Vercel.
 const SITE_URL = process.env.SITE_URL || 'https://herdigitalplaybook.com';
+// Set WELCOME_EMAIL_VARIANT to "plain" in Vercel's environment
+// variables to test the plain, text-first version instead of the
+// fully styled one — no code changes needed to switch back and
+// forth while you compare Gmail inbox placement.
+const EMAIL_VARIANT = (process.env.WELCOME_EMAIL_VARIANT || 'styled').toLowerCase();
 
 function isValidName(name) {
   return typeof name === 'string' && name.trim().length >= 2;
@@ -84,7 +90,8 @@ async function insertSubscriber(name, email) {
    npm package is required either.
    ============================================= */
 async function sendWelcomeEmail(name, email) {
-  const personalizedHtml = WELCOME_EMAIL_TEMPLATE
+  const template = EMAIL_VARIANT === 'plain' ? WELCOME_EMAIL_TEMPLATE_PLAIN : WELCOME_EMAIL_TEMPLATE;
+  const personalizedHtml = template
     .replaceAll('{{SUBSCRIBER_NAME}}', name)
     .replaceAll('{{UNSUBSCRIBE_URL}}', `${SITE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}`);
 
@@ -190,4 +197,5 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ success: true, emailSent: true });
-}
+   }
+   
