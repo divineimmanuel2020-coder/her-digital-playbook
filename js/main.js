@@ -19,8 +19,15 @@ import { optimizeImages } from './images.js';
 import { initNewsletter } from './newsletter.js';
 
 async function init() {
+  // The splash must appear the instant the page opens — it can't
+  // wait behind header/hero/sections/footer/etc. loading, so it's
+  // fetched and initialized on its own, in parallel with everything
+  // else below rather than inside that Promise.all.
+  loadComponent('splash-placeholder', 'components/splash.html').then((ok) => {
+    if (ok) initSplash();
+  });
+
   await Promise.all([
-    loadComponent('splash-placeholder', 'components/splash.html'),
     loadComponent('header-placeholder', 'components/header.html'),
     loadComponent('hero-placeholder', 'sections/hero.html'),
     loadComponent('featured-placeholder', 'sections/featured-stories.html'),
@@ -40,7 +47,6 @@ async function init() {
   // nav.js reads them for active-link highlighting.
   rewriteRootLinks(document);
 
-  initSplash();
   initNav();
   initSearch();
 
@@ -57,3 +63,4 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+   
