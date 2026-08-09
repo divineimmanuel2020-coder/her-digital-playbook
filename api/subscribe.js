@@ -108,7 +108,7 @@ async function sendWelcomeEmail(name, email) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: FROM_EMAIL,
+      from: `Princess from Her Digital Playbook <${FROM_EMAIL}>`,
       to: email,
       // A real, monitored reply-to address (rather than a bare
       // "noreply") signals a genuine sender-recipient relationship
@@ -203,5 +203,5 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ success: true, emailSent: true });
-     }
-     
+}
+   
