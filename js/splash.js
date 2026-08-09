@@ -38,7 +38,7 @@ export function initSplash() {
     }
   }
 
-  window.setTimeout(() => splash.classList.add('hidden'), 3000);
+  window.setTimeout(() => splash.classList.add('hidden'), 5000);
 }
 
 // If the browser restores this page from its back/forward cache
