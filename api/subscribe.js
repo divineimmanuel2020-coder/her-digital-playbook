@@ -95,6 +95,12 @@ async function sendWelcomeEmail(name, email) {
     .replaceAll('{{SUBSCRIBER_NAME}}', name)
     .replaceAll('{{UNSUBSCRIBE_URL}}', `${SITE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}`);
 
+  // Emoji-laden, exclamation-heavy subject lines are one of the
+  // strongest Promotions-tab triggers Gmail's classifier checks —
+  // so the plain variant gets a genuinely plain, conversational
+  // subject instead of the branded one.
+  const subject = EMAIL_VARIANT === 'plain' ? `Welcome, ${name}` : '✨ Welcome to Her Digital Playbook ✨';
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -108,7 +114,7 @@ async function sendWelcomeEmail(name, email) {
       // "noreply") signals a genuine sender-recipient relationship
       // to Gmail — and lets people actually write back to you.
       reply_to: FROM_EMAIL,
-      subject: '✨ Welcome to Her Digital Playbook ✨',
+      subject,
       html: personalizedHtml,
       headers: {
         // One-click unsubscribe headers, expected by Gmail/Yahoo's
@@ -197,5 +203,5 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ success: true, emailSent: true });
-   }
-   
+     }
+     
