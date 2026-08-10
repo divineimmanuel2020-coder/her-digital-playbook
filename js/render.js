@@ -26,7 +26,7 @@ function fillStoryCard(item) {
   img.src = item.image;
   img.alt = item.title;
   card.querySelector('.card-img-link').href = detailUrl;
-  card.querySelector('.card-category').textContent = item.category;
+  card.querySelector('.card-category').textContent = item.missionLabel || item.category;
   card.querySelector('.card-title').textContent = item.title;
   card.querySelector('.card-desc').textContent = item.excerpt;
   card.querySelector('.read-time').textContent = item.readTime || '';
