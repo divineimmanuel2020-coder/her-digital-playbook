@@ -15,13 +15,13 @@ const DREAMBOARD_KEY = 'hdp-dreamboard';
 const XP_PER_LEVEL = 250;
 
 export const BADGES = [
-  { id: 'first-chapter', icon: '📖', label: 'Fast Starter', desc: 'Completed your first chapter' },
-  { id: 'chapter-champion', icon: '🏆', label: 'Chapter Champion', desc: 'Completed 10 chapters total' },
-  { id: 'quiz-whiz', icon: '🧠', label: 'Quiz Whiz', desc: 'Answered your first quiz correctly' },
-  { id: 'checklist-queen', icon: '✅', label: 'Checklist Queen', desc: 'Finished a whole checklist' },
-  { id: 'dreamer', icon: '💭', label: 'Dreamer', desc: 'Added a goal to your Dream Board' },
-  { id: 'consistency-queen', icon: '🔥', label: 'Consistency Queen', desc: 'Visited 3 days in a row' },
-  { id: 'level-5', icon: '👑', label: 'Rising Star', desc: 'Reached Level 5' },
+  { id: 'first-chapter', icon: '💗', label: 'First Money Move', desc: 'Completed your first chapter — the journey starts now' },
+  { id: 'chapter-champion', icon: '👑', label: 'Business Babe', desc: 'Completed 10 chapters total — you\u2019re building real momentum' },
+  { id: 'quiz-whiz', icon: '💎', label: 'Digital Girl', desc: 'Nailed your first money scenario' },
+  { id: 'checklist-queen', icon: '💰', label: 'Income Explorer', desc: 'Finished a whole action checklist' },
+  { id: 'dreamer', icon: '✨', label: 'Future Builder', desc: 'Added a goal to your Dream Board' },
+  { id: 'consistency-queen', icon: '🔥', label: 'Career Glow-Up', desc: 'Showed up 3 days in a row' },
+  { id: 'level-5', icon: '👑', label: 'CEO Energy', desc: 'Reached Level 5' },
 ];
 
 export const DREAM_ITEMS = [
@@ -139,4 +139,5 @@ export function toggleDream(id) {
 }
 
 export { unlockBadge };
+
    
