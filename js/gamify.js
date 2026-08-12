@@ -22,6 +22,8 @@ export const BADGES = [
   { id: 'dreamer', icon: '✨', label: 'Future Builder', desc: 'Added a goal to your Dream Board' },
   { id: 'consistency-queen', icon: '🔥', label: 'Career Glow-Up', desc: 'Showed up 3 days in a row' },
   { id: 'level-5', icon: '👑', label: 'CEO Energy', desc: 'Reached Level 5' },
+  { id: 'offer-builder', icon: '🎀', label: 'Offer Builder', desc: 'Built your first money idea in a Builder tool' },
+  { id: 'digital-bag-builder', icon: '📱', label: 'Digital Bag Builder', desc: 'Completed a Final Money Mission' },
 ];
 
 export const DREAM_ITEMS = [
@@ -140,4 +142,4 @@ export function toggleDream(id) {
 
 export { unlockBadge };
 
-   
+     
