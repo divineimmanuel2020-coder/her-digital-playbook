@@ -31,27 +31,25 @@ function isValidEmail(email) {
 
 /* =============================================
    DATA LAYER
-   Talks to our own /api/subscribe serverless function — never
-   directly to Supabase or Resend from the browser. That function
-   saves the subscriber and sends the welcome email server-side,
-   where the Resend API key and Supabase service_role key can stay
-   hidden in Vercel's environment variables.
-
-   Throws a small, typed error so the UI layer can decide what to
-   show without knowing anything about HTTP status codes itself.
+   Talks to Supabase only. Throws a small, typed error so the
+   UI layer can decide what to show without knowing anything
+   about Postgres error codes itself.
    ============================================= */
 
 async function insertSubscriber(name, email) {
-  let res;
+  const supabase = window.hdpSupabase;
+  if (!supabase) {
+    const err = new Error('Supabase client not available');
+    err.kind = 'unexpected';
+    throw err;
+  }
+
+  let result;
   try {
-    res = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email }),
-    });
+    result = await supabase.from('subscribers').insert({ name, email, status: 'active' });
   } catch (networkErr) {
     // fetch() throws a TypeError when the network itself fails
-    // (offline, DNS, CORS-from-nowhere) — before our function ever
+    // (offline, DNS, CORS-from-nowhere) — before Supabase ever
     // gets a chance to return a structured error.
     console.error('[newsletter] network error', networkErr);
     const err = new Error('network failure');
@@ -59,27 +57,18 @@ async function insertSubscriber(name, email) {
     throw err;
   }
 
-  let data = null;
-  try {
-    data = await res.json();
-  } catch (_) {
-    // ignore — handled by the res.ok / status checks below
-  }
-
-  if (res.ok && data && data.success) {
-    return;
-  }
-
-  if (res.status === 409 || (data && data.error === 'duplicate')) {
-    const err = new Error('duplicate subscriber');
-    err.kind = 'duplicate';
+  const { error } = result;
+  if (error) {
+    console.error('[newsletter] supabase error', error);
+    if (error.code === '23505') {
+      const err = new Error('duplicate subscriber');
+      err.kind = 'duplicate';
+      throw err;
+    }
+    const err = new Error('unexpected supabase error');
+    err.kind = 'unexpected';
     throw err;
   }
-
-  console.error('[newsletter] /api/subscribe error', res.status, data);
-  const err = new Error('unexpected subscribe error');
-  err.kind = 'unexpected';
-  throw err;
 }
 
 /* =============================================
@@ -179,6 +168,7 @@ function renderSuccess(panel, fxLayer) {
       <p class="newsletter-result-text">Girl... I'm genuinely so excited you're here.</p>
       <p class="newsletter-result-text">Every week you'll receive practical digital skills, AI tips, online income ideas, beautiful resources, and exclusive content designed to help you build your dream life.</p>
       <p class="newsletter-result-text">This isn't spam. It's your digital glow-up journey. Welcome home. 🎀🫂</p>
+      <p class="newsletter-result-text newsletter-result-next-step">You're in, girl! 💕 Go to your Gmail app and check your <strong>Promotions tab</strong> — your welcome email is already waiting for you there. Open it up and let's get started. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">✨ Explore Articles</a>
         <a class="btn btn-secondary" href="${BASE}index.html#tools">✨ Try A Free Tool</a>
@@ -324,5 +314,5 @@ export function initNewsletter() {
   }
 
   bindFormEvents();
-                          }
-       
+       }
+                          
