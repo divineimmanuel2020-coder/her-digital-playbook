@@ -18,17 +18,6 @@ function optimizeCloudinaryUrl(url, width) {
   return url.replace('/upload/', `/upload/w_${width},q_auto,f_auto,dpr_auto/`);
 }
 
-function markLoaded(img) {
-  if (img.complete && img.naturalWidth > 0) {
-    img.classList.add('loaded');
-  } else {
-    img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
-    // If a broken/slow image never fires load, still reveal the frame after a
-    // moment so the placeholder background doesn't hang around forever.
-    img.addEventListener('error', () => img.classList.add('loaded'), { once: true });
-  }
-}
-
 export function optimizeImages(scope = document) {
   const cardImgs = scope.querySelectorAll('.card-img img');
 
@@ -54,8 +43,6 @@ export function optimizeImages(scope = document) {
       img.setAttribute('loading', 'lazy');
       img.setAttribute('decoding', 'async');
     }
-
-    markLoaded(img);
   });
-       }
-   
+     }
+                                        
