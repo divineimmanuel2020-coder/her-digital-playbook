@@ -50,6 +50,40 @@ function initInPageAnchorScrolling() {
   });
 }
 
+/* =============================================
+   HERO TYPEWRITER EFFECT
+   Fast, plays once when the hero loads, respects
+   prefers-reduced-motion by just showing the full text instantly.
+   ============================================= */
+function initHeroTypewriter() {
+  const el = document.getElementById('hero-typewriter');
+  if (!el) return;
+  const fullText = el.dataset.typewriter || el.textContent;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    el.textContent = fullText;
+    return;
+  }
+
+  el.textContent = '';
+  el.classList.add('typewriter-active');
+  let i = 0;
+  const speed = 12; // fast — ms per character
+
+  function typeNext() {
+    if (i <= fullText.length) {
+      el.textContent = fullText.slice(0, i);
+      i += 1;
+      window.setTimeout(typeNext, speed);
+    } else {
+      el.classList.remove('typewriter-active');
+    }
+  }
+
+  typeNext();
+}
+
 async function init() {
   // Works immediately — uses event delegation, so it correctly
   // handles the hero buttons, nav links, and any other in-page
@@ -86,6 +120,7 @@ async function init() {
 
   initNav();
   initSearch();
+  initHeroTypewriter();
 
   renderFeatured();
   renderCategories((category) => {
@@ -100,3 +135,4 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+     
