@@ -55,4 +55,4 @@ window.addEventListener('pageshow', (event) => {
   const splash = document.getElementById('splash');
   if (splash) hideSplash(splash);
 });
-         
+     
