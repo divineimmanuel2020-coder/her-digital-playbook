@@ -36,6 +36,31 @@
 <div id="card-templates-placeholder" hidden></div>
 <div id="girlgang-popup-placeholder"></div>
 
+<script>
+(function () {
+  function showError(msg) {
+    var box = document.getElementById('hdp-debug-box');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'hdp-debug-box';
+      box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font:12px monospace;padding:10px;white-space:pre-wrap;max-height:50vh;overflow:auto;';
+      document.body.appendChild(box);
+    }
+    var line = document.createElement('div');
+    line.style.marginBottom = '8px';
+    line.style.borderBottom = '1px solid rgba(255,255,255,0.3)';
+    line.style.paddingBottom = '8px';
+    line.textContent = msg;
+    box.appendChild(line);
+  }
+  window.addEventListener('error', function (e) {
+    showError('ERROR: ' + e.message + '\nFILE: ' + e.filename + '\nLINE: ' + e.lineno + ':' + e.colno);
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    showError('PROMISE REJECTION: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
 <script type="module" src="js/main.js"></script>
