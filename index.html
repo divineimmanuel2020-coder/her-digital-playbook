@@ -53,12 +53,31 @@
     line.textContent = msg;
     box.appendChild(line);
   }
+
+  // useCapture: true — required to catch resource-loading failures
+  // (a script/module file 404ing), which do NOT bubble to window
+  // the way normal script errors do. Without this, a missing or
+  // misnamed file fails completely silently.
   window.addEventListener('error', function (e) {
-    showError('ERROR: ' + e.message + '\nFILE: ' + e.filename + '\nLINE: ' + e.lineno + ':' + e.colno);
-  });
+    if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+      showError('FAILED TO LOAD FILE: ' + (e.target.src || e.target.href));
+    } else {
+      showError('ERROR: ' + e.message + '\nFILE: ' + e.filename + '\nLINE: ' + e.lineno + ':' + e.colno);
+    }
+  }, true);
+
   window.addEventListener('unhandledrejection', function (e) {
     showError('PROMISE REJECTION: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
   });
+
+  // Positive confirmation, either way — so "no red box" actually
+  // means something instead of being ambiguous.
+  window.setTimeout(function () {
+    var splashPlaceholder = document.getElementById('splash-placeholder');
+    if (splashPlaceholder && splashPlaceholder.innerHTML.trim() === '') {
+      showError('DIAGNOSTIC: 3 seconds in, nothing has rendered into the page yet — main.js likely never started running, but threw no catchable error. This points to a file path or MIME-type issue, not a JS syntax error.');
+    }
+  }, 3000);
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -67,4 +86,4 @@
 </body>
                                 </html>
 
-  
+                                  
