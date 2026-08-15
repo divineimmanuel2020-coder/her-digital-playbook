@@ -17,6 +17,8 @@ import { rewriteRootLinks } from './base.js';
 import { initSearch } from './search.js';
 import { optimizeImages } from './images.js';
 import { initNewsletter } from './newsletter.js';
+import { initGirlGangPopup } from './girlgang-popup.js';
+import { maybeShowJoinReminder } from './notifications.js';
 
 /* =============================================
    HEADER-AWARE IN-PAGE SCROLLING
@@ -108,6 +110,7 @@ async function init() {
     loadComponent('newsletter-placeholder', 'sections/newsletter.html'),
     loadComponent('footer-placeholder', 'components/footer.html'),
     loadComponent('card-templates-placeholder', 'components/card-template.html'),
+    loadComponent('girlgang-popup-placeholder', 'components/girlgang-popup.html'),
   ]);
 
   // nav.html injects into a placeholder that only exists once
@@ -132,6 +135,8 @@ async function init() {
 
   optimizeImages(document);
   initNewsletter();
+  initGirlGangPopup();
+  maybeShowJoinReminder();
 }
 
 document.addEventListener('DOMContentLoaded', init);
