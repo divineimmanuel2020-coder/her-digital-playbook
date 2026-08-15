@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="https://res.cloudinary.com/s9jk4ddk/image/upload/v1786286194/file_00000000bf7c821186b8c99e14d14dfa_j8vxfm.png">
 <title>Contact — Her Digital Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght;700&family=Plus+Jakarta+Sans:ital,wght,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
@@ -24,6 +23,11 @@
   </div>
 </section>
 
+<div class="container static-content">
+  <p>Whether you've got a question about one of our Money Missions, a free tool that's acting up, a partnership or collaboration idea, or you just want to tell us which article hit different — we genuinely want to hear it. This isn't a form that disappears into a void; a real person reads every message that comes through here.</p>
+  <p>Here's what's a great fit for this form: feedback on the site, questions about a specific article or tool, brand or partnership inquiries, press requests, or general "hey, I loved this" messages. For newsletter-specific questions, checking your Girl Gang subscription is usually fastest — for everything else, drop us a note below and we'll get back to you as soon as we can.</p>
+</div>
+
 <div class="container">
   <form class="contact-form" id="contact-form">
     <input type="text" placeholder="Your name" required>
@@ -42,9 +46,42 @@
 <script type="module">
   const form = document.getElementById('contact-form');
   const note = document.getElementById('contact-note');
-  form.addEventListener('submit', (e) => {
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    note.textContent = "Thank you — we'll get back to you soon! 💌";
+    const [nameInput, emailInput] = form.querySelectorAll('input');
+    const messageInput = form.querySelector('textarea');
+
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    note.textContent = '';
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameInput.value,
+          email: emailInput.value,
+          message: messageInput.value,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data && data.success) {
+        note.textContent = "Thank you — we'll get back to you soon! 💌";
+        form.reset();
+      } else {
+        note.textContent = "Something went wrong sending that — please try again in a moment.";
+      }
+    } catch (_) {
+      note.textContent = "Couldn't reach the server — check your connection and try again.";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }
   });
 </script>
 </body>
