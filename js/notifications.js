@@ -97,3 +97,4 @@ export function showWelcomeNotification() {
     'Check your Gmail Promotions tab \u2014 your Her Digital Playbook welcome email is waiting for you. \u2728'
   );
 }
+   
