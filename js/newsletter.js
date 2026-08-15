@@ -319,5 +319,5 @@ export function initNewsletter() {
   }
 
   bindFormEvents();
-}
-   
+               }
+                           
