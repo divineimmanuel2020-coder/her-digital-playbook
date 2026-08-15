@@ -9,6 +9,12 @@
 
 const SPLASH_KEY = 'hdp-splash-shown';
 
+function hideSplash(splash) {
+  splash.classList.add('hidden');
+  window.__hdpSplashHidden = true;
+  window.dispatchEvent(new CustomEvent('hdp:splash-hidden'));
+}
+
 export function initSplash() {
   const splash = document.getElementById('splash');
   if (!splash) return;
@@ -19,7 +25,7 @@ export function initSplash() {
     // Skip the intro entirely and reveal the homepage instantly —
     // this is what makes Back/Forward and repeat visits feel normal.
     splash.classList.add('skip-intro');
-    splash.classList.add('hidden');
+    hideSplash(splash);
     return;
   }
 
@@ -38,7 +44,7 @@ export function initSplash() {
     }
   }
 
-  window.setTimeout(() => splash.classList.add('hidden'), 5000);
+  window.setTimeout(() => hideSplash(splash), 5000);
 }
 
 // If the browser restores this page from its back/forward cache
@@ -47,5 +53,6 @@ export function initSplash() {
 window.addEventListener('pageshow', (event) => {
   if (!event.persisted) return;
   const splash = document.getElementById('splash');
-  if (splash) splash.classList.add('hidden');
+  if (splash) hideSplash(splash);
 });
+         
