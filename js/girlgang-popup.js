@@ -88,4 +88,4 @@ export function initGirlGangPopup() {
   } else {
     window.addEventListener('hdp:splash-hidden', scheduleShow, { once: true });
   }
-                  }
+}
