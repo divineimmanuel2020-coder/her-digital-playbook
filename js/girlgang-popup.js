@@ -18,17 +18,25 @@
 
 import { isSubscribed } from './subscription-state.js';
 import { requestNotificationPermissionOnce } from './notifications.js';
+import { BASE } from './base.js';
 
 const DISMISSED_KEY = 'hdp-girlgang-popup-dismissed-session';
 const SHOW_DELAY_MS = 1800; // "shortly after" the homepage loads, not instantly
 
-function scrollToNewsletter() {
+function goToNewsletter() {
   const target = document.getElementById('newsletter');
-  if (!target) return;
-  const header = document.querySelector('.header');
-  const offset = (header ? header.offsetHeight : 0) + 16;
-  const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-  window.scrollTo({ top, behavior: 'smooth' });
+  if (target) {
+    // Already on the homepage — smooth-scroll, header-offset-aware.
+    const header = document.querySelector('.header');
+    const offset = (header ? header.offsetHeight : 0) + 16;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  } else {
+    // On an article or static page — #newsletter doesn't exist here
+    // at all, so this has to be a real navigation back to the
+    // homepage's newsletter section, not a scroll attempt.
+    window.location.href = `${BASE}index.html#newsletter`;
+  }
 }
 
 export function initGirlGangPopup() {
@@ -64,10 +72,11 @@ export function initGirlGangPopup() {
     if (event.target === overlay) dismissForSession();
   });
 
-  cta?.addEventListener('click', () => {
+  cta?.addEventListener('click', (event) => {
+    event.preventDefault();
     requestNotificationPermissionOnce();
     dismissForSession();
-    scrollToNewsletter();
+    goToNewsletter();
   });
 
   // Stop instantly and permanently the moment she subscribes,
@@ -78,12 +87,14 @@ export function initGirlGangPopup() {
     window.setTimeout(showPopup, SHOW_DELAY_MS);
   }
 
-  // The splash may have already hidden (or been skipped on a repeat
-  // visit) before this script even runs. Checking a flag splash.js
-  // sets — rather than the #splash element's presence/class — avoids
-  // a race where the splash component simply hasn't loaded into the
-  // DOM yet at the moment this runs.
-  if (window.__hdpSplashHidden) {
+  // Only the homepage has a splash screen — article pages and static
+  // pages (About, Contact, Privacy, Terms, 404) never load one, so
+  // waiting for a 'hdp:splash-hidden' event on those pages would mean
+  // waiting forever for something that will never fire. Checking for
+  // the placeholder's existence tells us which situation we're in.
+  const hasSplash = !!document.getElementById('splash-placeholder');
+
+  if (!hasSplash || window.__hdpSplashHidden) {
     scheduleShow();
   } else {
     window.addEventListener('hdp:splash-hidden', scheduleShow, { once: true });
