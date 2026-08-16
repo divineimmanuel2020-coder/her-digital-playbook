@@ -13,11 +13,14 @@ import { initNav } from './nav.js';
 import { rewriteRootLinks } from './base.js';
 import { initSearch } from './search.js';
 import { optimizeImages } from './images.js';
+import { initGirlGangPopup } from './girlgang-popup.js';
+import { maybeShowJoinReminder } from './notifications.js';
 
 async function init() {
   await Promise.all([
     loadComponent('header-placeholder', '../components/header.html'),
     loadComponent('footer-placeholder', '../components/footer.html'),
+    loadComponent('girlgang-popup-placeholder', '../components/girlgang-popup.html'),
   ]);
   await loadComponent('nav-placeholder', '../components/nav.html');
 
@@ -29,6 +32,8 @@ async function init() {
   initNav();
   initSearch();
   optimizeImages(document);
+  initGirlGangPopup();
+  maybeShowJoinReminder();
 }
 
 document.addEventListener('DOMContentLoaded', init);
