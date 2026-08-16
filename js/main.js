@@ -41,13 +41,33 @@ function scrollToSectionId(id) {
 
 function initInPageAnchorScrolling() {
   document.addEventListener('click', (event) => {
-    const link = event.target.closest('a[href^="#"]');
+    const link = event.target.closest('a[href]');
     if (!link) return;
-    const id = link.getAttribute('href').slice(1);
+    const href = link.getAttribute('href');
+    if (!href) return;
+
+    let url;
+    try {
+      url = new URL(href, window.location.href);
+    } catch (_) {
+      return;
+    }
+
+    // No fragment at all — a normal link to another page, leave it alone.
+    if (!url.hash) return;
+
+    // A fragment pointing at THIS same page (whether written as a bare
+    // "#newsletter" or a full "/index.html#newsletter" — both resolve
+    // to the same URL) becomes a smooth in-page scroll instead of a
+    // full reload. A fragment on a genuinely different page (e.g.
+    // clicking this from an article page) is left to navigate normally.
+    if (url.pathname !== window.location.pathname) return;
+
+    const id = url.hash.slice(1);
     if (!id) return;
     if (scrollToSectionId(id)) {
       event.preventDefault();
-      history.pushState(null, '', `#${id}`);
+      history.pushState(null, '', url.hash);
     }
   });
 }
@@ -137,6 +157,16 @@ async function init() {
   initNewsletter();
   initGirlGangPopup();
   maybeShowJoinReminder();
+
+  // Honor a hash that was already in the URL when this page loaded
+  // (e.g. following a "Join The Girl Gang" link from an article page).
+  // The browser's own native scroll-to-hash happens before any of the
+  // sections above exist yet, so it silently fails — this re-attempts
+  // it now that everything has actually rendered.
+  if (window.location.hash) {
+    scrollToSectionId(window.location.hash.slice(1));
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
+                            
