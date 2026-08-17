@@ -1,14 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
-      "has": [
-        { "type": "host", "value": "www.herdigitalplaybook.com" }
-      ],
-      "destination": "https://herdigitalplaybook.com/:path*",
-      "permanent": true
-    },
-    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
