@@ -16,8 +16,6 @@
    ============================================= */
 
 import { BASE } from './base.js';
-import { markSubscribed } from './subscription-state.js';
-import { showWelcomeNotification } from './notifications.js';
 
 /* =============================================
    VALIDATION
@@ -163,8 +161,6 @@ function renderFormState(panel) {
 }
 
 function renderSuccess(panel, fxLayer) {
-  markSubscribed();
-  showWelcomeNotification();
   panel.innerHTML = `
     <div class="newsletter-result-card success" tabindex="-1" id="newsletter-result-heading">
       <p class="newsletter-result-emoji">🎉</p>
@@ -184,7 +180,6 @@ function renderSuccess(panel, fxLayer) {
 }
 
 function renderDuplicate(panel) {
-  markSubscribed();
   panel.innerHTML = `
     <div class="newsletter-result-card duplicate" tabindex="-1" id="newsletter-result-heading">
       <p class="newsletter-result-emoji">💖</p>
@@ -319,5 +314,5 @@ export function initNewsletter() {
   }
 
   bindFormEvents();
-               }
-                           
+       }
+                          
