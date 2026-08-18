@@ -1,22 +1,20 @@
 /* =============================================
    NEWSLETTER.JS
-   Join The Girl Gang newsletter experience.
+   Her Digital Playbook — Join The Girl Gang
 
    FLOW:
-     Browser
-       ↓
-     /api/subscribe
-       ↓
-     Supabase
-       ↓
-     Resend
-       ↓
-     Welcome email
+   Browser
+      ↓
+   POST /api/subscribe
+      ↓
+   Vercel Serverless Function
+      ↓
+   Supabase + Resend
 
    IMPORTANT:
    This file does NOT talk directly to Supabase.
-   The secure Vercel API function /api/subscribe.js
-   handles both the Supabase insertion and Resend email.
+   The secure server-side /api/subscribe endpoint handles
+   both the database insert and the welcome email.
    ============================================= */
 
 import { BASE } from './base.js';
@@ -36,23 +34,26 @@ function isValidEmail(email) {
 }
 
 /* =============================================
-   API DATA LAYER
-   Sends the subscriber to Vercel.
+   DATA LAYER
+   Sends the signup to the Vercel API.
 
-   DO NOT connect directly to Supabase here.
-   /api/subscribe.js handles:
-     1. Supabase
-     2. Resend
+   The API then:
+   1. Saves the subscriber to Supabase.
+   2. Sends the welcome email through Resend.
+
+   We deliberately do NOT call Supabase directly
+   from the browser anymore.
    ============================================= */
 
-async function subscribe(name, email) {
+async function subscribeToGirlGang(name, email) {
   let response;
 
   try {
     response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         name,
@@ -62,7 +63,7 @@ async function subscribe(name, email) {
   } catch (networkError) {
     console.error('[newsletter] API network error:', networkError);
 
-    const error = new Error('Network failure');
+    const error = new Error('Unable to reach the subscription server.');
     error.kind = 'network';
     throw error;
   }
@@ -71,60 +72,78 @@ async function subscribe(name, email) {
 
   try {
     data = await response.json();
-  } catch (_) {
-    // The server returned something that wasn't JSON.
-  }
+  } catch (jsonError) {
+    console.error('[newsletter] Invalid API response:', jsonError);
 
-  console.log('[newsletter] /api/subscribe response:', response.status, data);
-
-  /*
-   * Already subscribed.
-   */
-  if (response.status === 409 || data?.error === 'duplicate') {
-    const error = new Error('Duplicate subscriber');
-    error.kind = 'duplicate';
-    throw error;
-  }
-
-  /*
-   * Server-side failure.
-   */
-  if (!response.ok) {
-    console.error('[newsletter] API error:', response.status, data);
-
-    const error = new Error(
-      data?.error || 'Newsletter subscription failed'
-    );
-
+    const error = new Error('The server returned an invalid response.');
     error.kind = 'unexpected';
     throw error;
   }
 
-  /*
-   * The API returns:
-   *
-   * {
-   *   success: true,
-   *   emailSent: true
-   * }
-   *
-   * OR
-   *
-   * {
-   *   success: true,
-   *   emailSent: false
-   * }
-   *
-   * In both cases the subscriber was successfully saved.
-   */
+  console.log('[newsletter] /api/subscribe response:', response.status, data);
+
+  /* ---------------------------------------------
+     ALREADY SUBSCRIBED
+     --------------------------------------------- */
+
+  if (response.status === 409 || data?.error === 'duplicate') {
+    const error = new Error('This email is already subscribed.');
+    error.kind = 'duplicate';
+    throw error;
+  }
+
+  /* ---------------------------------------------
+     VALIDATION ERRORS
+     --------------------------------------------- */
+
+  if (response.status === 400) {
+    const error = new Error(data?.error || 'Invalid signup information.');
+    error.kind = 'validation';
+    throw error;
+  }
+
+  /* ---------------------------------------------
+     SERVER CONFIGURATION / SUPABASE ERRORS
+     --------------------------------------------- */
+
+  if (response.status >= 500) {
+    console.error('[newsletter] Server error:', data);
+
+    const error = new Error(data?.error || 'The subscription server encountered an error.');
+    error.kind = 'server';
+    throw error;
+  }
+
+  /* ---------------------------------------------
+     OTHER NON-SUCCESS RESPONSES
+     --------------------------------------------- */
+
+  if (!response.ok || data?.success !== true) {
+    console.error('[newsletter] Unexpected API response:', data);
+
+    const error = new Error(data?.error || 'Something went wrong.');
+    error.kind = 'unexpected';
+    throw error;
+  }
+
+  /* ---------------------------------------------
+     SUCCESS
+
+     emailSent tells us whether Resend successfully
+     accepted the welcome email.
+
+     The subscriber itself has already been saved
+     successfully when success === true.
+     --------------------------------------------- */
+
   return {
     success: true,
-    emailSent: data?.emailSent === true
+    emailSent: data.emailSent === true
   };
 }
 
 /* =============================================
-   FX
+   FX — CONFETTI
    ============================================= */
 
 function launchConfetti(layer) {
@@ -142,9 +161,12 @@ function launchConfetti(layer) {
     const piece = document.createElement('span');
 
     piece.className = 'confetti-piece';
+
     piece.style.left = `${Math.random() * 100}%`;
+
     piece.style.background =
       colors[Math.floor(Math.random() * colors.length)];
+
     piece.style.animationDelay =
       `${(Math.random() * 0.3).toFixed(2)}s`;
 
@@ -159,6 +181,10 @@ function launchConfetti(layer) {
   }
 }
 
+/* =============================================
+   FX — FLOATING HEARTS
+   ============================================= */
+
 function launchFloatingHearts(layer) {
   if (!layer) return;
 
@@ -168,12 +194,16 @@ function launchFloatingHearts(layer) {
     const heart = document.createElement('span');
 
     heart.className = 'fx-heart';
+
     heart.textContent =
       hearts[Math.floor(Math.random() * hearts.length)];
 
-    heart.style.left = `${10 + Math.random() * 80}%`;
+    heart.style.left =
+      `${10 + Math.random() * 80}%`;
+
     heart.style.animationDelay =
       `${(Math.random() * 0.6).toFixed(2)}s`;
+
     heart.style.fontSize =
       `${14 + Math.random() * 14}px`;
 
@@ -183,6 +213,10 @@ function launchFloatingHearts(layer) {
   }
 }
 
+/* =============================================
+   FX — SPARKLES
+   ============================================= */
+
 function launchSparkles(layer) {
   if (!layer) return;
 
@@ -190,9 +224,15 @@ function launchSparkles(layer) {
     const sparkle = document.createElement('span');
 
     sparkle.className = 'fx-sparkle';
+
     sparkle.textContent = '✦';
-    sparkle.style.left = `${Math.random() * 100}%`;
-    sparkle.style.top = `${Math.random() * 100}%`;
+
+    sparkle.style.left =
+      `${Math.random() * 100}%`;
+
+    sparkle.style.top =
+      `${Math.random() * 100}%`;
+
     sparkle.style.animationDelay =
       `${(Math.random() * 1).toFixed(2)}s`;
 
@@ -201,6 +241,10 @@ function launchSparkles(layer) {
     setTimeout(() => sparkle.remove(), 2000);
   }
 }
+
+/* =============================================
+   CELEBRATION
+   ============================================= */
 
 function celebrate(layer) {
   launchConfetti(layer);
@@ -214,7 +258,9 @@ function celebrate(layer) {
 
 function renderFormState(panel) {
   panel.innerHTML = `
-    <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
+    <h2 class="newsletter-title">
+      Join Our Girl Gang 🎀
+    </h2>
 
     <p class="newsletter-desc">
       Get beautiful Big Sis Letters straight to your inbox —
@@ -230,7 +276,11 @@ function renderFormState(panel) {
       <li>🎁 Free tools &amp; templates</li>
     </ul>
 
-    <form class="newsletter-form" id="newsletter-form" novalidate>
+    <form
+      class="newsletter-form"
+      id="newsletter-form"
+      novalidate
+    >
 
       <div class="newsletter-field">
         <label
@@ -295,40 +345,40 @@ function renderFormState(panel) {
 }
 
 /* =============================================
-   SUCCESS
+   SUCCESS STATE
+
+   This happens after the API confirms that the
+   subscriber was successfully saved.
+
+   IMPORTANT:
+   We show the Gmail/Promotions instruction whether
+   Resend reports emailSent true or false, because
+   the signup itself succeeded.
+
+   The console also tells us the exact emailSent
+   value during testing.
    ============================================= */
 
 function renderSuccess(panel, fxLayer, emailSent) {
-  /*
-   * The API has successfully saved the subscriber.
-   * Mark them as subscribed so the site's subscription
-   * pop-ups stop appearing.
-   */
   markSubscribed();
-
-  /*
-   * Show the browser/site welcome notification.
-   */
   showWelcomeNotification();
 
   const emailMessage = emailSent
     ? `
       <p class="newsletter-result-text newsletter-result-next-step">
-        You're in, girl! 💕
-        Go to your Gmail app and check your
-        <strong>Promotions tab</strong> —
-        your welcome email is waiting for you there.
-        Open it up and let's get started. ✨
+        You're in, girl! 💕 Go to your Gmail app and check your
+        <strong>Promotions tab</strong> — your welcome email is
+        already waiting for you there. Open it up and let's
+        get started. ✨
       </p>
     `
     : `
       <p class="newsletter-result-text newsletter-result-next-step">
-        You're officially in, girl! 💕
-        We've saved your place in the Girl Gang.
-        If your welcome email doesn't appear shortly,
-        check your Gmail <strong>Promotions</strong>,
-        <strong>Spam</strong>, or <strong>Junk</strong>
-        folder.
+        You're officially in, girl! 💕 We saved your spot in
+        the Girl Gang. If you don't see your welcome email
+        yet, check your Gmail <strong>Promotions</strong>,
+        <strong>Spam</strong>, or <strong>Updates</strong>
+        folders.
       </p>
     `;
 
@@ -339,7 +389,9 @@ function renderSuccess(panel, fxLayer, emailSent) {
       id="newsletter-result-heading"
     >
 
-      <p class="newsletter-result-emoji">🎉</p>
+      <p class="newsletter-result-emoji">
+        🎉
+      </p>
 
       <h2 class="newsletter-result-title">
         Welcome to the Girl Gang!
@@ -350,10 +402,10 @@ function renderSuccess(panel, fxLayer, emailSent) {
       </p>
 
       <p class="newsletter-result-text">
-        Every week you'll receive practical digital
-        skills, AI tips, online income ideas, beautiful
-        resources, and exclusive content designed to
-        help you build your dream life.
+        Every week you'll receive practical digital skills,
+        AI tips, online income ideas, beautiful resources,
+        and exclusive content designed to help you build
+        your dream life.
       </p>
 
       <p class="newsletter-result-text">
@@ -392,7 +444,7 @@ function renderSuccess(panel, fxLayer, emailSent) {
 }
 
 /* =============================================
-   DUPLICATE
+   DUPLICATE STATE
    ============================================= */
 
 function renderDuplicate(panel) {
@@ -405,7 +457,9 @@ function renderDuplicate(panel) {
       id="newsletter-result-heading"
     >
 
-      <p class="newsletter-result-emoji">💖</p>
+      <p class="newsletter-result-emoji">
+        💖
+      </p>
 
       <h2 class="newsletter-result-title">
         Hey Queen!
@@ -455,15 +509,66 @@ function renderNetworkError(panel, onRetry) {
       id="newsletter-result-heading"
     >
 
-      <p class="newsletter-result-emoji">☕</p>
+      <p class="newsletter-result-emoji">
+        ☕
+      </p>
 
       <h2 class="newsletter-result-title">
         Oops...
       </h2>
 
       <p class="newsletter-result-text">
-        Looks like your internet took a little coffee break.
-        Let's try again in a moment.
+        Looks like your internet took a little coffee
+        break. Let's try again in a moment.
+      </p>
+
+      <div class="newsletter-result-actions">
+
+        <button
+          class="btn btn-primary"
+          id="newsletter-retry-btn"
+          type="button"
+        >
+          Try Again
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  panel
+    .querySelector('#newsletter-retry-btn')
+    ?.addEventListener('click', onRetry);
+
+  panel
+    .querySelector('#newsletter-result-heading')
+    ?.focus();
+}
+
+/* =============================================
+   SERVER ERROR
+   ============================================= */
+
+function renderServerError(panel, onRetry) {
+  panel.innerHTML = `
+    <div
+      class="newsletter-result-card error"
+      tabindex="-1"
+      id="newsletter-result-heading"
+    >
+
+      <p class="newsletter-result-emoji">
+        💗
+      </p>
+
+      <h2 class="newsletter-result-title">
+        Something went wrong...
+      </h2>
+
+      <p class="newsletter-result-text">
+        Your signup couldn't be completed just yet.
+        Please try again in a moment.
       </p>
 
       <div class="newsletter-result-actions">
@@ -502,7 +607,9 @@ function renderUnexpectedError(panel, onRetry) {
       id="newsletter-result-heading"
     >
 
-      <p class="newsletter-result-emoji">💗</p>
+      <p class="newsletter-result-emoji">
+        💗
+      </p>
 
       <h2 class="newsletter-result-title">
         Something unexpected happened.
@@ -538,31 +645,58 @@ function renderUnexpectedError(panel, onRetry) {
 }
 
 /* =============================================
+   VALIDATION ERROR
+   ============================================= */
+
+function renderValidationError(panel, message) {
+  const existingError =
+    document.getElementById('newsletter-email-error');
+
+  if (existingError) {
+    existingError.textContent = message;
+  }
+}
+
+/* =============================================
    WIRING
    ============================================= */
 
 export function initNewsletter() {
-  const panel = document.getElementById('newsletter-panel');
-  const fxLayer = document.getElementById('newsletter-fx');
+  const panel =
+    document.getElementById('newsletter-panel');
+
+  const fxLayer =
+    document.getElementById('newsletter-fx');
 
   if (!panel) return;
 
+  /*
+   * Keeps the most recent valid submission so that
+   * Retry can resend it without asking the visitor
+   * to type everything again.
+   */
   let lastAttempt = null;
 
   /* ---------------------------------------------
-     Bind the form
+     BIND FORM
      --------------------------------------------- */
 
   function bindFormEvents() {
-    const form = document.getElementById('newsletter-form');
+    const form =
+      document.getElementById('newsletter-form');
+
     const nameInput =
       document.getElementById('newsletter-name');
+
     const emailInput =
       document.getElementById('newsletter-email');
+
     const nameError =
       document.getElementById('newsletter-name-error');
+
     const emailError =
       document.getElementById('newsletter-email-error');
+
     const submitBtn =
       document.getElementById('newsletter-submit');
 
@@ -574,8 +708,15 @@ export function initNewsletter() {
       !emailError ||
       !submitBtn
     ) {
+      console.error(
+        '[newsletter] Newsletter form elements could not be found.'
+      );
       return;
     }
+
+    /* -------------------------------------------
+       LOADING STATE
+       ------------------------------------------- */
 
     function setLoading(isLoading) {
       submitBtn.disabled = isLoading;
@@ -586,26 +727,29 @@ export function initNewsletter() {
       );
 
       submitBtn.innerHTML = isLoading
-        ? `
-          <span
-            class="btn-spinner"
-            aria-hidden="true"
-          ></span>
-          Joining the Girl Gang... 🎀
-        `
+        ? '<span class="btn-spinner" aria-hidden="true"></span> Joining the Girl Gang... 🎀'
         : 'Join The Girl Gang 🎀';
     }
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    /* -------------------------------------------
+       SUBMIT
+       ------------------------------------------- */
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
 
       nameError.textContent = '';
       emailError.textContent = '';
 
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
+      const name =
+        nameInput.value.trim();
+
+      const email =
+        emailInput.value.trim();
 
       let valid = true;
+
+      /* Name validation */
 
       if (!isValidName(name)) {
         nameError.textContent =
@@ -613,6 +757,8 @@ export function initNewsletter() {
 
         valid = false;
       }
+
+      /* Email validation */
 
       if (!isValidEmail(email)) {
         emailError.textContent =
@@ -632,14 +778,25 @@ export function initNewsletter() {
 
       try {
         /*
-         * IMPORTANT:
-         * This now calls /api/subscribe.
+         * THIS is the important change.
          *
-         * That server function handles BOTH:
-         *   Supabase insertion
-         *   Resend welcome email
+         * We now call:
+         *
+         *     /api/subscribe
+         *
+         * instead of calling Supabase directly.
          */
-        const result = await subscribe(name, email);
+
+        const result =
+          await subscribeToGirlGang(
+            name,
+            email
+          );
+
+        console.log(
+          '[newsletter] Subscription successful.',
+          result
+        );
 
         renderSuccess(
           panel,
@@ -647,24 +804,66 @@ export function initNewsletter() {
           result.emailSent
         );
 
-      } catch (err) {
-        handleSubmitError(err);
+      } catch (error) {
+        console.error(
+          '[newsletter] Subscription failed:',
+          error
+        );
+
+        handleSubmitError(error);
+
+      } finally {
+        /*
+         * If an error rendered a retry state,
+         * the button is no longer the original
+         * submit button. So only restore this
+         * button if it still exists.
+         */
+
+        const currentSubmitBtn =
+          document.getElementById(
+            'newsletter-submit'
+          );
+
+        if (currentSubmitBtn) {
+          currentSubmitBtn.disabled = false;
+
+          currentSubmitBtn.removeAttribute(
+            'aria-busy'
+          );
+
+          currentSubmitBtn.innerHTML =
+            'Join The Girl Gang 🎀';
+        }
       }
     });
   }
 
   /* ---------------------------------------------
-     Error handling
+     ERROR HANDLER
      --------------------------------------------- */
 
-  function handleSubmitError(err) {
-    if (err.kind === 'duplicate') {
+  function handleSubmitError(error) {
+    if (error.kind === 'duplicate') {
       renderDuplicate(panel);
       return;
     }
 
-    if (err.kind === 'network') {
+    if (error.kind === 'network') {
       renderNetworkError(
+        panel,
+        retryLastAttempt
+      );
+      return;
+    }
+
+    if (error.kind === 'validation') {
+      renderFormState(panel);
+      return;
+    }
+
+    if (error.kind === 'server') {
+      renderServerError(
         panel,
         retryLastAttempt
       );
@@ -678,7 +877,7 @@ export function initNewsletter() {
   }
 
   /* ---------------------------------------------
-     Retry
+     RETRY
      --------------------------------------------- */
 
   async function retryLastAttempt() {
@@ -695,13 +894,20 @@ export function initNewsletter() {
 
     if (retryBtn) {
       retryBtn.disabled = true;
-      retryBtn.textContent = 'Trying again...';
+      retryBtn.textContent =
+        'Trying again...';
     }
 
     try {
-      const result = await subscribe(
-        lastAttempt.name,
-        lastAttempt.email
+      const result =
+        await subscribeToGirlGang(
+          lastAttempt.name,
+          lastAttempt.email
+        );
+
+      console.log(
+        '[newsletter] Retry successful.',
+        result
       );
 
       renderSuccess(
@@ -710,13 +916,18 @@ export function initNewsletter() {
         result.emailSent
       );
 
-    } catch (err) {
-      handleSubmitError(err);
+    } catch (error) {
+      console.error(
+        '[newsletter] Retry failed:',
+        error
+      );
+
+      handleSubmitError(error);
     }
   }
 
   /* ---------------------------------------------
-     Initial form
+     INITIALISE
      --------------------------------------------- */
 
   renderFormState(panel);
