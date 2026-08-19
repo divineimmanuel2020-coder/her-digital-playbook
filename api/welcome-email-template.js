@@ -74,6 +74,15 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
             </td>
           </tr>
 
+          <!-- ============ MOVE TO PRIMARY BANNER ============ -->
+          <tr>
+            <td align="center" bgcolor="#FDE9A8" style="background-color:#FDE9A8;padding:14px 24px;">
+              <p style="margin:0;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#6B5416;">
+                \ud83d\udccc Go to your Promotions tab in Gmail to see this message, gorgeous. Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. \u2728
+              </p>
+            </td>
+          </tr>
+
           <!-- ============ HERO ============ -->
           <tr>
             <td class="px-mobile" align="center" bgcolor="#FDEEF2" style="background-color:#FDEEF2;background-image:linear-gradient(135deg,#FDEEF2 0%,#FBE0E8 55%,#FFF3E9 100%);padding:44px 36px 40px;">
