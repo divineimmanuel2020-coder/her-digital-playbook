@@ -251,7 +251,7 @@ function renderDuplicate(panel) {
       <p class="newsletter-result-emoji">💖</p>
       <h2 class="newsletter-result-title">Hey Queen!</h2>
       <p class="newsletter-result-text">Looks like you're already part of the Girl Gang. Check your inbox, because exciting things are already on their way.</p>
-      <p class="newsletter-result-text newsletter-result-next-step">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the menu at the top right, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
+      <p class="newsletter-result-text newsletter-result-next-step">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the three dots menu at the top right, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">Go To Articles</a>
         <a class="btn btn-secondary" href="${BASE}pages/article.html?id=first-2000-online">Read Latest Guide</a>
