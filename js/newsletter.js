@@ -175,9 +175,57 @@ function renderFormState(panel) {
   `;
 }
 
+/* =============================================
+   POST-SUBSCRIBE CELEBRATION POPUP
+   A separate, dedicated on-site popup shown the moment a
+   subscription actually succeeds — distinct from the inline
+   success card in the form itself, and distinct from the browser
+   Notification API welcome ping. Built entirely inline (no
+   component file needed) since it only ever needs to exist for
+   the few seconds right after a real success.
+
+   Built display:none by default with pointer-events:none as a
+   baseline safety habit — the earlier Girl Gang reminder popup
+   once shipped with an always-rendered invisible overlay that
+   silently blocked every click on the site, so every popup here
+   on out starts from "impossible to accidentally cover the page."
+   ============================================= */
+function showSubscribedPopup() {
+  let overlay = document.getElementById('subscribed-popup-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'subscribed-popup-overlay';
+    overlay.className = 'subscribed-popup-overlay';
+    overlay.innerHTML = `
+      <div class="subscribed-popup" role="dialog" aria-modal="true" aria-labelledby="subscribed-popup-title">
+        <button class="subscribed-popup-close" id="subscribed-popup-close" type="button" aria-label="Close">✕</button>
+        <p class="subscribed-popup-emoji">🎀</p>
+        <h2 class="subscribed-popup-title" id="subscribed-popup-title">Hey Beautiful, you're part of the Girl Gang! 🙈</h2>
+        <p class="subscribed-popup-text">Go check your Gmail, tap on the <strong>Promotions tab</strong>, and see what we sent you.</p>
+        <p class="subscribed-popup-text">When you're in the email we sent you, tap the menu (the three dots in the top right) and move us to <strong>Primary</strong> to keep receiving more beautiful emails from us. 🫂🎀</p>
+        <p class="subscribed-popup-text subscribed-popup-cheeky">There are a whole lot of opportunities awaiting you. Don't miss them, babe. 😘</p>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const closeBtn = overlay.querySelector('#subscribed-popup-close');
+    const hide = () => {
+      overlay.classList.remove('visible');
+      window.setTimeout(() => { overlay.hidden = true; }, 250);
+    };
+    closeBtn.addEventListener('click', hide);
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) hide();
+    });
+  }
+
+  overlay.hidden = false;
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+}
+
 function renderSuccess(panel, fxLayer) {
   markSubscribed();
   showWelcomeNotification();
+  showSubscribedPopup();
   panel.innerHTML = `
     <div class="newsletter-result-card success" tabindex="-1" id="newsletter-result-heading">
       <p class="newsletter-result-emoji">🎉</p>
@@ -203,6 +251,7 @@ function renderDuplicate(panel) {
       <p class="newsletter-result-emoji">💖</p>
       <h2 class="newsletter-result-title">Hey Queen!</h2>
       <p class="newsletter-result-text">Looks like you're already part of the Girl Gang. Check your inbox, because exciting things are already on their way.</p>
+      <p class="newsletter-result-text newsletter-result-next-step">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the menu at the top right, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">Go To Articles</a>
         <a class="btn btn-secondary" href="${BASE}pages/article.html?id=first-2000-online">Read Latest Guide</a>
