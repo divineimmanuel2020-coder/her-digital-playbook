@@ -1,568 +1,284 @@
 /* =============================================
    WELCOME-EMAIL-TEMPLATE.JS
-   The full "Girlllllll..." welcome email, unchanged from the
-   original design — every section, every gradient, every line
-   is preserved exactly. The ONLY thing different from the
-   original file is that the two dynamic spots now use plain
-   placeholders instead of Pipedream's variable syntax:
+   The full "Welcome Home, Gorgeous" redesign — a colourful,
+   editorial, table-based HTML email built for real email client
+   compatibility (Gmail, Gmail mobile, Outlook, Apple Mail, Yahoo).
 
-     {{SUBSCRIBER_NAME}}   was  {{steps.trigger.event.body.name}}
-     {{UNSUBSCRIBE_URL}}   was  {{unsubscribe_url}}
+   Two placeholders are swapped by api/subscribe.js at send time,
+   exactly as before — nothing about the sending logic changed:
 
-   api/subscribe.js swaps both placeholders for real values right
-   before sending, using a plain .replace(). If you ever want to
-   redesign the email, edit the HTML string below directly — it's
-   the exact same markup you already had, just living here instead
-   of in a standalone .html file so the serverless function can
-   import it.
+     {{SUBSCRIBER_NAME}}   -> the subscriber's real name
+     {{UNSUBSCRIBE_URL}}   -> their real unsubscribe link
+
+   Design notes:
+   - Every layout is a single-column, role="presentation" table —
+     no side-by-side card grids that could break in Outlook, so
+     nothing needs a media query to "stack" on mobile; it's already
+     one column everywhere, which is also simply the safest pattern
+     across every major email client.
+   - No <img> tags at all — every visual element is colour, type,
+     and emoji, so the email looks exactly the same whether or not
+     the subscriber's client blocks images.
+   - Colours pull directly from the Her Digital Playbook palette:
+     blush pink, hot pink/raspberry, lilac, peach, butter yellow,
+     deep plum, and burgundy, each used section-by-section.
    ============================================= */
 
 export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>✨ Welcome to Her Digital Playbook ✨</title>
-    <!--[if mso]>
-    <noscript>
-        <xml>
-            <o:OfficeDocumentSettings>
-                <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-        </xml>
-    </noscript>
-    <![endif]-->
-    <style type="text/css">
-        body, table, td, p, a, li, blockquote {
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-        }
-        table, td {
-            mso-table-lspace: 0pt;
-            mso-table-rspace: 0pt;
-        }
-        img {
-            -ms-interpolation-mode: bicubic;
-            border: 0;
-            height: auto;
-            line-height: 100%;
-            outline: none;
-            text-decoration: none;
-        }
-        body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Welcome to Her Digital Playbook</title>
+<!--[if mso]>
+<style type="text/css">
+  body, table, td { font-family: Arial, Helvetica, sans-serif !important; }
+</style>
+<![endif]-->
+<style type="text/css">
+  body { margin:0; padding:0; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; background-color:#FFF8F2; }
+  table { border-collapse:collapse; }
+  img { border:0; line-height:100%; outline:none; text-decoration:none; }
+  a { text-decoration:none; }
+  .email-wrapper { width:100%; background-color:#FFF8F2; }
+  .email-container { max-width:600px; margin:0 auto; }
+  @media only screen and (max-width:600px) {
+    .email-container { width:100% !important; }
+    .stack { display:block !important; width:100% !important; }
+    .px-mobile { padding-left:20px !important; padding-right:20px !important; }
+    .hero-headline { font-size:30px !important; line-height:1.15 !important; }
+    .section-headline { font-size:22px !important; }
+    .card-pad { padding:20px !important; }
+    .btn-full { display:block !important; width:100% !important; }
+  }
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#FFE4EC;font-family:Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
-    
-    <!-- PREHEADER SPACER -->
-    <div style="display:none;max-height:0px;overflow:hidden;mso-hide:all;font-size:0px;line-height:0px;color:#FFE4EC;">
-        Girlllllll... You're officially one of us 💖 Welcome to your digital playbook for ambitious women — practical guides, soft luxury &amp; big-sister energy ✨
-    </div>
+<body style="margin:0;padding:0;background-color:#FFF8F2;">
 
-    <!-- OUTER WRAPPER (pink dream background) -->
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE4EC;">
-        <tr>
-            <td align="center" style="padding:24px 16px 40px 16px;">
-                
-                <!-- MAIN CONTAINER (luxury magazine card with soft shadow) -->
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background-color:#FFF5F7;border-radius:28px;overflow:hidden;box-shadow:0 20px 50px rgba(200,140,150,0.15);">
-                    
-                    <!-- ============ TOP DECORATIVE RIBBON (gradient) ============ -->
-                    <tr>
-                        <td style="background-image:linear-gradient(135deg,#F9D5D3,#F2B8B5,#FBC8D4,#FADDE1);background-color:#F9D5D3;height:8px;font-size:0;line-height:0;border-radius:0 0 20px 20px;" height="8">
-                            &nbsp;
-                        </td>
-                    </tr>
+  <!-- Preheader (hidden preview text) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#FFF8F2;">
+    Hi {{SUBSCRIBER_NAME}} \u2014 welcome to the Girl Gang. Money moves, career glow-ups, and opportunities from Lagos to London are waiting inside. \u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C\u200C
+  </div>
 
-                    <!-- ============ BRAND MASTHEAD (dramatic serif) ============ -->
-                    <tr>
-                        <td align="center" style="padding:28px 32px 6px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td align="center" style="font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:14px;letter-spacing:4px;color:#E5A3AF;text-transform:uppercase;font-weight:500;line-height:1.4;">
-                                        ♡ Her Digital Playbook ♡
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+  <table role="presentation" class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:24px;overflow:hidden;">
 
-                    <!-- ============ PRIMARY INBOX NUDGE (plain text, no styling tricks — just a genuine ask) ============ -->
-                    <tr>
-                        <td align="center" style="padding:2px 32px 0 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td align="center" style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#B98A93;font-weight:400;">
-                                        📌 Quick favor — drag this email into your Primary tab (or add us to your contacts) so you never miss one 💌
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ HERO SECTION (typography drama) ============ -->
-                    <tr>
-                        <td align="center" style="padding:16px 32px 12px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td align="center" style="font-family:'Great Vibes','Parisienne','Sacramento','Allura','Brush Script MT',cursive;font-size:60px;line-height:1.1;color:#D4677A;font-weight:400;letter-spacing:0.5px;mso-line-height-rule:exactly;">
-                                        Girlllllll...
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:6px;font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:26px;line-height:1.35;color:#B25768;font-weight:500;font-style:italic;letter-spacing:0.3px;">
-                                        You're officially one of us.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:18px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                            <tr>
-                                                <td style="width:45px;height:1px;background-color:#FAC8D0;font-size:0;line-height:0;">&nbsp;</td>
-                                                <td style="width:20px;text-align:center;font-size:16px;color:#F2A5B5;line-height:1;">&nbsp;💖&nbsp;</td>
-                                                <td style="width:45px;height:1px;background-color:#FAC8D0;font-size:0;line-height:0;">&nbsp;</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ PERSONALIZED GREETING (script accent) ============ -->
-                    <tr>
-                        <td align="center" style="padding:14px 32px 4px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td style="font-family:'Great Vibes','Parisienne','Sacramento','Allura',cursive;font-size:24px;line-height:1.5;color:#C7546B;font-weight:400;text-align:center;letter-spacing:0.4px;">
-                                        Hey beautiful...
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top:2px;font-family:Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:#4A3F42;font-weight:400;text-align:center;">
-                                        {{SUBSCRIBER_NAME}} 💖
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ WELCOME MESSAGE (warm big-sister tone) ============ -->
-                    <tr>
-                        <td align="center" style="padding:18px 32px 6px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td style="font-family:Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.75;color:#4B383C;font-weight:400;text-align:center;">
-                                        I'm genuinely so happy you're here. You've just stepped into a <span style="font-weight:600;color:#D4677A;">special space</span> for women who want more — more freedom, more creativity, more income, and more control over their lives.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top:12px;font-family:Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.75;color:#4B383C;font-weight:400;text-align:center;">
-                                        You don't have to figure everything out alone anymore. This isn't just another newsletter. This is your <span style="font-weight:600;color:#D4677A;">digital playbook</span> — a thoughtfully curated resource for ambitious women, filled with practical guidance, honest encouragement, and the tools you actually need.
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ DECORATIVE DIVIDER (sparkles & hearts) ============ -->
-                    <tr>
-                        <td align="center" style="padding:22px 32px 18px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td style="font-size:18px;color:#F2B8C4;letter-spacing:8px;line-height:1;">&nbsp;✨&nbsp;♡&nbsp;🎀&nbsp;♡&nbsp;✨&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ WHAT YOU'LL DISCOVER (editorial card) ============ -->
-                    <tr>
-                        <td align="center" style="padding:4px 28px 4px 28px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFF0F3;border-radius:20px;border:1px solid #FAD4DC;">
-                                <tr>
-                                    <td align="center" style="padding:24px 18px 20px 18px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td align="center" style="font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:24px;line-height:1.3;color:#B55467;font-weight:500;letter-spacing:0.2px;">
-                                                    ✨ What You'll <span style="color:#E18A99;">Discover</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:6px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#C49CA3;font-weight:400;font-style:italic;">
-                                                    A world of pretty opportunities...
-                                                </td>
-                                            </tr>
-                                            <!-- Opportunity grid using two columns of pink tags -->
-                                            <tr>
-                                                <td align="center" style="padding-top:14px;">
-                                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">🤖 AI &amp; Automation</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">✍️ Freelancing</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📋 Virtual Assistance</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📝 Copywriting</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📱 Content Creation</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📊 Digital Marketing</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">💰 Affiliate Marketing</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">💌 Email Marketing</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">🎨 Canva &amp; Design</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">🌟 Personal Branding</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📦 Digital Products</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">📸 UGC Creation</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">🌐 Remote Work</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">💻 Online Business</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">▶️ YouTube &amp; Video</td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td width="48%" style="padding:6px 2%;vertical-align:top;">
-                                                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFE8EC;border-radius:12px;border:1px solid #FCCED7;">
-                                                                    <tr><td align="center" style="padding:12px 8px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#4F3A40;font-weight:500;">⚡ Automation</td></tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:10px;font-family:'Playfair Display',Georgia,serif;font-size:14px;font-style:italic;color:#C48F9A;">...and so many more ♡</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ DECORATIVE DIVIDER ============ -->
-                    <tr>
-                        <td align="center" style="padding:18px 32px 14px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td style="font-size:16px;color:#F2B8C4;letter-spacing:6px;line-height:1;">&nbsp;💎&nbsp;♡&nbsp;💎&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ INCOME POSSIBILITIES (pink card with script pull quote) ============ -->
-                    <tr>
-                        <td align="center" style="padding:4px 28px 6px 28px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFF2F5;border-radius:20px;border:1px solid #FAD4DC;">
-                                <tr>
-                                    <td align="center" style="padding:24px 20px 22px 20px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td align="center" style="font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:22px;line-height:1.3;color:#B55467;font-weight:500;">
-                                                    💰 Realistic <span style="color:#E18A99;">Income</span> Possibilities
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:12px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#4B383C;font-weight:400;">
-                                                    Women in this community are building <span style="font-weight:500;color:#C7546B;">real results</span> — from their first few hundred dollars to thousands in consistent monthly income. They're creating digital assets, multiple income streams, and lives they genuinely love.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:14px;">
-                                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="background-color:#FFE4EB;border-radius:12px;">
-                                                        <tr>
-                                                            <td style="padding:10px 18px;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.5;color:#9B6D77;font-weight:400;font-style:italic;text-align:center;">
-                                                                ⚠️ Success requires learning, consistency &amp; action.<br>No income is guaranteed — only honest guidance.
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <!-- Script pull quote -->
-                                            <tr>
-                                                <td align="center" style="padding-top:16px;font-family:'Great Vibes','Parisienne','Sacramento','Allura',cursive;font-size:22px;line-height:1.4;color:#D4677A;font-weight:400;font-style:italic;">
-                                                    “Your winning era starts today.”
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ DECORATIVE DIVIDER ============ -->
-                    <tr>
-                        <td align="center" style="padding:20px 32px 16px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td style="font-size:16px;color:#F2B8C4;letter-spacing:6px;line-height:1;">&nbsp;🎀&nbsp;✨&nbsp;🎀&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ WHAT YOU'LL RECEIVE (another pink card) ============ -->
-                    <tr>
-                        <td align="center" style="padding:4px 28px 6px 28px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFF0F3;border-radius:20px;border:1px solid #FAD4DC;">
-                                <tr>
-                                    <td align="center" style="padding:22px 18px 18px 18px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td align="center" style="font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:22px;line-height:1.3;color:#B55467;font-weight:500;">
-                                                    📋 What You'll <span style="color:#E18A99;">Receive</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:14px;">
-                                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">✨ Practical step-by-step guides</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">🎁 Free resources &amp; digital tools</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">📄 Ready-to-use templates &amp; checklists</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">🤖 AI prompts that save hours</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">🎯 Industry insights &amp; trend spotting</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">💌 Weekly motivation (big-sister style)</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">🔑 Opportunities worth exploring</td></tr>
-                                                        <tr><td style="padding:7px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;">⏱️ Time-saving shortcuts</td></tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ DECORATIVE DIVIDER ============ -->
-                    <tr>
-                        <td align="center" style="padding:20px 32px 16px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td style="font-size:16px;color:#F2B8C4;letter-spacing:6px;line-height:1;">&nbsp;♡&nbsp;✨&nbsp;♡&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ BRAND PROMISE (elegant quote box) ============ -->
-                    <tr>
-                        <td align="center" style="padding:4px 28px 6px 28px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FFF5F5;border-radius:20px;border:1px solid #FCCED7;">
-                                <tr>
-                                    <td align="center" style="padding:24px 18px 20px 18px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td align="center" style="font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-size:22px;line-height:1.3;color:#B55467;font-weight:500;">
-                                                    🤍 Our <span style="color:#E18A99;">Promise</span> to You
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" style="padding-top:14px;">
-                                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="85%">
-                                                        <tr><td style="padding:8px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;text-align:center;">🌸 This is a <span style="font-weight:500;color:#D4677A;">safe space</span> — always</td></tr>
-                                                        <tr><td style="padding:8px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;text-align:center;">🚫 No fake gurus. No fluff. No jargon.</td></tr>
-                                                        <tr><td style="padding:8px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;text-align:center;">✅ Only practical guidance you can use</td></tr>
-                                                        <tr><td style="padding:8px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;text-align:center;">💗 Encouragement that feels like a warm hug</td></tr>
-                                                        <tr><td style="padding:8px 0;font-family:Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#4B383C;font-weight:400;text-align:center;">🤝 Honesty. Consistency. Real talk.</td></tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <!-- script tagline -->
-                                            <tr>
-                                                <td align="center" style="padding-top:12px;font-family:'Great Vibes','Parisienne','Sacramento','Allura',cursive;font-size:21px;line-height:1.4;color:#D4677A;font-weight:400;font-style:italic;">
-                                                    “This is your soft life meets smart strategy era.”
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ DECORATIVE DIVIDER ============ -->
-                    <tr>
-                        <td align="center" style="padding:22px 32px 12px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td style="font-size:16px;color:#F2B8C4;letter-spacing:6px;line-height:1;">&nbsp;💖&nbsp;🎀&nbsp;💖&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ CTA (luxury pink gradient button) ============ -->
-                    <tr>
-                        <td align="center" style="padding:8px 32px 14px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td align="center" style="font-family:'Playfair Display',Georgia,serif;font-size:18px;line-height:1.4;color:#B55467;font-weight:500;">
-                                        Ready to dive in?
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:16px;">
-                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                                            <tr>
-                                                <td align="center" style="background-color:#D4677A;background-image:linear-gradient(135deg,#E88A9D,#D4677A,#C14D63);border-radius:50px;box-shadow:0 8px 24px rgba(212,103,122,0.30);">
-                                                    <a href="https://herdigitalplaybook.com" target="_blank" style="display:inline-block;padding:18px 42px;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:1.3;color:#FFFFFF;font-weight:600;text-decoration:none;letter-spacing:0.4px;border-radius:50px;text-align:center;white-space:nowrap;">
-                                                        ✨ Explore Her Digital Playbook ✨
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ CLOSING (script love note) ============ -->
-                    <tr>
-                        <td align="center" style="padding:18px 32px 6px 32px;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <td align="center" style="font-family:'Great Vibes','Parisienne','Sacramento','Allura',cursive;font-size:26px;line-height:1.5;color:#D4677A;font-weight:400;letter-spacing:0.4px;">
-                                        Welcome home, lovely.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:8px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#4B383C;font-weight:400;">
-                                        Your future self is already smiling. Keep showing up — you're exactly where you need to be.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:18px;font-family:'Great Vibes','Parisienne','Sacramento','Allura',cursive;font-size:28px;line-height:1.5;color:#C7546B;font-weight:400;">
-                                        Love,
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="font-family:'Playfair Display',Georgia,serif;font-size:20px;line-height:1.4;color:#B55467;font-weight:500;">
-                                        Princess
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding-top:2px;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:1.5px;color:#C49CA3;text-transform:uppercase;">
-                                        Founder, Her Digital Playbook
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- ============ BOTTOM DECORATIVE RIBBON ============ -->
-                    <tr>
-                        <td style="background-image:linear-gradient(135deg,#F9D5D3,#F2B8B5,#FBC8D4,#FADDE1);background-color:#F9D5D3;height:6px;font-size:0;line-height:0;border-radius:20px 20px 0 0;" height="6">
-                            &nbsp;
-                        </td>
-                    </tr>
-
-                </table>
-                <!-- END MAIN CONTAINER -->
-
-                <!-- ============ FOOTER (pink minimal) ============ -->
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;margin-top:22px;">
-                    <tr>
-                        <td align="center" style="padding:6px 20px;font-family:Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:#C49CA3;font-weight:400;">
-                            Her Digital Playbook &copy; 2026 &nbsp;|&nbsp; All rights reserved
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding:2px 20px;">
-                            <a href="https://herdigitalplaybook.com" target="_blank" style="color:#E18A99;text-decoration:underline;font-family:Helvetica,Arial,sans-serif;font-size:11px;">herdigitalplaybook.com</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding:6px 20px;font-family:Helvetica,Arial,sans-serif;font-size:11px;color:#D4A5AF;">
-                            💌 Instagram &nbsp;·&nbsp; Pinterest &nbsp;·&nbsp; TikTok &nbsp;·&nbsp; YouTube
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding:10px 20px 4px 20px;font-family:Helvetica,Arial,sans-serif;font-size:10.5px;line-height:1.6;color:#D4A5AF;font-weight:400;">
-                            You received this email because you signed up at Her Digital Playbook.<br>
-                            If you'd like to step away, you can <a href="{{UNSUBSCRIBE_URL}}" target="_blank" style="color:#E18A99;text-decoration:underline;">unsubscribe here</a> anytime — no hard feelings. 💕
-                        </td>
-                    </tr>
-                </table>
-
+          <!-- ============ MASTHEAD ============ -->
+          <tr>
+            <td align="center" bgcolor="#4A2545" style="background-color:#4A2545;padding:22px 20px;">
+              <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:22px;color:#F6C9D6;">Her\u2661</span>
+              <span style="font-family:Arial,Helvetica,sans-serif;font-size:15px;letter-spacing:2px;color:#FFFFFF;font-weight:bold;">&nbsp;&nbsp;DIGITAL PLAYBOOK</span>
             </td>
-        </tr>
-    </table>
-    <!-- END OUTER WRAPPER -->
+          </tr>
 
+          <!-- ============ HERO ============ -->
+          <tr>
+            <td class="px-mobile" align="center" bgcolor="#FDEEF2" style="background-color:#FDEEF2;background-image:linear-gradient(135deg,#FDEEF2 0%,#FBE0E8 55%,#FFF3E9 100%);padding:44px 36px 40px;">
+              <p style="margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:20px;color:#EC5C82;">Hi {{SUBSCRIBER_NAME}},</p>
+              <h1 class="hero-headline" style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:36px;line-height:1.1;color:#3A1B32;font-weight:900;letter-spacing:-0.5px;">WELCOME HOME,<br>GORGEOUS. \ud83c\udf80</h1>
+              <p style="margin:0 auto;max-width:440px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#5C4650;">You're officially part of the <strong>Her Digital Playbook Girl Gang</strong> \u2014 and honestly? I'm so happy you're here.</p>
+              <p style="margin:16px auto 0;max-width:440px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#5C4650;">This inbox is about to become your spot for money moves, career opportunities, digital skills, business ideas, AI, freelancing, online income, tools, and the honest big-sis advice to actually use all of it.</p>
+            </td>
+          </tr>
+
+          <!-- ============ WHAT YOU'LL GET ============ -->
+          <tr>
+            <td class="px-mobile" style="padding:40px 28px 12px;">
+              <p style="margin:0 0 22px;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:2px;color:#C9A253;font-weight:bold;text-transform:uppercase;">What You'll Get Here</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="px-mobile" style="padding:0 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="#FBE0E8" style="background-color:#FBE0E8;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#7A2039;">\ud83d\udcb8 Money Moves</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Practical ways to make money online, grow your income, and discover new income streams.</p>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td bgcolor="#E6E0F5" style="background-color:#E6E0F5;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#4A2545;">\ud83d\udcbc Career Glow-Ups</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">CV advice, LinkedIn strategy, salary negotiation, remote work, and international career opportunities.</p>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td bgcolor="#FCD9C2" style="background-color:#FCD9C2;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#7A3B1D;">\ud83d\udcbb Digital Skills</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">AI, freelancing, virtual assistance, content creation, and other skills that actually pay.</p>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td bgcolor="#FDE9A8" style="background-color:#FDE9A8;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#6B5416;">\ud83d\udecd\ufe0f Business Ideas</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Digital products, online businesses, personal brands, and turning your skills into real income.</p>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td bgcolor="#4A2545" style="background-color:#4A2545;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#F6C9D6;">\ud83c\udf0d Opportunities</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#EAD9E5;">Jobs, fellowships, scholarships, grants, and programmes worth knowing about \u2014 wherever you are.</p>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td bgcolor="#F6C9D6" style="background-color:#F6C9D6;border-radius:16px;padding:20px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#7A2039;">\ud83c\udf81 Tools &amp; Resources</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Calculators, templates, guides, checklists, and prompts you can actually use today.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ BIG SIS TIP ============ -->
+          <tr>
+            <td style="padding:40px 0 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td class="card-pad" bgcolor="#3A1B32" style="background-color:#3A1B32;padding:44px 40px;" align="center">
+                    <p style="margin:0 0 10px;font-family:Georgia,serif;font-size:52px;line-height:0.5;color:#C9A253;">&#8220;</p>
+                    <p style="margin:0 0 16px;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:2px;color:#EC5C82;font-weight:bold;text-transform:uppercase;">A Little Big-Sis Talk \ud83d\udc8c</p>
+                    <p style="margin:0 auto;max-width:440px;text-align:center;font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.5;color:#FFF8F2;">Don't wait until you feel completely ready.</p>
+                    <p style="margin:16px auto 0;max-width:440px;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#EAD9E5;">The girl who starts with one skill, one idea, one application, or one tiny offer today can be in a completely different financial position twelve months from now. You don't need to have everything figured out. You just need to start making better moves. That's what we're here for.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ SO WHERE DO WE START ============ -->
+          <tr>
+            <td class="px-mobile" style="padding:40px 28px 8px;" align="center">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:900;color:#3A1B32;" class="section-headline">SO... WHERE DO WE START? \ud83c\udf80</p>
+              <p style="margin:10px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#8A7480;">A few places to jump in right now \u2014 no overwhelm, just pick one.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="px-mobile" style="padding:16px 28px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="border:1.5px solid #FBE0E8;border-radius:16px;padding:22px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#3A1B32;">\ud83d\udcb8 Make Your First $2,000 Online</p>
+                    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Discover practical ways to begin building online income \u2014 no guesswork, just a real plan.</p>
+                    <a href="https://herdigitalplaybook.com/pages/article.html?id=first-2000-online" class="btn-full" style="display:inline-block;background-color:#EC5C82;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:50px;">READ THE GUIDE \u2192</a>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td style="border:1.5px solid #E6E0F5;border-radius:16px;padding:22px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#3A1B32;">\ud83d\udcbb Build Your Digital Skills</p>
+                    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Explore every Money Mission and pick a skill worth learning this week.</p>
+                    <a href="https://herdigitalplaybook.com/#articles" class="btn-full" style="display:inline-block;background-color:#EC5C82;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:50px;">EXPLORE ARTICLES \u2192</a>
+                  </td>
+                </tr>
+                <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
+                <tr>
+                  <td style="border:1.5px solid #FCD9C2;border-radius:16px;padding:22px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#3A1B32;">\ud83e\uddf0 Explore Free Tools</p>
+                    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Calculators and checklists to help you price, plan, and negotiate with confidence.</p>
+                    <a href="https://herdigitalplaybook.com/#tools" class="btn-full" style="display:inline-block;background-color:#EC5C82;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:50px;">TRY A TOOL \u2192</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ INTERNATIONAL GIRL GANG ============ -->
+          <tr>
+            <td style="padding:44px 0 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td class="card-pad" align="center" bgcolor="#7A2039" style="background-color:#7A2039;background-image:linear-gradient(120deg,#7A2039 0%,#4A2545 100%);padding:40px 30px;">
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:20px;line-height:1.6;font-weight:900;color:#FFFFFF;text-align:center;">FROM LAGOS TO LONDON.<br>FROM ACCRA TO TORONTO.<br>FROM NAIROBI TO NEW YORK.</p>
+                    <p style="margin:14px 0 0;font-family:Georgia,serif;font-style:italic;font-size:17px;color:#F6C9D6;text-align:center;">Wherever you are \u2014 you're welcome here. \ud83c\udf0d</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ COMMUNITY ============ -->
+          <tr>
+            <td class="px-mobile" align="center" style="padding:40px 30px;">
+              <p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:900;color:#3A1B32;" class="section-headline">YOU'RE ONE OF US NOW. \ud83e\udd17\ud83c\udf80</p>
+              <p style="margin:0 auto;max-width:440px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5C4650;">The Girl Gang is women supporting women \u2014 sharing opportunities, learning new skills, and making smarter money moves together. No gatekeeping, no judgment. Just girls actually helping girls build something real.</p>
+            </td>
+          </tr>
+
+          <!-- ============ PRIMARY CTA ============ -->
+          <tr>
+            <td align="center" style="padding:8px 28px 44px;">
+              <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:900;color:#3A1B32;">LET'S GET STARTED, GORGEOUS. \ud83c\udf80</p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="#EC5C82" style="background-color:#EC5C82;background-image:linear-gradient(120deg,#F6C9D6,#EC5C82,#C9A253);border-radius:50px;">
+                    <a href="https://herdigitalplaybook.com/" class="btn-full" style="display:inline-block;padding:16px 40px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;color:#FFFFFF;letter-spacing:0.5px;">EXPLORE HER DIGITAL PLAYBOOK \u2192</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ PERSONAL LETTER ============ -->
+          <tr>
+            <td class="px-mobile" bgcolor="#FFF8F2" style="background-color:#FFF8F2;padding:40px 32px;">
+              <p style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.7;color:#5C4650;">Please don't think you have to become a completely different person to build the life you want.</p>
+              <p style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.7;color:#5C4650;">You don't need to hustle 24/7. You don't need to know everything. You don't need to compare your chapter one to someone else's chapter twenty.</p>
+              <p style="margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.7;color:#5C4650;">We're building this intentionally.</p>
+              <p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.6;color:#EC5C82;font-weight:bold;">One skill. One opportunity. One money move. One brave decision at a time.</p>
+              <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;color:#3A1B32;">Welcome to the Girl Gang. \ud83e\udd17\ud83c\udf80</p>
+              <p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#5C4650;">We're so glad you're here.</p>
+              <p style="margin:0;font-family:Georgia,serif;font-style:italic;font-size:18px;color:#7A2039;">Princess</p>
+              <p style="margin:2px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8A7480;">Her Digital Playbook<br>Your digital big sis on money, careers, business &amp; opportunities.</p>
+            </td>
+          </tr>
+
+          <!-- ============ P.S. CARD ============ -->
+          <tr>
+            <td class="px-mobile" style="padding:0 28px 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="#FDE9A8" style="background-color:#FDE9A8;border-radius:16px;padding:20px 22px;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;color:#6B5416;">P.S. \ud83d\udc97</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#5C4650;">Save this email. You never know which little idea you discover inside Her Digital Playbook will become your next big money move.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ FOOTER ============ -->
+          <tr>
+            <td align="center" bgcolor="#3A1B32" style="background-color:#3A1B32;padding:36px 28px;">
+              <p style="margin:0 0 14px;font-family:Georgia,serif;font-style:italic;font-size:18px;color:#F6C9D6;">Her\u2661 Digital Playbook</p>
+              <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:2;color:#EAD9E5;">
+                <a href="https://herdigitalplaybook.com/" style="color:#EAD9E5;">Home</a> &nbsp;\u00b7&nbsp;
+                <a href="https://herdigitalplaybook.com/#articles" style="color:#EAD9E5;">Articles</a> &nbsp;\u00b7&nbsp;
+                <a href="https://herdigitalplaybook.com/#tools" style="color:#EAD9E5;">Free Tools</a> &nbsp;\u00b7&nbsp;
+                <a href="https://herdigitalplaybook.com/pages/about.html" style="color:#EAD9E5;">About</a> &nbsp;\u00b7&nbsp;
+                <a href="https://herdigitalplaybook.com/pages/contact.html" style="color:#EAD9E5;">Contact</a>
+              </p>
+              <p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#B89AAE;">herdigitalplaybook.com</p>
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#B89AAE;">You're receiving this because you joined the Her Digital Playbook Girl Gang.</p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;">
+                <a href="{{UNSUBSCRIBE_URL}}" style="color:#B89AAE;text-decoration:underline;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
