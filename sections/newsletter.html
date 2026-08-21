@@ -1,42 +1,87 @@
 <section class="newsletter" id="newsletter">
   <div class="container newsletter-wrapper">
+
     <div class="newsletter-image">
       <div class="blob blob-3"></div>
       <div class="blob blob-4"></div>
       <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_900,q_auto,f_auto,dpr_auto/v1786870646/file_00000000dd9c81f49d10e8ec29f0b6a8_xbxdr2.png" alt="Join the Her Digital Playbook community">
     </div>
-    <div class="newsletter-panel-wrap">
-      <div class="newsletter-fx" id="newsletter-fx" aria-hidden="true"></div>
-      <div id="newsletter-panel" aria-live="polite">
-        <!-- Default "form" state — newsletter.js swaps this whole
-             panel's content for success/duplicate/error states, and
-             can re-render this exact markup again via renderFormState(). -->
-        <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
-        <p class="newsletter-desc">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, girl to girl.</p>
-        <ul class="newsletter-perks">
-          <li>♡ Expert insights</li>
-          <li>✎ Practical tips</li>
-          <li>✦ Exclusive resources</li>
-          <li>🎁 Free tools &amp; templates</li>
-        </ul>
 
-        <form class="newsletter-form" id="newsletter-form" novalidate>
-          <div class="newsletter-field">
-            <label for="newsletter-name" class="sr-only">Your name</label>
-            <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name" aria-describedby="newsletter-name-error">
-            <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
-          </div>
-          <div class="newsletter-field">
-            <label for="newsletter-email" class="sr-only">Your email address</label>
-            <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
-            <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
-          </div>
-          <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
-        </form>
-        <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+    <!-- Always-visible intro + perks — stays put regardless of
+         whether the panel below is showing the form, a success
+         message, or an error, so this content never disappears. -->
+    <div class="newsletter-intro">
+      <p class="newsletter-intro-heading">
+        <span class="newsletter-intro-deco">🎀</span>
+        Come sit with us, <em>gorgeous</em>.
+        <span class="newsletter-intro-deco">♡</span>
+      </p>
+      <div class="newsletter-intro-divider"><span>♡</span></div>
+      <p class="newsletter-desc newsletter-desc-glow">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, <em>girl to girl</em>.</p>
+    </div>
+
+    <div class="newsletter-perks-grid">
+      <div class="newsletter-perk-card newsletter-perk-1">
+        <span class="newsletter-perk-icon">♡</span>
+        <p class="newsletter-perk-label">Expert Insights</p>
+        <p class="newsletter-perk-desc">Career, growth &amp; success advice that actually helps you level up.</p>
+        <span class="newsletter-perk-num">01</span>
+      </div>
+      <div class="newsletter-perk-card newsletter-perk-2">
+        <span class="newsletter-perk-icon">✎</span>
+        <p class="newsletter-perk-label">Practical Tips</p>
+        <p class="newsletter-perk-desc">Real, actionable tips you can use immediately.</p>
+        <span class="newsletter-perk-num">02</span>
+      </div>
+      <div class="newsletter-perk-card newsletter-perk-3">
+        <span class="newsletter-perk-icon">✦</span>
+        <p class="newsletter-perk-label">Exclusive Resources</p>
+        <p class="newsletter-perk-desc">Guides, templates &amp; tools made just for our girl gang.</p>
+        <span class="newsletter-perk-num">03</span>
+      </div>
+      <div class="newsletter-perk-card newsletter-perk-4">
+        <span class="newsletter-perk-icon">🎁</span>
+        <p class="newsletter-perk-label">Free Tools &amp; Templates</p>
+        <p class="newsletter-perk-desc">Pretty, powerful resources to make your journey easier &amp; prettier.</p>
+        <span class="newsletter-perk-num">04</span>
       </div>
     </div>
-  </div>
-  </section>
 
-            
+    <div class="newsletter-connect-card">
+      <span class="newsletter-sticky-note">Your next big idea might be one letter away. ♡</span>
+      <p class="newsletter-connect-eyebrow">Let's Stay Connected ♡</p>
+      <h2 class="newsletter-title">Join The Girl Gang 🎀</h2>
+      <div class="newsletter-panel-wrap">
+        <div class="newsletter-fx" id="newsletter-fx" aria-hidden="true"></div>
+        <div id="newsletter-panel" aria-live="polite">
+          <!-- Default "form" state — newsletter.js swaps this whole
+               panel's content for success/duplicate/error states, and
+               can re-render this exact markup again via renderFormState(). -->
+          <form class="newsletter-form" id="newsletter-form" novalidate>
+            <div class="newsletter-field">
+              <label for="newsletter-name">Your Name ♡</label>
+              <div class="newsletter-input-wrap">
+                <span class="newsletter-input-icon">👤</span>
+                <input type="text" id="newsletter-name" placeholder="What should we call you, gorgeous?" autocomplete="name" aria-describedby="newsletter-name-error">
+              </div>
+              <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
+            </div>
+            <div class="newsletter-field">
+              <label for="newsletter-email">Your Email ♡</label>
+              <div class="newsletter-input-wrap">
+                <span class="newsletter-input-icon">✉️</span>
+                <input type="email" id="newsletter-email" placeholder="Where should we send your Big Sis Letters?" autocomplete="email" aria-describedby="newsletter-email-error">
+              </div>
+              <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
+            </div>
+            <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
+          </form>
+          <p class="newsletter-note">No spam. Just good things for your inbox. Pinky promise. ♡</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="newsletter-bottom-tagline">Learn. Earn. Elevate. ♡</p>
+
+  </div>
+</section>
