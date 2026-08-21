@@ -150,28 +150,26 @@ function celebrate(layer) {
 
 function renderFormState(panel) {
   panel.innerHTML = `
-    <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
-    <p class="newsletter-desc newsletter-desc-glow">Girl, come get the tea. Big Sis Letters land in your inbox with real money moves, career glow-ups, freelance opportunities, business ideas, and the digital skills that actually pay — plus the honest advice and gentle push you need to start today.</p>
-    <ul class="newsletter-perks">
-      <li>♡ Expert insights</li>
-      <li>✎ Practical tips</li>
-      <li>✦ Exclusive resources</li>
-      <li>🎁 Free tools &amp; templates</li>
-    </ul>
     <form class="newsletter-form" id="newsletter-form" novalidate>
       <div class="newsletter-field">
-        <label for="newsletter-name" class="sr-only">Your name</label>
-        <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name" aria-describedby="newsletter-name-error">
+        <label for="newsletter-name">Your Name ♡</label>
+        <div class="newsletter-input-wrap">
+          <span class="newsletter-input-icon">👤</span>
+          <input type="text" id="newsletter-name" placeholder="What should we call you, gorgeous?" autocomplete="name" aria-describedby="newsletter-name-error">
+        </div>
         <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
       </div>
       <div class="newsletter-field">
-        <label for="newsletter-email" class="sr-only">Your email address</label>
-        <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
+        <label for="newsletter-email">Your Email ♡</label>
+        <div class="newsletter-input-wrap">
+          <span class="newsletter-input-icon">✉️</span>
+          <input type="email" id="newsletter-email" placeholder="Where should we send your Big Sis Letters?" autocomplete="email" aria-describedby="newsletter-email-error">
+        </div>
         <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
       </div>
       <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
     </form>
-    <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+    <p class="newsletter-note">No spam. Just good things for your inbox. Pinky promise. ♡</p>
   `;
 }
 
