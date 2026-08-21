@@ -161,12 +161,12 @@ function renderFormState(panel) {
     <form class="newsletter-form" id="newsletter-form" novalidate>
       <div class="newsletter-field">
         <label for="newsletter-name" class="sr-only">Your name</label>
-        <input type="text" id="newsletter-name" placeholder="What should we call you, gorgeous?" autocomplete="name" aria-describedby="newsletter-name-error">
+        <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name" aria-describedby="newsletter-name-error">
         <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
       </div>
       <div class="newsletter-field">
         <label for="newsletter-email" class="sr-only">Your email address</label>
-        <input type="email" id="newsletter-email" placeholder="Where should we send your Big Sis Letters?" autocomplete="email" aria-describedby="newsletter-email-error">
+        <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
         <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
       </div>
       <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
