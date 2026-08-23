@@ -201,7 +201,7 @@ function showSubscribedPopup() {
         <button class="subscribed-popup-close" id="subscribed-popup-close" type="button" aria-label="Close">✕</button>
         <p class="subscribed-popup-emoji">🎀</p>
         <h2 class="subscribed-popup-title" id="subscribed-popup-title">Hey Beautiful, you're part of the Girl Gang! 🙈</h2>
-        <p class="subscribed-popup-text">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
+        <p class="subscribed-popup-text">Girl if you don't find our email, check promotions tab in your Gmail app, Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       </div>`;
     document.body.appendChild(overlay);
 
@@ -231,7 +231,7 @@ function renderSuccess(panel, fxLayer) {
       <p class="newsletter-result-text">Girl... I'm genuinely so excited you're here.</p>
       <p class="newsletter-result-text">Every week you'll receive practical digital skills, AI tips, online income ideas, beautiful resources, and exclusive content designed to help you build your dream life.</p>
       <p class="newsletter-result-text">This isn't spam. It's your digital glow-up journey. Welcome home. 🎀🫂</p>
-      <p class="newsletter-result-text newsletter-result-next-step">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
+      <p class="newsletter-result-text newsletter-result-next-step">Girl if you don't find our email, check promotions tab in your Gmail app, Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">✨ Explore Articles</a>
         <a class="btn btn-secondary" href="${BASE}index.html#tools">✨ Try A Free Tool</a>
@@ -249,7 +249,7 @@ function renderDuplicate(panel) {
       <p class="newsletter-result-emoji">💖</p>
       <h2 class="newsletter-result-title">Hey Queen!</h2>
       <p class="newsletter-result-text">Looks like you're already part of the Girl Gang. Check your inbox, because exciting things are already on their way.</p>
-      <p class="newsletter-result-text newsletter-result-next-step">Go to your Promotions tab in Gmail to see our message to you, gorgeous. Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
+      <p class="newsletter-result-text newsletter-result-next-step">Girl if you don't find our email, check promotions tab in your Gmail app, Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">Go To Articles</a>
         <a class="btn btn-secondary" href="${BASE}pages/article.html?id=first-2000-online">Read Latest Guide</a>
