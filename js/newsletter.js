@@ -224,6 +224,13 @@ function renderSuccess(panel, fxLayer) {
   markSubscribed();
   showWelcomeNotification();
   showSubscribedPopup();
+  // GA4: record the successful signup itself — never the subscriber's
+  // name or email, and nothing else identifying. window.gtag is only
+  // ever absent if a page hasn't loaded the GA snippet at all, so this
+  // stays a safe no-op rather than throwing if that's ever the case.
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'newsletter_signup');
+  }
   panel.innerHTML = `
     <div class="newsletter-result-card success" tabindex="-1" id="newsletter-result-heading">
       <p class="newsletter-result-emoji">🎉</p>
