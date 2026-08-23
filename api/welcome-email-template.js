@@ -74,15 +74,6 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
             </td>
           </tr>
 
-          <!-- ============ MOVE TO PRIMARY BANNER ============ -->
-          <tr>
-            <td align="center" bgcolor="#FDE9A8" style="background-color:#FDE9A8;padding:14px 24px;">
-              <p style="margin:0;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#6B5416;">
-                \ud83d\udccc Go to your Promotions tab in Gmail to see this message, gorgeous. Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. \u2728
-              </p>
-            </td>
-          </tr>
-
           <!-- ============ HERO ============ -->
           <tr>
             <td class="px-mobile" align="center" bgcolor="#FDEEF2" style="background-color:#FDEEF2;background-image:linear-gradient(135deg,#FDEEF2 0%,#FBE0E8 55%,#FFF3E9 100%);padding:44px 36px 40px;">
@@ -260,6 +251,21 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                   <td bgcolor="#FDE9A8" style="background-color:#FDE9A8;border-radius:16px;padding:20px 22px;">
                     <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;color:#6B5416;">P.S. \ud83d\udc97</p>
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#5C4650;">Save this email. You never know which little idea you discover inside Her Digital Playbook will become your next big money move.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============ MOVE TO PRIMARY REMINDER (placed at the end, not the top, so it doesn't distract from the main welcome message) ============ -->
+          <tr>
+            <td class="px-mobile" style="padding:0 28px 36px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="border-top:1px solid #F3D9E0;padding:20px 10px 0;">
+                    <p style="margin:0;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#8A7480;">
+                      \ud83d\udccc Girl if you don't find our email, check promotions tab in your Gmail app, Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. \u2728
+                    </p>
                   </td>
                 </tr>
               </table>
