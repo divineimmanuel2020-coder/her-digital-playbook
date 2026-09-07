@@ -1026,6 +1026,19 @@ async function init() {
   }
   canonicalLink.setAttribute('href', `https://herdigitalplaybook.com/pages/article.html?id=${item.id}`);
 
+  // Self-updating meta description, same pattern as canonical above.
+  // Reads item.metaDescription if present (new SEO-focused articles
+  // set this explicitly); falls back to item.excerpt so every
+  // existing article/tool still gets a correct, non-empty
+  // description with zero changes needed to their data.
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) {
+    metaDesc = document.createElement('meta');
+    metaDesc.setAttribute('name', 'description');
+    document.head.appendChild(metaDesc);
+  }
+  metaDesc.setAttribute('content', item.metaDescription || item.excerpt);
+
   const isTool = item.type === 'tool';
   const { html: bodyHtml, chapters } = formatArticleBody(item.content, item.id);
 
