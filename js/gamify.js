@@ -24,6 +24,12 @@ export const BADGES = [
   { id: 'level-5', icon: '👑', label: 'CEO Energy', desc: 'Reached Level 5' },
   { id: 'offer-builder', icon: '🎀', label: 'Offer Builder', desc: 'Built your first money idea in a Builder tool' },
   { id: 'digital-bag-builder', icon: '📱', label: 'Digital Bag Builder', desc: 'Completed a Final Money Mission' },
+  { id: 'skills-passport', icon: '🎒', label: 'Skills Passport Holder', desc: 'Checked off every skill in a Digital Skills Passport' },
+  { id: 'product-builder', icon: '🛠️', label: 'Product Builder', desc: 'Completed every stage of a build-along mission' },
+  { id: 'client-ready', icon: '🤝', label: 'Client Ready', desc: 'Worked through a real client scenario' },
+  { id: 'digital-girl-unlocked', icon: '🎀', label: 'Digital Girl Unlocked', desc: 'Completed a full 30-Day Challenge' },
+  { id: 'myth-buster', icon: '🔍', label: 'Myth Buster', desc: 'Revealed every myth vs reality in a mission' },
+  { id: 'goal-getter', icon: '🎯', label: 'Goal Getter', desc: 'Hit 100% in a money goal simulator' },
 ];
 
 export const DREAM_ITEMS = [
