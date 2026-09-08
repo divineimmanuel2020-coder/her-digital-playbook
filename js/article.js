@@ -70,6 +70,12 @@ function formatArticleBody(content, articleId) {
   let checkinIndex = 0;
   let builderIndex = 0;
   let bossIndex = 0;
+  let passportIndex = 0;
+  let stagesIndex = 0;
+  let scenarioIndex = 0;
+  let challengeIndex = 0;
+  let mythIndex = 0;
+  let goalsimIndex = 0;
 
   const html = blocks
     .map((block) => {
@@ -271,6 +277,201 @@ function formatArticleBody(content, articleId) {
               ${options.map((o, i) => `<button class="quiz-option" data-correct="${o.correct}" data-letter="${String.fromCharCode(65 + i)}" type="button"><span class="quiz-letter">${String.fromCharCode(65 + i)}</span>${applyBold(o.text)}</button>`).join('')}
             </div>
             <p class="quiz-why" hidden>${applyBold(why)}</p>
+          </div>`;
+      }
+
+      if (trimmed.startsWith('%%PASSPORT')) {
+        const lines = trimmed.split('\n').slice(1);
+        let title = 'Your Digital Skills Passport';
+        let badgeId = '';
+        let xpEach = 5;
+        const items = [];
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('TITLE:')) title = l.slice(6).trim();
+          else if (l.startsWith('BADGE:')) badgeId = l.slice(6).trim();
+          else if (l.startsWith('XP:')) xpEach = Number(l.slice(3).trim()) || xpEach;
+          else if (l.startsWith('ITEM:')) items.push(l.slice(5).trim());
+        });
+        const pid = `${articleId}-passport-${passportIndex++}`;
+        return `
+          <div class="passport-card" data-passport-id="${pid}" data-passport-total="${items.length}" data-passport-xp="${xpEach}" data-passport-badge="${badgeId}">
+            <p class="quiz-label">🎒 ${applyBold(title)}</p>
+            <div class="passport-progress-track"><div class="passport-progress-fill"></div></div>
+            <p class="passport-count"><span class="passport-count-num">0</span>/${items.length} skills unlocked</p>
+            <ul class="passport-grid">
+              ${items.map((label, i) => `<li><label><input type="checkbox" data-passport-item="${pid}-${i}"><span>${applyBold(label)}</span></label></li>`).join('')}
+            </ul>
+            <div class="passport-complete" hidden><p>🎉 Passport Complete! You've unlocked every skill on this list, girl.</p></div>
+          </div>`;
+      }
+
+      if (trimmed.startsWith('%%STAGES')) {
+        const lines = trimmed.split('\n').slice(1);
+        let title = 'Build Your Idea';
+        let badgeId = '';
+        let xpEach = 15;
+        let completeMsg = '🛠️ Built! Every stage is complete.';
+        const stages = [];
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('TITLE:')) title = l.slice(6).trim();
+          else if (l.startsWith('BADGE:')) badgeId = l.slice(6).trim();
+          else if (l.startsWith('XP:')) xpEach = Number(l.slice(3).trim()) || xpEach;
+          else if (l.startsWith('COMPLETE:')) completeMsg = l.slice(9).trim();
+          else if (l.startsWith('STAGE:')) stages.push(l.slice(6).trim());
+        });
+        const sid = `${articleId}-stages-${stagesIndex++}`;
+        return `
+          <div class="stages-card" data-stages-id="${sid}" data-stages-total="${stages.length}" data-stages-xp="${xpEach}" data-stages-badge="${badgeId}">
+            <p class="quiz-label">🎀 ${applyBold(title)}</p>
+            <div class="stages-track">
+              ${stages.map((label, i) => `<button class="stage-pill" data-stage-key="${sid}-${i}" type="button"><span class="stage-num">${i + 1}</span>${applyBold(label)}</button>`).join('')}
+            </div>
+            <div class="stages-progress-track"><div class="stages-progress-fill"></div></div>
+            <p class="stages-count"><span class="stages-count-num">0</span>/${stages.length} stages complete</p>
+            <div class="stages-complete" hidden><p>${completeMsg}</p></div>
+          </div>`;
+      }
+
+      if (trimmed.startsWith('%%SCENARIO')) {
+        const lines = trimmed.split('\n').slice(1);
+        let situation = '';
+        const options = [];
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('SITUATION:')) situation = l.slice(10).trim();
+          else if (l.startsWith('OPTION:')) {
+            const [label, icon, feedback] = l.slice(7).split('|').map((s) => s.trim());
+            options.push({ label, icon: icon || '💬', feedback: feedback || '' });
+          }
+        });
+        const scId = `${articleId}-scenario-${scenarioIndex++}`;
+        return `
+          <div class="scenario-card" data-scenario-id="${scId}">
+            <p class="quiz-label">🎮 The Client Simulator</p>
+            <p class="scenario-situation">${applyBold(situation)}</p>
+            <div class="scenario-options">
+              ${options.map((o, i) => `<button class="scenario-option" data-index="${i}" type="button"><span class="scenario-icon">${o.icon}</span>${applyBold(o.label)}</button>`).join('')}
+            </div>
+            <p class="scenario-feedback" hidden></p>
+          </div>
+          <script type="application/json" class="scenario-data">${JSON.stringify(options)}</script>`;
+      }
+
+      if (trimmed.startsWith('%%CHALLENGE')) {
+        const lines = trimmed.split('\n').slice(1);
+        let title = '30-Day Challenge';
+        let badgeId = '';
+        const weeks = [];
+        let currentWeek = null;
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('TITLE:')) title = l.slice(6).trim();
+          else if (l.startsWith('BADGE:')) badgeId = l.slice(6).trim();
+          else if (l.startsWith('WEEK:')) {
+            currentWeek = { label: l.slice(5).trim(), days: [] };
+            weeks.push(currentWeek);
+          } else if (l.startsWith('DAY:')) {
+            const [label, mission, xp] = l.slice(4).split('|').map((s) => s.trim());
+            if (!currentWeek) { currentWeek = { label: '', days: [] }; weeks.push(currentWeek); }
+            currentWeek.days.push({ label, mission, xp: Number(xp) || 15 });
+          }
+        });
+        const allDays = weeks.flatMap((w) => w.days);
+        const cid = `${articleId}-challenge-${challengeIndex++}`;
+        let dayCounter = 0;
+        return `
+          <div class="challenge-card" data-challenge-id="${cid}" data-challenge-total="${allDays.length}" data-challenge-badge="${badgeId}">
+            <p class="quiz-label">🎀 ${applyBold(title)}</p>
+            <div class="challenge-progress-track"><div class="challenge-progress-fill"></div></div>
+            <p class="challenge-count"><span class="challenge-count-num">0</span>/${allDays.length} days complete · <span class="challenge-xp-num">0</span> Challenge XP</p>
+            <div class="challenge-weeks">
+              ${weeks.map((w) => `
+                <div class="challenge-week">
+                  ${w.label ? `<p class="challenge-week-title">${applyBold(w.label)}</p>` : ''}
+                  <ul class="challenge-days">
+                    ${w.days.map((d) => {
+                      const dayKey = `${cid}-${dayCounter++}`;
+                      return `
+                        <li class="challenge-day" data-day-xp="${d.xp}">
+                          <label><input type="checkbox" data-challenge-day="${dayKey}"><span class="challenge-day-title">${applyBold(d.label)}</span></label>
+                          <p class="challenge-day-mission">${applyBold(d.mission || '')}</p>
+                          <span class="challenge-day-xp">+${d.xp} XP</span>
+                        </li>`;
+                    }).join('')}
+                  </ul>
+                </div>`).join('')}
+            </div>
+            <div class="challenge-complete" hidden><p>🎀 Digital Girl Unlocked! You finished all 30 days.</p></div>
+          </div>`;
+      }
+
+      if (trimmed.startsWith('%%MYTH')) {
+        const lines = trimmed.split('\n').slice(1);
+        let myth = '';
+        let reality = '';
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('MYTH:')) myth = l.slice(5).trim();
+          else if (l.startsWith('REALITY:')) reality = l.slice(8).trim();
+        });
+        const mid = `${articleId}-myth-${mythIndex++}`;
+        return `
+          <div class="myth-card" data-myth-id="${mid}">
+            <p class="myth-label">❌ MYTH</p>
+            <p class="myth-text">${applyBold(myth)}</p>
+            <button class="myth-reveal-btn" type="button">See the Reality →</button>
+            <div class="myth-reality" hidden>
+              <p class="reality-label">✅ REALITY</p>
+              <p class="reality-text">${applyBold(reality)}</p>
+            </div>
+          </div>`;
+      }
+
+      if (trimmed.startsWith('%%GOALSIM')) {
+        const lines = trimmed.split('\n').slice(1);
+        let title = '$0 → $1,000 Progress Simulator';
+        let goal = 1000;
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('TITLE:')) title = l.slice(6).trim();
+          else if (l.startsWith('GOAL:')) goal = Number(l.slice(5).trim()) || goal;
+        });
+        const gid = `${articleId}-goalsim-${goalsimIndex++}`;
+        const goalFmt = goal.toLocaleString('en-US');
+        return `
+          <div class="goalsim-card" data-goalsim-id="${gid}" data-goalsim-goal="${goal}">
+            <p class="quiz-label">🎯 ${applyBold(title)}</p>
+            <div class="goalsim-field-row">
+              <label class="goalsim-field">
+                <span>My income route</span>
+                <select class="goalsim-route">
+                  <option>Freelancing</option>
+                  <option>Services</option>
+                  <option>Digital products</option>
+                  <option>Content</option>
+                  <option>Affiliate marketing</option>
+                  <option>Remote work</option>
+                  <option>Selling templates</option>
+                  <option>Consulting</option>
+                </select>
+              </label>
+              <label class="goalsim-field">
+                <span>My offer price ($)</span>
+                <input type="number" class="goalsim-price" min="1" placeholder="e.g. 100">
+              </label>
+              <label class="goalsim-field">
+                <span>Sales/clients so far</span>
+                <input type="number" class="goalsim-completed" min="0" placeholder="0">
+              </label>
+            </div>
+            <div class="goalsim-result">
+              <p class="goalsim-target-text">Target: <strong class="goalsim-target-num">—</strong> sales to reach $${goalFmt}</p>
+              <div class="goalsim-progress-track"><div class="goalsim-progress-fill"></div></div>
+              <p class="goalsim-progress-label"><span class="goalsim-progress-amount">$0</span> / $${goalFmt}</p>
+            </div>
+            <div class="goalsim-complete" hidden><p>🎯 Goal Getter! That combination gets you to your target.</p></div>
           </div>`;
       }
 
@@ -776,6 +977,282 @@ function initFinalBoss(container) {
   });
 }
 
+/* =============================================
+   DIGITAL SKILLS PASSPORT
+   A checklist that doubles as a progress tracker: check off each
+   skill, watch the counter and progress bar move, unlock a badge
+   when every skill on the passport is checked.
+   ============================================= */
+function initPassports(container) {
+  container.querySelectorAll('[data-passport-id]').forEach((card) => {
+    const total = Number(card.dataset.passportTotal) || 0;
+    const xpEach = Number(card.dataset.passportXp) || 5;
+    const badgeId = card.dataset.passportBadge || undefined;
+    const boxes = card.querySelectorAll('input[data-passport-item]');
+    const countNum = card.querySelector('.passport-count-num');
+    const fill = card.querySelector('.passport-progress-fill');
+    const complete = card.querySelector('.passport-complete');
+
+    const refresh = () => {
+      const done = [...boxes].filter((b) => b.checked).length;
+      if (countNum) countNum.textContent = done;
+      if (fill) fill.style.width = total ? `${Math.round((done / total) * 100)}%` : '0%';
+      if (complete) complete.hidden = done < total || total === 0;
+    };
+
+    boxes.forEach((box) => {
+      const key = `hdp-passport-${box.dataset.passportItem}`;
+      box.checked = localStorage.getItem(key) === '1';
+      box.addEventListener('change', () => {
+        localStorage.setItem(key, box.checked ? '1' : '0');
+        const xpKey = `${key}-xp`;
+        if (box.checked && localStorage.getItem(xpKey) !== '1') {
+          localStorage.setItem(xpKey, '1');
+          grantXP(xpEach);
+        }
+        const done = [...boxes].filter((b) => b.checked).length;
+        if (done === total && total > 0) {
+          playUnlock();
+          grantXP(0, { badgeId });
+        }
+        refresh();
+      });
+    });
+    refresh();
+  });
+}
+
+/* =============================================
+   STAGE BUILDER
+   A row of tappable stage pills for build-along processes (idea
+   -> audience -> product -> price -> platform -> launch). Each
+   pill toggles complete; finishing every stage unlocks a badge.
+   ============================================= */
+function initStages(container) {
+  container.querySelectorAll('[data-stages-id]').forEach((card) => {
+    const total = Number(card.dataset.stagesTotal) || 0;
+    const xpEach = Number(card.dataset.stagesXp) || 15;
+    const badgeId = card.dataset.stagesBadge || undefined;
+    const pills = card.querySelectorAll('.stage-pill');
+    const countNum = card.querySelector('.stages-count-num');
+    const fill = card.querySelector('.stages-progress-fill');
+    const complete = card.querySelector('.stages-complete');
+
+    const refresh = () => {
+      const done = [...pills].filter((p) => p.classList.contains('done')).length;
+      if (countNum) countNum.textContent = done;
+      if (fill) fill.style.width = total ? `${Math.round((done / total) * 100)}%` : '0%';
+      if (complete) complete.hidden = done < total || total === 0;
+    };
+
+    pills.forEach((pill) => {
+      const key = `hdp-stage-${pill.dataset.stageKey}`;
+      if (localStorage.getItem(key) === '1') pill.classList.add('done');
+      pill.addEventListener('click', () => {
+        const wasDone = pill.classList.contains('done');
+        const done = pill.classList.toggle('done');
+        localStorage.setItem(key, done ? '1' : '0');
+        if (done && !wasDone) grantXP(xpEach);
+        const doneCount = [...pills].filter((p) => p.classList.contains('done')).length;
+        if (doneCount === total && total > 0) {
+          playUnlock();
+          grantXP(0, { badgeId });
+        }
+        refresh();
+      });
+    });
+    refresh();
+  });
+}
+
+/* =============================================
+   CLIENT SCENARIO SIMULATOR
+   Realistic client situations with several plausible responses —
+   no single "correct" answer, just honest feedback on the
+   trade-offs of the one she picks.
+   ============================================= */
+function initScenarios(container) {
+  container.querySelectorAll('[data-scenario-id]').forEach((card) => {
+    const dataScript = card.nextElementSibling;
+    if (!dataScript || !dataScript.classList.contains('scenario-data')) return;
+    const options = JSON.parse(dataScript.textContent);
+    const buttons = card.querySelectorAll('.scenario-option');
+    const feedback = card.querySelector('.scenario-feedback');
+    const key = `hdp-scenario-${card.dataset.scenarioId}`;
+
+    const reveal = (index) => {
+      const o = options[index];
+      if (!o) return;
+      feedback.textContent = o.feedback;
+      feedback.hidden = false;
+    };
+
+    const saved = localStorage.getItem(key);
+    if (saved !== null) {
+      buttons.forEach((b) => b.classList.toggle('selected', b.dataset.index === saved));
+      reveal(Number(saved));
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isFirst = localStorage.getItem(key) === null;
+        buttons.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        localStorage.setItem(key, btn.dataset.index);
+        reveal(Number(btn.dataset.index));
+        if (isFirst) {
+          playChime();
+          grantXP(10, { badgeId: 'client-ready' });
+        }
+      });
+    });
+  });
+}
+
+/* =============================================
+   30-DAY CHALLENGE TRACKER
+   Every day is a real, individually-checkable mission with its
+   own XP reward, grouped into weeks, with a running total and a
+   final badge for finishing all 30 days. Genuinely persists via
+   localStorage — nothing here is decorative.
+   ============================================= */
+function initChallenges(container) {
+  container.querySelectorAll('[data-challenge-id]').forEach((card) => {
+    const total = Number(card.dataset.challengeTotal) || 0;
+    const badgeId = card.dataset.challengeBadge || undefined;
+    const dayBoxes = card.querySelectorAll('input[data-challenge-day]');
+    const countNum = card.querySelector('.challenge-count-num');
+    const xpNum = card.querySelector('.challenge-xp-num');
+    const fill = card.querySelector('.challenge-progress-fill');
+    const complete = card.querySelector('.challenge-complete');
+
+    const dayXP = (box) => Number(box.closest('.challenge-day')?.dataset.dayXp) || 15;
+
+    const refresh = () => {
+      const doneBoxes = [...dayBoxes].filter((b) => b.checked);
+      const done = doneBoxes.length;
+      const xpTotal = doneBoxes.reduce((sum, b) => sum + dayXP(b), 0);
+      if (countNum) countNum.textContent = done;
+      if (xpNum) xpNum.textContent = xpTotal;
+      if (fill) fill.style.width = total ? `${Math.round((done / total) * 100)}%` : '0%';
+      if (complete) complete.hidden = done < total || total === 0;
+    };
+
+    dayBoxes.forEach((box) => {
+      const key = `hdp-challenge-${box.dataset.challengeDay}`;
+      box.checked = localStorage.getItem(key) === '1';
+      box.addEventListener('change', () => {
+        localStorage.setItem(key, box.checked ? '1' : '0');
+        const xpKey = `${key}-xp`;
+        if (box.checked && localStorage.getItem(xpKey) !== '1') {
+          localStorage.setItem(xpKey, '1');
+          grantXP(dayXP(box));
+        }
+        const done = [...dayBoxes].filter((b) => b.checked).length;
+        if (done === total && total > 0) {
+          playUnlock();
+          grantXP(50, { badgeId });
+        }
+        refresh();
+      });
+    });
+    refresh();
+  });
+}
+
+/* =============================================
+   MYTH VS REALITY
+   A soft reveal: read the myth, tap to see the honest reality
+   underneath. Awards a small XP the first time each one is
+   revealed, and a badge once every myth on the page is revealed.
+   ============================================= */
+function initMyths(container) {
+  const cards = container.querySelectorAll('.myth-card');
+  const totalMyths = cards.length;
+
+  const checkAllRevealed = () => {
+    const revealedCount = [...cards].filter((c) => localStorage.getItem(`hdp-myth-${c.dataset.mythId}`) === '1').length;
+    if (revealedCount === totalMyths && totalMyths > 0) {
+      grantXP(0, { badgeId: 'myth-buster' });
+    }
+  };
+
+  cards.forEach((card) => {
+    const key = `hdp-myth-${card.dataset.mythId}`;
+    const btn = card.querySelector('.myth-reveal-btn');
+    const reality = card.querySelector('.myth-reality');
+
+    if (localStorage.getItem(key) === '1') {
+      reality.hidden = false;
+      if (btn) btn.hidden = true;
+    }
+
+    btn?.addEventListener('click', () => {
+      reality.hidden = false;
+      btn.hidden = true;
+      const isFirst = localStorage.getItem(key) !== '1';
+      localStorage.setItem(key, '1');
+      if (isFirst) {
+        playSparkle();
+        grantXP(5);
+        checkAllRevealed();
+      }
+    });
+  });
+  checkAllRevealed();
+}
+
+/* =============================================
+   $0 -> GOAL PROGRESS SIMULATOR
+   Turns a flat income goal into a concrete, editable equation:
+   pick a route, set an offer price, log sales so far, watch the
+   real math and progress bar update live. Persists per device.
+   ============================================= */
+function initGoalSims(container) {
+  container.querySelectorAll('[data-goalsim-id]').forEach((card) => {
+    const goal = Number(card.dataset.goalsimGoal) || 1000;
+    const id = card.dataset.goalsimId;
+    const route = card.querySelector('.goalsim-route');
+    const priceInput = card.querySelector('.goalsim-price');
+    const completedInput = card.querySelector('.goalsim-completed');
+    const targetNum = card.querySelector('.goalsim-target-num');
+    const fill = card.querySelector('.goalsim-progress-fill');
+    const amountLabel = card.querySelector('.goalsim-progress-amount');
+    const complete = card.querySelector('.goalsim-complete');
+    let awarded = localStorage.getItem(`hdp-goalsim-${id}-awarded`) === '1';
+
+    const keyFor = (field) => `hdp-goalsim-${id}-${field}`;
+    if (localStorage.getItem(keyFor('route'))) route.value = localStorage.getItem(keyFor('route'));
+    if (localStorage.getItem(keyFor('price'))) priceInput.value = localStorage.getItem(keyFor('price'));
+    if (localStorage.getItem(keyFor('completed'))) completedInput.value = localStorage.getItem(keyFor('completed'));
+
+    const refresh = () => {
+      const price = Number(priceInput.value) || 0;
+      const completed = Number(completedInput.value) || 0;
+      const earned = price * completed;
+      const pct = price > 0 ? Math.min(100, Math.round((earned / goal) * 100)) : 0;
+      if (targetNum) targetNum.textContent = price > 0 ? Math.ceil(goal / price) : '—';
+      if (fill) fill.style.width = `${pct}%`;
+      if (amountLabel) amountLabel.textContent = `$${earned.toLocaleString('en-US')}`;
+      if (complete) {
+        const hit = price > 0 && earned >= goal;
+        complete.hidden = !hit;
+        if (hit && !awarded) {
+          awarded = true;
+          localStorage.setItem(`hdp-goalsim-${id}-awarded`, '1');
+          playUnlock();
+          grantXP(30, { badgeId: 'goal-getter' });
+        }
+      }
+    };
+
+    route.addEventListener('change', () => { localStorage.setItem(keyFor('route'), route.value); });
+    priceInput.addEventListener('input', () => { localStorage.setItem(keyFor('price'), priceInput.value); refresh(); });
+    completedInput.addEventListener('input', () => { localStorage.setItem(keyFor('completed'), completedInput.value); refresh(); });
+    refresh();
+  });
+}
+
 function initSaveForLater(item) {
   const btn = document.getElementById('save-for-later-btn');
   if (!btn) return;
@@ -816,7 +1293,7 @@ function relatedCardsHtml(currentId, category) {
       <div class="tool-recs-grid">
         ${items.map((i) => `
           <a class="tool-rec-card" href="${BASE}pages/article.html?id=${i.id}">
-            <img src="${i.image}" alt="">
+            <img src="${i.image}" alt="${i.title}">
             <span><strong>${i.title}</strong><em>${i.readTime || 'Quick read'}</em></span>
           </a>`).join('')}
       </div>
@@ -1039,6 +1516,25 @@ async function init() {
   }
   metaDesc.setAttribute('content', item.metaDescription || item.excerpt);
 
+  // Self-updating Open Graph tags, same create-if-missing pattern as
+  // canonical/description above — works for every existing item too,
+  // with zero changes needed to their data.
+  [
+    ['og:title', item.title],
+    ['og:description', item.metaDescription || item.excerpt],
+    ['og:image', item.image],
+    ['og:type', 'article'],
+    ['og:url', `https://herdigitalplaybook.com/pages/article.html?id=${item.id}`],
+  ].forEach(([prop, content]) => {
+    let tag = document.querySelector(`meta[property="${prop}"]`);
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute('property', prop);
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute('content', content);
+  });
+
   const isTool = item.type === 'tool';
   const { html: bodyHtml, chapters } = formatArticleBody(item.content, item.id);
 
@@ -1092,6 +1588,12 @@ async function init() {
   initCheckins(container);
   initBuilders(container);
   initFinalBoss(container);
+  initPassports(container);
+  initStages(container);
+  initScenarios(container);
+  initChallenges(container);
+  initMyths(container);
+  initGoalSims(container);
   initSoundToggle();
   initSaveForLater(item);
   refreshLevelUI();
