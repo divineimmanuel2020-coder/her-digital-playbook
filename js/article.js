@@ -1378,7 +1378,8 @@ function todaysGoalHtml() {
 function refreshTodaysGoal(articleId, chapters) {
   const anyChapterDone = chapters.some((c, i) => localStorage.getItem(`hdp-chapter-${articleId}-${i}`) === '1');
   const anyChecklistDone = Object.keys(localStorage).some((k) => k.startsWith(`hdp-check-xp-${articleId}-`));
-  const anyQuizDone = Object.keys(localStorage).some((k) => k.startsWith(`hdp-quiz-${articleId}-`) && localStorage.getItem(k) === '1');
+  const interactivePrefixes = ['hdp-quiz-', 'hdp-passport-', 'hdp-stage-', 'hdp-scenario-', 'hdp-challenge-', 'hdp-myth-', 'hdp-goalsim-'];
+  const anyQuizDone = Object.keys(localStorage).some((k) => interactivePrefixes.some((p) => k.startsWith(`${p}${articleId}-`)));
 
   const goals = [
     ['goal-chapter', anyChapterDone],
@@ -1615,8 +1616,10 @@ async function init() {
   const startChallenge = document.getElementById('start-challenge-btn');
   if (startChallenge) {
     startChallenge.addEventListener('click', () => {
-      const firstQuiz = container.querySelector('.quiz-card, .pathquiz-grid');
-      firstQuiz?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const firstInteractive = container.querySelector(
+        '.quiz-card, .pathquiz-grid, .checkin-card, .builder-card, .money-map-card, .passport-card, .stages-card, .scenario-card, .challenge-card, .myth-card, .goalsim-card'
+      );
+      firstInteractive?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   }
 
