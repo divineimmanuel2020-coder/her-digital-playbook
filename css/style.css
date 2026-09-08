@@ -3114,6 +3114,428 @@ input:focus-visible,
 }
 
 /* =============================================
+   18b. DIGITAL SKILLS PASSPORT
+   ============================================= */
+
+.passport-card {
+    background: var(--color-pink-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.passport-progress-track,
+.stages-progress-track,
+.challenge-progress-track,
+.goalsim-progress-track {
+    width: 100%;
+    height: 10px;
+    background: var(--color-border-light);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin: var(--spacing-sm) 0 6px;
+}
+
+.passport-progress-fill,
+.stages-progress-fill,
+.challenge-progress-fill,
+.goalsim-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--gradient-gold);
+    border-radius: var(--radius-pill);
+    transition: width var(--transition-base);
+}
+
+.passport-count,
+.stages-count,
+.challenge-count {
+    font-size: var(--body-small);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.passport-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.passport-grid label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--color-warm-white);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: var(--body-small);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.passport-grid input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.passport-grid input:checked + span {
+    color: var(--color-accent-dark);
+    text-decoration: line-through;
+}
+
+.passport-complete,
+.stages-complete,
+.challenge-complete,
+.goalsim-complete {
+    margin-top: var(--spacing-md);
+    background: var(--gradient-hero);
+    border: 1.5px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-weight: var(--weight-bold);
+    color: var(--color-accent-dark);
+    text-align: center;
+}
+
+/* =============================================
+   18c. STAGE BUILDER
+   ============================================= */
+
+.stages-card {
+    background: var(--color-warm-white);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.stages-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: var(--spacing-sm) 0 var(--spacing-md);
+}
+
+.stage-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-pink-light);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-pill);
+    padding: 10px 16px;
+    font-size: var(--body-small);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.stage-pill:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.stage-pill.done {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.stage-num {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-circle);
+    background: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+.stage-pill.done .stage-num {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* =============================================
+   18d. CLIENT SCENARIO SIMULATOR
+   ============================================= */
+
+.scenario-card {
+    background: var(--color-pink-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.scenario-situation {
+    font-weight: var(--weight-bold);
+    font-size: var(--body-large);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.scenario-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scenario-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    background: var(--color-warm-white);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-size: var(--body-small);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.scenario-option:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.scenario-option.selected {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.scenario-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.scenario-feedback {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px dashed var(--color-border-medium);
+    font-size: var(--body-small);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-normal);
+}
+
+/* =============================================
+   18e. 30-DAY CHALLENGE TRACKER
+   ============================================= */
+
+.challenge-card {
+    background: var(--color-warm-white);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.challenge-weeks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.challenge-week-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    color: var(--color-accent-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.challenge-days {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.challenge-day {
+    background: var(--color-pink-light);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    position: relative;
+}
+
+.challenge-day label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.challenge-day input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.challenge-day-title {
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+}
+
+.challenge-day input:checked ~ .challenge-day-title {
+    color: var(--color-accent-dark);
+    text-decoration: line-through;
+}
+
+.challenge-day-mission {
+    font-size: var(--body-small);
+    color: var(--color-text-secondary);
+    margin: 6px 0 0 30px;
+}
+
+.challenge-day-xp {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: var(--body-xsmall);
+    font-weight: var(--weight-extrabold);
+    color: var(--color-gold-dark);
+}
+
+/* =============================================
+   18f. MYTH VS REALITY
+   ============================================= */
+
+.myth-card {
+    background: var(--color-warm-white);
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.myth-label {
+    display: inline-block;
+    font-size: var(--body-xsmall);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--letter-spacing-wide);
+    color: var(--color-error);
+    background: rgba(229, 115, 115, 0.12);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--spacing-sm);
+}
+
+.myth-text {
+    font-weight: var(--weight-semibold);
+    font-size: var(--body-large);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.myth-reveal-btn {
+    background: var(--gradient-gold);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 20px;
+    font-weight: var(--weight-bold);
+    font-size: var(--body-small);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.myth-reveal-btn:hover {
+    transform: translateY(-2px);
+}
+
+.myth-reality {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px dashed var(--color-border-medium);
+}
+
+.reality-label {
+    display: inline-block;
+    font-size: var(--body-xsmall);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--letter-spacing-wide);
+    color: var(--color-success);
+    background: rgba(76, 175, 80, 0.12);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--spacing-sm);
+}
+
+.reality-text {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-normal);
+}
+
+/* =============================================
+   18g. $0 -> GOAL PROGRESS SIMULATOR
+   ============================================= */
+
+.goalsim-card {
+    background: var(--color-pink-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.goalsim-field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.goalsim-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.goalsim-field span {
+    font-weight: var(--weight-bold);
+    font-size: var(--body-small);
+    color: var(--color-text-primary);
+}
+
+.goalsim-field select,
+.goalsim-field input {
+    border: 1.5px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: var(--body-small);
+    color: var(--color-text-primary);
+    background: #fff;
+}
+
+.goalsim-field select:focus,
+.goalsim-field input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.goalsim-target-text {
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+}
+
+.goalsim-progress-label {
+    font-size: var(--body-small);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-secondary);
+}
+
+/* =============================================
    19. TODAY'S GOAL
    ============================================= */
 
@@ -3237,6 +3659,22 @@ input:focus-visible,
     .hero-lets-go {
         margin-left: 0;
         width: 100%;
+    }
+    .passport-grid,
+    .goalsim-field-row {
+        grid-template-columns: 1fr;
+    }
+    .stages-track {
+        flex-direction: column;
+    }
+    .stage-pill {
+        width: 100%;
+    }
+    .challenge-day-xp {
+        position: static;
+        display: inline-block;
+        margin-top: 6px;
+        margin-left: 30px;
     }
 }
 
