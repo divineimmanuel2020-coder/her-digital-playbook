@@ -6,7 +6,10 @@
    ============================================= */
 
 import { ALL_ITEMS } from '../data/store.js';
+import { PLAYGROUND_PAGES } from '../data/playground.js';
 import { BASE } from './base.js';
+
+const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES];
 
 export function initSearch() {
   const btn = document.getElementById('search-btn');
@@ -34,7 +37,7 @@ export function initSearch() {
       return;
     }
 
-    const matches = ALL_ITEMS.filter((item) =>
+    const matches = SEARCHABLE_ITEMS.filter((item) =>
       item.title.toLowerCase().includes(q) || item.category.toLowerCase().includes(q)
     );
 
@@ -45,14 +48,20 @@ export function initSearch() {
 
     results.innerHTML = matches
       .slice(0, 8)
-      .map((item) => `
-        <a class="search-result" href="${BASE}pages/article.html?id=${item.id}">
-          <img src="${item.image}" alt="">
+      .map((item) => {
+        const href = item.url ? `${BASE}${item.url.replace(/^\//, '')}` : `${BASE}pages/article.html?id=${item.id}`;
+        const thumb = item.image
+          ? `<img src="${item.image}" alt="">`
+          : `<span class="search-result-icon">${item.icon || '🎀'}</span>`;
+        return `
+        <a class="search-result" href="${href}">
+          ${thumb}
           <span>
             <strong>${item.title}</strong>
             <em>${item.category}</em>
           </span>
-        </a>`)
+        </a>`;
+      })
       .join('');
   }
 
