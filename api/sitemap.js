@@ -22,6 +22,13 @@ const STATIC_PAGES = [
   '/pages/contact.html',
   '/pages/privacy.html',
   '/pages/terms.html',
+  '/pages/playground.html',
+  '/pages/start-here.html',
+  '/pages/money-path.html',
+  '/pages/game-room.html',
+  '/pages/client-simulator.html',
+  '/pages/templates.html',
+  '/pages/glossary.html',
 ];
 
 export default function handler(req, res) {
