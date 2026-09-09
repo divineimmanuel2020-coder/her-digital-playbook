@@ -30,6 +30,12 @@ export const BADGES = [
   { id: 'digital-girl-unlocked', icon: '🎀', label: 'Digital Girl Unlocked', desc: 'Completed a full 30-Day Challenge' },
   { id: 'myth-buster', icon: '🔍', label: 'Myth Buster', desc: 'Revealed every myth vs reality in a mission' },
   { id: 'goal-getter', icon: '🎯', label: 'Goal Getter', desc: 'Hit 100% in a money goal simulator' },
+  { id: 'pathfinder', icon: '🎀', label: 'Pathfinder', desc: 'Completed the Find Your Money Path quiz' },
+  { id: 'game-girl', icon: '🎮', label: 'Game Girl', desc: 'Completed every game in the Digital Girl Game Room' },
+  { id: 'client-boss', icon: '💼', label: 'Client Boss', desc: 'Completed the full Client Simulator' },
+  { id: 'resource-girl', icon: '📚', label: 'Resource Girl', desc: 'Used a template from the Playground' },
+  { id: 'digital-dictionary', icon: '🔎', label: 'Digital Dictionary', desc: 'Explored a term in the Digital Girl Glossary' },
+  { id: 'playground-queen', icon: '👑', label: 'Playground Queen', desc: 'Completed a meaningful selection of Playground experiences' },
 ];
 
 export const DREAM_ITEMS = [
