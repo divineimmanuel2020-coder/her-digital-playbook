@@ -128,6 +128,7 @@ async function init() {
     loadComponent('latest-placeholder', 'sections/latest-articles.html'),
     loadComponent('tools-placeholder', 'sections/free-tools.html'),
     loadComponent('playground-teaser-placeholder', 'sections/playground-teaser.html'),
+    loadComponent('academy-teaser-placeholder', 'sections/academy-teaser.html'),
     loadComponent('newsletter-placeholder', 'sections/newsletter.html'),
     loadComponent('footer-placeholder', 'components/footer.html'),
     loadComponent('card-templates-placeholder', 'components/card-template.html'),
