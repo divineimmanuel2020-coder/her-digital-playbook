@@ -12,6 +12,7 @@
    ============================================= */
 
 import { ALL_ITEMS } from '../data/store.js';
+import { ACADEMY_COURSES } from '../data/academy.js';
 
 const SITE_URL = 'https://herdigitalplaybook.com';
 
@@ -29,12 +30,17 @@ const STATIC_PAGES = [
   '/pages/client-simulator.html',
   '/pages/templates.html',
   '/pages/glossary.html',
+  '/pages/academy.html',
 ];
 
 export default function handler(req, res) {
   const urls = [
     ...STATIC_PAGES.map((path) => `${SITE_URL}${path}`),
     ...ALL_ITEMS.map((item) => `${SITE_URL}/pages/article.html?id=${item.id}`),
+    // Academy courses — my-academy.html, certificate.html, and
+    // verify.html are personal/utility pages and intentionally left
+    // out, same reasoning as not indexing a logged-in dashboard.
+    ...ACADEMY_COURSES.map((course) => `${SITE_URL}/pages/course.html?id=${course.id}`),
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
