@@ -1,0 +1,224 @@
+/* =============================================
+   CSS/ACADEMY.CSS
+   Styles for The Playbook Academy. Loaded after variables.css /
+   style.css / animations.css / responsive.css on Academy pages
+   only. Self-contained — does not depend on playground.css.
+   ============================================= */
+
+.ac-section { padding: var(--spacing-2xl) 0; }
+.ac-section-head { text-align: center; max-width: 680px; margin: 0 auto var(--spacing-xl); }
+.ac-section-head h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--color-text-primary); margin-bottom: var(--spacing-sm); }
+.ac-section-head p { color: var(--color-text-secondary); font-size: var(--body-large); }
+.ac-eyebrow { display: inline-block; font-size: var(--body-xsmall); font-weight: var(--weight-extrabold); letter-spacing: var(--letter-spacing-wide); color: var(--color-accent-dark); background: var(--color-pink-light); padding: 4px 14px; border-radius: var(--radius-pill); margin-bottom: var(--spacing-sm); }
+.ac-empty-state { text-align: center; padding: var(--spacing-2xl); color: var(--color-text-secondary); font-size: var(--body-large); }
+
+/* ---- value badges ---- */
+.ac-badge-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: var(--spacing-lg); }
+.ac-badge { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-pill); padding: 8px 18px; font-size: var(--body-small); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+
+/* ---- goal / path / course grids (shared card shell) ---- */
+.ac-goal-grid, .ac-path-grid, .ac-course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--spacing-lg); }
+
+.ac-goal-card { background: var(--color-pink-light); border: 1.5px solid transparent; border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; text-decoration: none; transition: all var(--transition-fast); cursor: pointer; }
+.ac-goal-card:hover { border-color: var(--color-accent); transform: translateY(-3px); }
+.ac-goal-icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+.ac-goal-card strong { color: var(--color-text-primary); font-size: var(--body-large); }
+
+.ac-path-card { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+.ac-path-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--color-text-primary); margin-bottom: 6px; }
+.ac-path-chain { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: var(--spacing-sm); }
+.ac-path-chain span { background: var(--color-pink-light); border-radius: var(--radius-pill); padding: 4px 12px; font-size: var(--body-xsmall); font-weight: var(--weight-semibold); color: var(--color-accent-dark); }
+.ac-path-chain em { color: var(--color-border-medium); font-style: normal; }
+
+/* ---- course library ---- */
+.ac-search-filters { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-bottom: var(--spacing-xl); }
+.ac-search-input { width: 100%; max-width: 480px; padding: 12px 20px; border-radius: var(--radius-pill); border: 1.5px solid var(--color-border-light); font-family: var(--font-body); font-size: var(--body-large); background: var(--color-warm-white); color: var(--color-text-primary); }
+.ac-search-input:focus { outline: none; border-color: var(--color-accent); }
+.ac-filter-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.ac-filter-pill { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-pill); padding: 8px 16px; font-size: var(--body-small); font-weight: var(--weight-semibold); color: var(--color-text-primary); cursor: pointer; transition: all var(--transition-fast); }
+.ac-filter-pill:hover { border-color: var(--color-accent); }
+.ac-filter-pill.active { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+
+.ac-course-card { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); display: flex; flex-direction: column; gap: 8px; text-decoration: none; transition: all var(--transition-fast); position: relative; }
+.ac-course-card:hover { border-color: var(--color-accent); transform: translateY(-3px); box-shadow: var(--shadow-medium); }
+.ac-course-number { font-family: var(--font-display); font-size: 1.4rem; color: var(--color-border-medium); }
+.ac-course-card h3 { font-family: var(--font-display); font-size: 1.25rem; color: var(--color-text-primary); }
+.ac-course-card p { color: var(--color-text-secondary); font-size: var(--body-small); flex-grow: 1; }
+.ac-course-difficulty { display: inline-block; align-self: flex-start; font-size: var(--body-xsmall); font-weight: var(--weight-extrabold); letter-spacing: var(--letter-spacing-wide); color: var(--color-gold-dark); }
+.ac-course-meta-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ac-course-tag { background: var(--color-pink-light); border-radius: var(--radius-pill); padding: 3px 10px; font-size: var(--body-xsmall); font-weight: var(--weight-semibold); color: var(--color-accent-dark); }
+.ac-course-cert-tag { background: var(--gradient-gold); color: #fff; }
+.ac-course-progress-track { width: 100%; height: 6px; background: var(--color-border-light); border-radius: var(--radius-pill); overflow: hidden; }
+.ac-course-progress-fill { height: 100%; background: var(--gradient-gold); border-radius: var(--radius-pill); }
+.ac-course-cta { align-self: flex-start; margin-top: 6px; }
+
+/* ---- how it works ---- */
+.ac-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--spacing-md); }
+.ac-step-card { text-align: center; padding: var(--spacing-md); }
+.ac-step-num { font-family: var(--font-display); font-size: 1.8rem; color: var(--color-accent); display: block; }
+.ac-step-card strong { display: block; margin: 6px 0 4px; color: var(--color-text-primary); }
+.ac-step-card span { color: var(--color-text-secondary); font-size: var(--body-small); }
+
+/* ---- course overview ---- */
+.ac-overview-header { text-align: center; max-width: 760px; margin: 0 auto var(--spacing-xl); }
+.ac-overview-header h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); color: var(--color-text-primary); }
+.ac-overview-meta-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--spacing-lg); margin: var(--spacing-lg) 0; }
+.ac-overview-meta-item { text-align: center; }
+.ac-overview-meta-item strong { display: block; font-family: var(--font-display); font-size: 1.3rem; color: var(--color-accent-dark); }
+.ac-overview-meta-item span { font-size: var(--body-xsmall); color: var(--color-text-secondary); letter-spacing: var(--letter-spacing-wide); }
+.ac-overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--spacing-lg); margin: var(--spacing-xl) 0; }
+.ac-overview-card { background: var(--color-pink-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+.ac-overview-card h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--color-text-primary); margin-bottom: 8px; }
+.ac-overview-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.ac-overview-card li { font-size: var(--body-small); color: var(--color-text-secondary); }
+.ac-overview-card li::before { content: "✓ "; color: var(--color-success); font-weight: var(--weight-bold); }
+
+/* ---- curriculum list ---- */
+.ac-curriculum { display: flex; flex-direction: column; gap: 10px; }
+.ac-module { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); overflow: hidden; }
+.ac-module-header { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); cursor: pointer; }
+.ac-module-header:hover { background: var(--color-pink-light); }
+.ac-module-title { font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.ac-module-objective { font-size: var(--body-xsmall); color: var(--color-text-secondary); margin-top: 2px; }
+.ac-module-progress { font-size: var(--body-xsmall); color: var(--color-accent-dark); font-weight: var(--weight-bold); white-space: nowrap; }
+.ac-lesson-list { list-style: none; display: none; flex-direction: column; border-top: 1px solid var(--color-border-light); }
+.ac-module.open .ac-lesson-list { display: flex; }
+.ac-lesson-row { display: flex; align-items: center; gap: 10px; padding: 10px var(--spacing-lg); text-decoration: none; color: var(--color-text-primary); font-size: var(--body-small); border-bottom: 1px solid var(--color-border-light); transition: background var(--transition-fast); }
+.ac-lesson-row:last-child { border-bottom: none; }
+.ac-lesson-row:hover { background: var(--color-pink-light); }
+.ac-lesson-row.current { background: var(--color-pink-light); font-weight: var(--weight-bold); }
+.ac-lesson-status { flex-shrink: 0; width: 18px; text-align: center; }
+.ac-lesson-type-tag { margin-left: auto; font-size: var(--body-xsmall); color: var(--color-text-secondary); letter-spacing: var(--letter-spacing-wide); }
+
+/* ---- lesson viewer ---- */
+.ac-lesson-page { display: grid; grid-template-columns: 280px 1fr; gap: var(--spacing-xl); align-items: start; }
+.ac-lesson-sidebar { position: sticky; top: 90px; max-height: 80vh; overflow-y: auto; }
+.ac-lesson-main { min-width: 0; }
+.ac-lesson-header { background: var(--color-pink-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+.ac-lesson-crumb { font-size: var(--body-xsmall); letter-spacing: var(--letter-spacing-wide); color: var(--color-accent-dark); font-weight: var(--weight-bold); }
+.ac-lesson-header h1 { font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2rem); color: var(--color-text-primary); margin: 6px 0; }
+.ac-lesson-meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: var(--body-xsmall); color: var(--color-text-secondary); }
+
+.ac-lesson-block { margin-bottom: var(--spacing-xl); }
+.ac-lesson-block h2 { font-family: var(--font-display); font-size: 1.3rem; color: var(--color-accent-dark); margin-bottom: 10px; }
+.ac-lesson-block p, .ac-lesson-block li { color: var(--color-text-primary); line-height: var(--line-height-normal); }
+.ac-lesson-block ul, .ac-lesson-block ol { padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; }
+.ac-example-box { background: var(--color-pink-light); border-radius: var(--radius-md); padding: var(--spacing-lg); }
+.ac-mistakes-box { background: rgba(229, 115, 115, 0.08); border-left: 3px solid var(--color-error); border-radius: var(--radius-md); padding: var(--spacing-lg); }
+.ac-success-box { background: rgba(76, 175, 80, 0.08); border-left: 3px solid var(--color-success); border-radius: var(--radius-md); padding: var(--spacing-lg); }
+.ac-practice-box { background: var(--color-warm-white); border: 1.5px dashed var(--color-accent); border-radius: var(--radius-md); padding: var(--spacing-lg); }
+
+.ac-knowledge-check { display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.ac-kc-question { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+.ac-kc-question p { font-weight: var(--weight-bold); margin-bottom: 10px; }
+.ac-kc-options { display: flex; flex-direction: column; gap: 8px; }
+.ac-kc-option { text-align: left; background: var(--color-pink-light); border: 1.5px solid transparent; border-radius: var(--radius-md); padding: 10px 14px; font-size: var(--body-small); cursor: pointer; transition: all var(--transition-fast); }
+.ac-kc-option:hover { border-color: var(--color-accent); }
+.ac-kc-option.selected { border-color: var(--color-accent); }
+.ac-kc-option.correct { background: rgba(76, 175, 80, 0.15); border-color: var(--color-success); }
+.ac-kc-option.incorrect { background: rgba(229, 115, 115, 0.15); border-color: var(--color-error); }
+.ac-kc-result { text-align: center; padding: var(--spacing-lg); background: var(--gradient-hero); border-radius: var(--radius-lg); border: 2px solid var(--color-accent); }
+
+.ac-lesson-nav { display: flex; justify-content: space-between; gap: var(--spacing-md); margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--color-border-light); flex-wrap: wrap; }
+.ac-lesson-pending { text-align: center; padding: var(--spacing-2xl); background: var(--color-pink-light); border-radius: var(--radius-lg); }
+.ac-lesson-pending h2 { font-family: var(--font-display); color: var(--color-text-primary); margin-bottom: 10px; }
+
+/* ---- assessments ---- */
+.ac-assessment-intro { text-align: center; padding: var(--spacing-xl); background: var(--color-pink-light); border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg); }
+.ac-assessment-result { text-align: center; padding: var(--spacing-xl); border-radius: var(--radius-lg); border: 2px solid var(--color-accent); }
+.ac-assessment-result.passed { background: rgba(76, 175, 80, 0.08); }
+.ac-assessment-result.failed { background: rgba(229, 115, 115, 0.08); }
+.ac-assessment-score { font-family: var(--font-display); font-size: 2.4rem; color: var(--color-accent-dark); }
+
+/* ---- projects & capstone ---- */
+.ac-project-card, .ac-capstone-card { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-lg); }
+.ac-project-card h3, .ac-capstone-card h2 { font-family: var(--font-display); color: var(--color-text-primary); margin-bottom: 10px; }
+.ac-project-field { margin-bottom: var(--spacing-md); }
+.ac-project-field strong { display: block; font-size: var(--body-xsmall); letter-spacing: var(--letter-spacing-wide); color: var(--color-accent-dark); margin-bottom: 4px; }
+.ac-rubric-table { width: 100%; border-collapse: collapse; margin: var(--spacing-md) 0; }
+.ac-rubric-table td { padding: 8px; border-bottom: 1px solid var(--color-border-light); font-size: var(--body-small); }
+.ac-rubric-table td:last-child { text-align: right; font-weight: var(--weight-bold); color: var(--color-accent-dark); }
+.ac-notes-textarea { width: 100%; min-height: 120px; border: 1.5px solid var(--color-border-light); border-radius: var(--radius-md); padding: 12px 14px; font-family: var(--font-body); font-size: var(--body-small); color: var(--color-text-primary); resize: vertical; }
+.ac-notes-textarea:focus { outline: none; border-color: var(--color-accent); }
+
+/* ---- celebration / unlock screens ---- */
+.ac-celebration { text-align: center; padding: var(--spacing-2xl); background: var(--gradient-hero); border-radius: var(--radius-lg); border: 2px solid var(--color-accent); }
+.ac-celebration h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.4rem); color: var(--color-text-primary); margin-bottom: var(--spacing-sm); }
+
+/* ---- name input ---- */
+.ac-name-form { max-width: 420px; margin: 0 auto; text-align: center; }
+.ac-name-input { width: 100%; padding: 14px 18px; border-radius: var(--radius-md); border: 1.5px solid var(--color-border-light); font-family: var(--font-body); font-size: var(--body-large); text-align: center; margin: var(--spacing-md) 0; }
+.ac-name-input:focus { outline: none; border-color: var(--color-accent); }
+
+/* ---- My Academy dashboard ---- */
+.ac-dashboard-tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: var(--spacing-xl); }
+.ac-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacing-lg); }
+.ac-dash-course-card { background: var(--color-warm-white); border: 1.5px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+.ac-dash-course-card h3 { font-family: var(--font-display); color: var(--color-text-primary); margin-bottom: 6px; }
+.ac-dash-stat-row { display: flex; justify-content: space-between; font-size: var(--body-xsmall); color: var(--color-text-secondary); margin: 8px 0; }
+.ac-dash-cert-card { background: var(--color-pink-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+.ac-dash-cert-card .ac-cert-icon { font-size: 2rem; }
+.ac-project-list-item { background: var(--color-pink-light); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: 10px; }
+
+/* ---- CERTIFICATE (on-page HTML/CSS preview + print) ---- */
+.ac-cert-page-wrap { max-width: 1000px; margin: 0 auto; }
+.ac-certificate {
+    background: linear-gradient(180deg, #fdf2f5 0%, #fffaf7 100%);
+    border: 3px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    padding: 3px;
+    aspect-ratio: 1.414 / 1;
+    max-width: 100%;
+}
+.ac-certificate-inner {
+    height: 100%;
+    border: 1px solid var(--color-accent);
+    border-radius: calc(var(--radius-lg) - 4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(1rem, 4vw, 3rem);
+    gap: clamp(4px, 1vw, 10px);
+}
+.ac-cert-brand { font-family: var(--font-display); font-size: clamp(0.9rem, 2vw, 1.3rem); color: var(--color-text-primary); }
+.ac-cert-academy { font-size: clamp(0.6rem, 1.2vw, 0.8rem); letter-spacing: var(--letter-spacing-wide); color: var(--color-accent-dark); font-weight: var(--weight-extrabold); }
+.ac-cert-title { font-family: var(--font-display); font-size: clamp(1.2rem, 3.5vw, 2.2rem); color: var(--color-text-primary); margin: clamp(4px, 1vw, 14px) 0; }
+.ac-cert-sub { font-size: clamp(0.65rem, 1.4vw, 0.95rem); color: var(--color-text-secondary); }
+.ac-cert-name { font-family: 'Caveat', cursive; font-size: clamp(1.8rem, 6vw, 3.4rem); color: var(--color-accent-dark); margin: clamp(2px, 0.5vw, 6px) 0; }
+.ac-cert-course { font-weight: var(--weight-extrabold); font-size: clamp(0.9rem, 2.2vw, 1.4rem); color: var(--color-text-primary); letter-spacing: 0.02em; }
+.ac-cert-desc { font-size: clamp(0.55rem, 1.1vw, 0.75rem); color: var(--color-text-secondary); max-width: 80%; }
+.ac-cert-skills { font-size: clamp(0.55rem, 1.1vw, 0.75rem); color: var(--color-accent-dark); font-weight: var(--weight-semibold); }
+.ac-cert-footer-row { display: flex; justify-content: space-between; width: 90%; margin-top: clamp(6px, 1.5vw, 16px); font-size: clamp(0.55rem, 1.1vw, 0.75rem); }
+.ac-cert-footer-row strong { display: block; letter-spacing: 0.05em; color: var(--color-accent-dark); font-size: 0.85em; }
+.ac-cert-tagline { font-family: var(--font-display); font-size: clamp(0.55rem, 1.2vw, 0.85rem); color: var(--color-accent-dark); margin-top: clamp(4px, 1vw, 10px); }
+
+.ac-cert-actions { display: flex; justify-content: center; gap: var(--spacing-md); flex-wrap: wrap; margin-top: var(--spacing-xl); }
+.ac-cert-locked { text-align: center; padding: var(--spacing-2xl); background: var(--color-pink-light); border-radius: var(--radius-lg); }
+.ac-share-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: var(--spacing-md); }
+
+@media print {
+    body.ac-printing > *:not(main),
+    body.ac-printing .ac-cert-actions,
+    body.ac-printing .ac-section-head,
+    body.ac-printing .ac-share-menu {
+        display: none !important;
+    }
+    body.ac-printing .ac-certificate {
+        border: 2px solid #d6336c;
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+    @page { size: A4 landscape; margin: 10mm; }
+}
+
+@media (max-width: 1024px) {
+    .ac-lesson-page { grid-template-columns: 1fr; }
+    .ac-lesson-sidebar { position: static; max-height: none; order: 2; }
+}
+@media (max-width: 640px) {
+    .ac-overview-meta-grid { gap: var(--spacing-md); }
+    .ac-lesson-nav { position: sticky; bottom: 0; background: var(--color-warm-white); padding: var(--spacing-md); margin: var(--spacing-xl) -1rem 0; box-shadow: 0 -4px 12px rgba(0,0,0,0.06); }
+    .ac-cert-footer-row { font-size: 0.5rem; }
+}
