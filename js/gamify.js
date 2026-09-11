@@ -36,6 +36,9 @@ export const BADGES = [
   { id: 'resource-girl', icon: '📚', label: 'Resource Girl', desc: 'Used a template from the Playground' },
   { id: 'digital-dictionary', icon: '🔎', label: 'Digital Dictionary', desc: 'Explored a term in the Digital Girl Glossary' },
   { id: 'playground-queen', icon: '👑', label: 'Playground Queen', desc: 'Completed a meaningful selection of Playground experiences' },
+  { id: 'academy-enrolled', icon: '🎓', label: 'Academy Enrolled', desc: 'Started your first Playbook Academy course' },
+  { id: 'academy-graduate', icon: '📜', label: 'Academy Graduate', desc: 'Earned your first Playbook Academy certificate' },
+  { id: 'academy-scholar', icon: '🌟', label: 'Academy Scholar', desc: 'Earned 3 Playbook Academy certificates' },
 ];
 
 export const DREAM_ITEMS = [
