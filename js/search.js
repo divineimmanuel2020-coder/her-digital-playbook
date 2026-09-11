@@ -7,9 +7,14 @@
 
 import { ALL_ITEMS } from '../data/store.js';
 import { PLAYGROUND_PAGES } from '../data/playground.js';
+import { ACADEMY_COURSES } from '../data/academy.js';
 import { BASE } from './base.js';
 
-const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES];
+const ACADEMY_SEARCH_ITEMS = ACADEMY_COURSES.map((c) => ({
+  id: c.id, title: c.title, category: c.category, icon: '🎓', url: `/pages/course.html?id=${c.id}`,
+}));
+
+const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES, ...ACADEMY_SEARCH_ITEMS];
 
 export function initSearch() {
   const btn = document.getElementById('search-btn');
