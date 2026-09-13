@@ -244,11 +244,28 @@ export function getNextLesson(course, progress) {
   return null; // everything done — learner is ready for the certificate
 }
 
+// Percentage is computed across EVERY real requirement — lessons,
+// module assessments, projects, and the capstone — not just plain
+// teaching lessons. This guarantees it can only reach 100% at the
+// exact same moment computeCompletion().isComplete becomes true;
+// it can never say "100%" while a module assessment, a project, or
+// the capstone is still outstanding.
 export function courseProgressPct(course, progress) {
-  const required = requiredLessonsFor(course);
-  if (!required.length) return 0;
-  const done = required.filter((l) => progress.completedLessons.includes(l.id)).length;
-  return Math.round((done / required.length) * 100);
+  const lessons = requiredLessonsFor(course);
+  const modulesWithAssessment = assessmentModules(course);
+  const projects = course.projects || [];
+  const hasCapstone = !!course.capstone;
+
+  const totalItems = lessons.length + modulesWithAssessment.length + projects.length + (hasCapstone ? 1 : 0);
+  if (!totalItems) return 0;
+
+  const doneLessons = lessons.filter((l) => progress.completedLessons.includes(l.id)).length;
+  const doneAssessments = modulesWithAssessment.filter((m) => progress.assessments[m.id]?.passed).length;
+  const doneProjects = projects.filter((p) => progress.projectsCompleted.some((d) => d.id === p.id)).length;
+  const capstoneDone = hasCapstone && progress.capstone.completed && progress.capstone.score >= 70 ? 1 : 0;
+
+  const doneItems = doneLessons + doneAssessments + doneProjects + capstoneDone;
+  return Math.round((doneItems / totalItems) * 100);
 }
 
 /* =============================================
