@@ -10,7 +10,7 @@ import { initSearch } from './search.js';
 import { optimizeImages } from './images.js';
 import { initGirlGangPopup } from './girlgang-popup.js';
 import { maybeShowJoinReminder } from './notifications.js';
-import { getCertificateById, formatCompletionDate, downloadCertificatePDF, buildShareText } from './academy-certificate.js';
+import { getCertificateById, formatCompletionDate, renderCertificateHtml, downloadCertificatePDF, buildShareText } from './academy-certificate.js';
 
 const gaEvent = (name, params = {}) => { if (typeof window.gtag === 'function') window.gtag('event', name, params); };
 
@@ -18,29 +18,6 @@ const root = document.getElementById('certificate-root');
 const params = new URLSearchParams(window.location.search);
 const certId = params.get('id');
 const certificate = getCertificateById(certId);
-
-function renderCertificateHtml(c) {
-  return `
-    <div class="ac-certificate">
-      <div class="ac-certificate-inner">
-        <p class="ac-cert-brand">Her Digital Playbook</p>
-        <p class="ac-cert-academy">THE PLAYBOOK ACADEMY</p>
-        <p class="ac-cert-title">✦ Certificate of Course Completion ✦</p>
-        <p class="ac-cert-sub">This certificate is proudly awarded to</p>
-        <p class="ac-cert-name">${c.learnerName}</p>
-        <p class="ac-cert-sub">for successfully completing</p>
-        <p class="ac-cert-course">${c.courseTitle}</p>
-        <p class="ac-cert-desc">The learner successfully completed the required lessons, practical assignments, assessments, and final course requirements through the curriculum of The Playbook Academy.</p>
-        ${c.skills?.length ? `<p class="ac-cert-skills">${c.skills.join(' &nbsp;•&nbsp; ')}</p>` : ''}
-        <div class="ac-cert-footer-row">
-          <span><strong>COMPLETION DATE</strong>${formatCompletionDate(c.completionDate)}</span>
-          <span><strong>AWARDED BY</strong>HER DIGITAL PLAYBOOK</span>
-          <span><strong>CERTIFICATE ID</strong>${c.certificateId}</span>
-        </div>
-        <p class="ac-cert-tagline">Learn. Build. Earn. Elevate.</p>
-      </div>
-    </div>`;
-}
 
 function render() {
   if (!certificate) {
@@ -88,7 +65,7 @@ function render() {
     btn.textContent = 'Preparing your PDF…';
     try {
       await downloadCertificatePDF(certificate);
-      gaEvent('certificate_download', { course_id: certificate.courseId, certificate_id: certificate.certificateId });
+      gaEvent('certificate_downloaded', { course_id: certificate.courseId, certificate_id: certificate.certificateId });
       btn.textContent = 'Certificate Downloaded 🎀';
     } catch {
       btn.textContent = "We couldn't download it — try Print / Save as PDF instead";
@@ -134,7 +111,7 @@ async function init() {
   optimizeImages(document);
   initGirlGangPopup();
   maybeShowJoinReminder();
-  if (certificate) gaEvent('certificate_view', { certificate_id: certificate.certificateId });
+  if (certificate) gaEvent('certificate_viewed', { course_id: certificate.courseId, certificate_id: certificate.certificateId });
   render();
 }
 
