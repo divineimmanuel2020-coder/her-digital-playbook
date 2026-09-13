@@ -196,6 +196,30 @@
 
 .ac-cert-actions { display: flex; justify-content: center; gap: var(--spacing-md); flex-wrap: wrap; margin-top: var(--spacing-xl); }
 .ac-cert-locked { text-align: center; padding: var(--spacing-2xl); background: var(--color-pink-light); border-radius: var(--radius-lg); }
+
+/* Certificate readiness banner on the course overview page — must be
+   impossible to miss, never buried below the fold. */
+.ac-cert-banner {
+  display: flex; align-items: center; gap: var(--spacing-md); flex-wrap: wrap;
+  text-align: left; margin-top: var(--spacing-lg); padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-lg); max-width: 640px; margin-left: auto; margin-right: auto;
+}
+.ac-cert-banner-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.ac-cert-banner h3 { font-family: var(--font-display); margin: 0 0 4px; font-size: 1.15rem; }
+.ac-cert-banner p { margin: 0; font-size: var(--body-small); color: var(--color-text-secondary); }
+.ac-cert-banner-actions { margin-left: auto; }
+.ac-cert-banner-ready, .ac-cert-banner-earned {
+  background: var(--color-pink-light); border: 1.5px solid var(--color-gold);
+}
+.ac-cert-banner-earned { background: rgba(76, 175, 80, 0.08); border-color: var(--color-success); }
+.ac-cert-banner-retry {
+  background: var(--color-pink-light); border: 1.5px solid var(--color-accent);
+}
+@media (max-width: 640px) {
+  .ac-cert-banner { flex-direction: column; text-align: center; }
+  .ac-cert-banner-actions { margin-left: 0; width: 100%; }
+  .ac-cert-banner-actions .btn { width: 100%; }
+}
 .ac-share-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: var(--spacing-md); }
 
 @media print {
