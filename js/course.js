@@ -22,7 +22,7 @@ import {
   computeCompletion, getCourseState, COURSE_STATE_LABELS, courseProgressPct, getNextLesson,
   enrollCourse, getLearnerName, setLearnerName,
 } from './academy-engine.js';
-import { createCertificate } from './academy-certificate.js';
+import { createCertificate, getCertificateForCourse, generateCertificateId, validateCertificateName, renderCertificateHtml } from './academy-certificate.js';
 
 const gaEvent = (name, params = {}) => { if (typeof window.gtag === 'function') window.gtag('event', name, params); };
 
@@ -53,12 +53,24 @@ function lessonStatusIcon(progress, lesson) {
   return '○';
 }
 
+// A lesson's real "done" state depends on its type — assessments are
+// done only once passed, and the capstone is done only once genuinely
+// PASSED (score >= 70), never merely "submitted"/"briefing viewed".
+// This is the single source of truth used both for the per-lesson
+// checkmarks below and for each module's done/total count, so the
+// two can never contradict each other the way they did before.
+function isLessonReallyDone(progress, moduleId, lesson) {
+  if (lesson.type === 'assessment') return !!progress.assessments[moduleId]?.passed;
+  if (lesson.type === 'capstone') return !!(progress.capstone.completed && progress.capstone.score >= 70);
+  return progress.completedLessons.includes(lesson.id);
+}
+
 function renderCurriculum(progress) {
   return `
     <div class="ac-curriculum">
       ${course.modules.map((m, i) => {
         const total = m.lessons.length;
-        const done = m.lessons.filter((l) => progress.completedLessons.includes(l.id)).length;
+        const done = m.lessons.filter((l) => isLessonReallyDone(progress, m.id, l)).length;
         return `
         <div class="ac-module" data-module="${m.id}">
           <div class="ac-module-header" data-toggle="${m.id}">
@@ -76,7 +88,7 @@ function renderCurriculum(progress) {
                 return `<li><a class="ac-lesson-row" href="course.html?id=${courseId}&assessment=${m.id}"><span class="ac-lesson-status">${statusIcon}</span>${escapeHtml(l.title)}<span class="ac-lesson-type-tag">${a?.passed ? `Passed ${a.score}%` : 'Assessment'}</span></a></li>`;
               }
               if (l.type === 'capstone') {
-                return `<li><a class="ac-lesson-row" href="course.html?id=${courseId}&capstone=1"><span class="ac-lesson-status">${progress.capstone.completed ? '✅' : '○'}</span>${escapeHtml(l.title)}<span class="ac-lesson-type-tag">Capstone</span></a></li>`;
+                return `<li><a class="ac-lesson-row" href="course.html?id=${courseId}&capstone=1"><span class="ac-lesson-status">${isLessonReallyDone(progress, m.id, l) ? '✅' : '○'}</span>${escapeHtml(l.title)}<span class="ac-lesson-type-tag">Capstone</span></a></li>`;
               }
               return `<li><a class="ac-lesson-row ${progress.currentLessonId === l.id ? 'current' : ''}" href="course.html?id=${courseId}&lesson=${l.id}"><span class="ac-lesson-status">${lessonStatusIcon(progress, l)}</span>${escapeHtml(l.title)}<span class="ac-lesson-type-tag">${l.type}${l.content ? '' : ' · coming soon'}</span></a></li>`;
             }).join('')}
@@ -84,6 +96,51 @@ function renderCurriculum(progress) {
         </div>`;
       }).join('')}
     </div>`;
+}
+
+function renderCertificateBanner(state, progress) {
+  if (state === 7) {
+    const cert = getCertificateForCourse(course.id);
+    if (!cert) return ''; // shouldn't happen, but never show a broken "Certified" banner with no record
+    return `
+      <div class="ac-cert-banner ac-cert-banner-earned">
+        <span class="ac-cert-banner-icon">🎓</span>
+        <div>
+          <h3>Certificate Earned</h3>
+          <p>Congratulations, ${escapeHtml(cert.learnerName)}!</p>
+        </div>
+        <div class="ac-cert-banner-actions">
+          <a class="btn btn-primary" href="certificate.html?id=${cert.certificateId}">View Certificate</a>
+        </div>
+      </div>`;
+  }
+  if (state === 6) {
+    return `
+      <div class="ac-cert-banner ac-cert-banner-ready">
+        <span class="ac-cert-banner-icon">🎓</span>
+        <div>
+          <h3>Your Certificate Is Ready!</h3>
+          <p>You've completed ${escapeHtml(course.title)} and passed your final capstone.</p>
+        </div>
+        <div class="ac-cert-banner-actions">
+          <a class="btn btn-primary" href="course.html?id=${courseId}&claim=1">Get My Certificate →</a>
+        </div>
+      </div>`;
+  }
+  if (progress.capstone.completed && progress.capstone.score < 70) {
+    return `
+      <div class="ac-cert-banner ac-cert-banner-retry">
+        <span class="ac-cert-banner-icon">🎓</span>
+        <div>
+          <h3>Capstone Not Yet Passed</h3>
+          <p>Your score: ${progress.capstone.score}%. Review the recommended areas and try again — your certificate unlocks once you pass.</p>
+        </div>
+        <div class="ac-cert-banner-actions">
+          <a class="btn btn-primary" href="course.html?id=${courseId}&capstone=1">Retry Capstone →</a>
+        </div>
+      </div>`;
+  }
+  return '';
 }
 
 function renderOverview() {
@@ -110,6 +167,7 @@ function renderOverview() {
             <div class="ac-overview-meta-item"><strong>🎓</strong><span>FREE CERTIFICATE</span></div>
           </div>
           ${pct > 0 ? `<div class="ac-course-progress-track" style="max-width:400px;margin:0 auto;"><div class="ac-course-progress-fill" style="width:${pct}%"></div></div><p style="font-size:var(--body-xsmall);color:var(--color-text-secondary);margin-top:6px;">${pct}% complete · ${COURSE_STATE_LABELS[state]}</p>` : ''}
+          ${renderCertificateBanner(state, progress)}
           <div style="margin-top:var(--spacing-lg);"><a class="btn btn-primary" id="course-cta" href="${ctaHref}">${ctaLabel} →</a></div>
         </div>
 
@@ -503,6 +561,16 @@ function renderClaim() {
   const progress = getProgress(course.id);
   const completion = computeCompletion(course, progress);
 
+  // Returning learner: a certificate already exists for this course.
+  // Never re-show the name form — go straight to view/download, per
+  // "don't make them type it every single time" and STATE 7.
+  const existingCert = getCertificateForCourse(course.id);
+  if (existingCert) {
+    gaEvent('certificate_viewed', { course_id: course.id, certificate_id: existingCert.certificateId });
+    window.location.replace(`certificate.html?id=${existingCert.certificateId}`);
+    return;
+  }
+
   if (!completion.isComplete) {
     root.innerHTML = `
       <section class="ac-section">
@@ -532,23 +600,85 @@ function renderClaim() {
           <h1>You Did It. 🎀</h1>
           <p>You completed <strong>${escapeHtml(course.title)}</strong> with a course score of <strong>${completion.overallScore}%</strong>.</p>
         </div>
-        <div class="ac-name-form" style="margin-top:2rem;">
-          <h2 style="font-family:var(--font-display);">Your Certificate Is Ready 🎀</h2>
-          <p>What name should appear on your certificate?</p>
-          <input type="text" class="ac-name-input" id="cert-name-input" value="${escapeHtml(getLearnerName())}" placeholder="Your full name">
-          <button class="btn btn-primary" id="preview-cert-btn" type="button">Preview My Certificate</button>
-        </div>
+        <div id="claim-step-root" style="margin-top:2rem;"></div>
       </div>
     </section>`;
 
-  document.getElementById('preview-cert-btn').addEventListener('click', () => {
-    const name = document.getElementById('cert-name-input').value.trim();
-    if (!name) { document.getElementById('cert-name-input').focus(); return; }
-    setLearnerName(name);
-    const cert = createCertificate({ learnerName: name, course, score: completion.overallScore });
-    gaEvent('certificate_generated', { course_id: course.id, certificate_id: cert.certificateId });
-    window.location.href = `certificate.html?id=${cert.certificateId}`;
-  });
+  const stepRoot = document.getElementById('claim-step-root');
+
+  // STEP 1 — name entry. Kept separate from step 2 (preview) so the
+  // learner can freely go back and edit the name before anything is
+  // actually saved (see the "Edit Name" requirement) — nothing is
+  // written to storage until "Confirm & Generate" in step 2.
+  function renderNameStep(prefillName) {
+    stepRoot.innerHTML = `
+      <div class="ac-name-form">
+        <h2 style="font-family:var(--font-display);">Personalize Your Certificate 🎀</h2>
+        <p>Enter the name exactly as you'd like it to appear on your certificate.</p>
+        <label for="cert-name-input" class="sr-only">Your name for the certificate</label>
+        <input type="text" class="ac-name-input" id="cert-name-input" value="${escapeHtml(prefillName)}" placeholder="Your full name" autocomplete="name">
+        <p id="cert-name-error" role="alert" style="color:var(--color-accent);font-size:var(--body-xsmall);min-height:1.2em;margin-top:4px;"></p>
+        <p style="font-size:var(--body-xsmall);color:var(--color-text-secondary);">This name will appear on your certificate and downloadable PDF.</p>
+        <button class="btn btn-primary" id="preview-cert-btn" type="button">Preview My Certificate →</button>
+      </div>`;
+
+    const input = document.getElementById('cert-name-input');
+    const errorEl = document.getElementById('cert-name-error');
+    document.getElementById('preview-cert-btn').addEventListener('click', () => {
+      const { valid, cleaned, reason } = validateCertificateName(input.value);
+      if (!valid) {
+        errorEl.textContent = reason;
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
+      }
+      errorEl.textContent = '';
+      setLearnerName(cleaned);
+      gaEvent('certificate_name_submitted', { course_id: course.id });
+      renderPreviewStep(cleaned);
+    });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('preview-cert-btn').click(); });
+  }
+
+  // STEP 2 — preview. Nothing is persisted yet: the certificate ID
+  // is generated in memory only so the preview and the eventually-
+  // saved record are guaranteed to show the exact same ID, without
+  // ever writing a record the learner hasn't confirmed.
+  function renderPreviewStep(name) {
+    const pendingId = generateCertificateId(course.code);
+    const previewCert = {
+      learnerName: name,
+      courseTitle: course.title,
+      completionDate: new Date().toISOString().slice(0, 10),
+      certificateId: pendingId,
+      skills: course.certificateSkills || [],
+    };
+    gaEvent('certificate_previewed', { course_id: course.id });
+
+    stepRoot.innerHTML = `
+      <div class="ac-cert-preview-wrap">
+        <h2 style="font-family:var(--font-display);text-align:center;">Looks Good? 🎀</h2>
+        <p style="text-align:center;">This is how your certificate will appear.</p>
+        ${renderCertificateHtml(previewCert)}
+        <div class="ac-cert-actions">
+          <button class="btn btn-secondary" id="edit-name-btn" type="button">← Edit Name</button>
+          <button class="btn btn-primary" id="confirm-cert-btn" type="button">Confirm &amp; Generate Certificate</button>
+        </div>
+      </div>`;
+
+    document.getElementById('edit-name-btn').addEventListener('click', () => renderNameStep(name));
+    document.getElementById('confirm-cert-btn').addEventListener('click', (e) => {
+      const btn = e.currentTarget;
+      btn.disabled = true;
+      btn.textContent = 'Generating…';
+      const cert = createCertificate({ learnerName: name, course, score: completion.overallScore, certificateId: pendingId });
+      gaEvent('certificate_generated', { course_id: course.id, certificate_id: cert.certificateId });
+      window.location.href = `certificate.html?id=${cert.certificateId}`;
+    });
+  }
+
+  gaEvent('certificate_unlocked', { course_id: course.id });
+  renderNameStep(getLearnerName());
 }
 
 /* =============================================
