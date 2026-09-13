@@ -54,9 +54,55 @@ function randomCode(length = 6) {
   return out;
 }
 
-function generateCertificateId(courseCode) {
+export function generateCertificateId(courseCode) {
   const year = new Date().getFullYear();
   return `HDP-${courseCode}-${year}-${randomCode()}`;
+}
+
+// Rejects blank/whitespace-only names and known placeholder junk
+// values (per the brief's explicit list) so a certificate can never
+// be silently generated with a missing or garbage name. Returns
+// { valid, cleaned, reason } rather than throwing, so callers can
+// show a friendly inline message.
+const NAME_PLACEHOLDER_BLOCKLIST = [
+  'undefined', 'null', '[object object]', 'learner name', 'your name', 'undefined undefined',
+];
+export function validateCertificateName(rawName) {
+  const cleaned = String(rawName || '').trim().replace(/\s+/g, ' ');
+  if (!cleaned) return { valid: false, cleaned, reason: "Please enter the name you'd like printed on your certificate." };
+  if (NAME_PLACEHOLDER_BLOCKLIST.includes(cleaned.toLowerCase())) {
+    return { valid: false, cleaned, reason: "Please enter the name you'd like printed on your certificate." };
+  }
+  return { valid: true, cleaned, reason: null };
+}
+
+/**
+ * Shared certificate markup — used both for the live on-course-page
+ * preview (before anything is saved) and the final certificate.html
+ * view, so the two can never visually drift apart. `c` just needs
+ * learnerName, courseTitle, completionDate, certificateId, skills.
+ */
+export function renderCertificateHtml(c) {
+  return `
+    <div class="ac-certificate">
+      <div class="ac-certificate-inner">
+        <p class="ac-cert-brand">Her Digital Playbook</p>
+        <p class="ac-cert-academy">THE PLAYBOOK ACADEMY</p>
+        <p class="ac-cert-title">✦ Certificate of Course Completion ✦</p>
+        <p class="ac-cert-sub">This certificate is proudly awarded to</p>
+        <p class="ac-cert-name">${c.learnerName}</p>
+        <p class="ac-cert-sub">for successfully completing</p>
+        <p class="ac-cert-course">${c.courseTitle}</p>
+        <p class="ac-cert-desc">The learner successfully completed the required lessons, practical assignments, assessments, and final course requirements through the curriculum of The Playbook Academy.</p>
+        ${c.skills?.length ? `<p class="ac-cert-skills">${c.skills.join(' &nbsp;•&nbsp; ')}</p>` : ''}
+        <div class="ac-cert-footer-row">
+          <span><strong>COMPLETION DATE</strong>${formatCompletionDate(c.completionDate)}</span>
+          <span><strong>AWARDED BY</strong>HER DIGITAL PLAYBOOK</span>
+          <span><strong>CERTIFICATE ID</strong>${c.certificateId}</span>
+        </div>
+        <p class="ac-cert-tagline">Learn. Build. Earn. Elevate.</p>
+      </div>
+    </div>`;
 }
 
 /**
@@ -65,13 +111,18 @@ function generateCertificateId(courseCode) {
  * certificate = one permanent ID, and calling this again for a
  * course that already has one just returns the original record
  * rather than minting a new ID.
+ *
+ * `certificateId` is optional: the caller (the preview step) may
+ * have already generated one to display before the learner
+ * confirmed, and passes it through here so the ID shown in preview
+ * and the ID actually saved are always the exact same value.
  */
-export function createCertificate({ learnerName, course, score }) {
+export function createCertificate({ learnerName, course, score, certificateId }) {
   const existing = getCertificateForCourse(course.id);
   if (existing) return existing;
 
   const certificate = {
-    certificateId: generateCertificateId(course.code),
+    certificateId: certificateId || generateCertificateId(course.code),
     learnerName: learnerName.trim(),
     courseId: course.id,
     courseTitle: course.title,
