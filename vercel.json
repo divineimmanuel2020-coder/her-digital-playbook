@@ -4,6 +4,316 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "first-2000-online"
+        }
+      ],
+      "destination": "/blog/first-2000-online.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "virtual-assistant-pretty-paid-booked"
+        }
+      ],
+      "destination": "/blog/virtual-assistant-pretty-paid-booked.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "soft-girl-youtube-creator"
+        }
+      ],
+      "destination": "/blog/soft-girl-youtube-creator.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "best-money-making-skills-2026"
+        }
+      ],
+      "destination": "/blog/best-money-making-skills-2026.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "profitable-digital-product-business"
+        }
+      ],
+      "destination": "/blog/profitable-digital-product-business.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "instagram-pays-too-sis"
+        }
+      ],
+      "destination": "/blog/instagram-pays-too-sis.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "linkedin-international-opportunity"
+        }
+      ],
+      "destination": "/blog/linkedin-international-opportunity.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "soft-girl-passive-income"
+        }
+      ],
+      "destination": "/blog/soft-girl-passive-income.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "build-your-online-empire"
+        }
+      ],
+      "destination": "/blog/build-your-online-empire.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "budget-like-a-queen"
+        }
+      ],
+      "destination": "/blog/budget-like-a-queen.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "digital-skills-for-beginners"
+        }
+      ],
+      "destination": "/blog/digital-skills-for-beginners.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-choose-a-career"
+        }
+      ],
+      "destination": "/blog/how-to-choose-a-career.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "personal-branding-for-beginners"
+        }
+      ],
+      "destination": "/blog/personal-branding-for-beginners.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-create-and-sell-a-digital-product"
+        }
+      ],
+      "destination": "/blog/how-to-create-and-sell-a-digital-product.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-get-your-first-freelance-client"
+        }
+      ],
+      "destination": "/blog/how-to-get-your-first-freelance-client.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-get-paid-as-a-freelancer"
+        }
+      ],
+      "destination": "/blog/how-to-get-paid-as-a-freelancer.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-make-your-first-1000-online"
+        }
+      ],
+      "destination": "/blog/how-to-make-your-first-1000-online.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "making-money-online-things-beginners-need-to-know"
+        }
+      ],
+      "destination": "/blog/making-money-online-things-beginners-need-to-know.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "30-day-digital-skills-challenge"
+        }
+      ],
+      "destination": "/blog/30-day-digital-skills-challenge.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "salary-negotiation-calculator"
+        }
+      ],
+      "destination": "/tools/salary-negotiation-calculator.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "freelance-rate-calculator"
+        }
+      ],
+      "destination": "/tools/freelance-rate-calculator.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "resume-review-checklist"
+        }
+      ],
+      "destination": "/tools/resume-review-checklist.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "ai-prompt-builder"
+        }
+      ],
+      "destination": "/tools/ai-prompt-builder.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "business-idea-validator"
+        }
+      ],
+      "destination": "/tools/business-idea-validator.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "personal-budget-planner"
+        }
+      ],
+      "destination": "/tools/personal-budget-planner.html",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/#articles",
+      "permanent": false
+    },
+    {
+      "source": "/tools",
+      "destination": "/#tools",
+      "permanent": false
     }
   ],
   "rewrites": [
