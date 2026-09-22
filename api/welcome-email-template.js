@@ -170,7 +170,7 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                   <td style="border:1.5px solid #FBE0E8;border-radius:16px;padding:22px;">
                     <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#3A1B32;">\ud83d\udcb8 Make Your First $2,000 Online</p>
                     <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C4650;">Discover practical ways to begin building online income \u2014 no guesswork, just a real plan.</p>
-                    <a href="https://herdigitalplaybook.com/pages/article.html?id=first-2000-online" class="btn-full" style="display:inline-block;background-color:#EC5C82;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:50px;">READ THE GUIDE \u2192</a>
+                    <a href="https://herdigitalplaybook.com/blog/first-2000-online.html" class="btn-full" style="display:inline-block;background-color:#EC5C82;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:50px;">READ THE GUIDE \u2192</a>
                   </td>
                 </tr>
                 <tr><td style="height:14px;line-height:14px;font-size:0;">&nbsp;</td></tr>
