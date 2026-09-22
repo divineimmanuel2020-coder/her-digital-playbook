@@ -259,7 +259,7 @@ function renderDuplicate(panel) {
       <p class="newsletter-result-text newsletter-result-next-step">Girl if you don't find our email, check promotions tab in your Gmail app, Tap the three dots menu at the top right, click on <strong>MOVE TO</strong>, then move us to <strong>Primary</strong> to keep receiving more beautiful emails. Don't miss the life-changing opportunities we've got for you. ✨</p>
       <div class="newsletter-result-actions">
         <a class="btn btn-secondary" href="${BASE}index.html#articles">Go To Articles</a>
-        <a class="btn btn-secondary" href="${BASE}pages/article.html?id=first-2000-online">Read Latest Guide</a>
+        <a class="btn btn-secondary" href="${BASE}blog/first-2000-online.html">Read Latest Guide</a>
       </div>
     </div>
   `;
