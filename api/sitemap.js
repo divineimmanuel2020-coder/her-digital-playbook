@@ -4,47 +4,28 @@
    live data/store.js — not a static file someone has to
    remember to update. Add a new article or tool to store.js
    and it appears in the sitemap on the very next request,
-   automatically, with its own correct canonical URL.
+   with its own static path (/blog/<id>.html or /tools/<id>.html).
 
-   Served at the real /sitemap.xml path via the rewrite rule in
-   vercel.json — search engines and validators fetch exactly the
-   URL they expect, with no idea a function generated it.
+   scripts/build.mjs also writes an identical static sitemap.xml
+   at the project root; the two always list the same URLs.
+
+   Academy course pages (/pages/course.html?id=...) are left out
+   until they are pre-rendered too — they still build their content
+   in the browser, so a crawler that doesn't run JavaScript would
+   only find an empty shell there.
    ============================================= */
 
 import { ALL_ITEMS } from '../data/store.js';
-import { ACADEMY_COURSES } from '../data/academy.js';
-
-const SITE_URL = 'https://herdigitalplaybook.com';
-
-// Fixed, non-dynamic pages that aren't part of store.js.
-const STATIC_PAGES = [
-  '/',
-  '/pages/about.html',
-  '/pages/contact.html',
-  '/pages/privacy.html',
-  '/pages/terms.html',
-  '/pages/playground.html',
-  '/pages/start-here.html',
-  '/pages/money-path.html',
-  '/pages/game-room.html',
-  '/pages/client-simulator.html',
-  '/pages/templates.html',
-  '/pages/glossary.html',
-  '/pages/academy.html',
-];
+import { SITE_URL, STATIC_PAGES, itemPath } from '../js/routes.js';
 
 export default function handler(req, res) {
   const urls = [
     ...STATIC_PAGES.map((path) => `${SITE_URL}${path}`),
-    ...ALL_ITEMS.map((item) => `${SITE_URL}/pages/article.html?id=${item.id}`),
-    // Academy courses — my-academy.html, certificate.html, and
-    // verify.html are personal/utility pages and intentionally left
-    // out, same reasoning as not indexing a logged-in dashboard.
-    ...ACADEMY_COURSES.map((course) => `${SITE_URL}/pages/course.html?id=${course.id}`),
+    ...ALL_ITEMS.map((item) => `${SITE_URL}${itemPath(item)}`),
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((url) => `  <url>\n    <loc>${url}</loc>\n  </url>`).join('\n')}
 </urlset>
 `;
@@ -55,4 +36,3 @@ ${urls.map((url) => `  <url>\n    <loc>${url}</loc>\n  </url>`).join('\n')}
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
   res.status(200).send(body);
 }
-  
