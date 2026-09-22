@@ -34,22 +34,662 @@
 <body>
 
 <div id="splash-placeholder"></div>
-<div id="header-placeholder"></div>
+<!--hdp:header-->
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="/">
+      <span class="logo-script">Her<span class="logo-heart">♡</span></span>
+      <span class="logo-stack">
+        <span class="logo-caps">Digital Playbook</span>
+        <span class="logo-tagline">Learn. Build. Earn. Elevate.</span>
+      </span>
+    </a>
+
+    <nav aria-label="Primary">
+  <ul class="nav-list" id="nav-list">
+    <!-- In-page navigation (scrolls within the homepage) -->
+    <li><a href="/" data-nav="home">Home</a></li>
+    <li><a href="/#articles" data-nav="articles">Articles</a></li>
+    <li><a href="/#categories" data-nav="categories">Categories</a></li>
+    <li><a href="/#tools" data-nav="tools">Free Tools</a></li>
+    <li><a href="/pages/playground.html" data-nav="playground">🎀 Playground</a></li>
+    <li><a href="/pages/academy.html" data-nav="academy">🎓 Academy</a></li>
+    <!-- Navigation to subsequent pages -->
+    <li><a href="/pages/about.html" data-nav="about">About</a></li>
+    <li><a href="/pages/contact.html" data-nav="contact">Contact Us, Gorgeous</a></li>
+    <li><a href="/#newsletter" data-nav="newsletter">Join The Girl Gang 🎀</a></li>
+    <li><a class="nav-soon" aria-disabled="true">Shop <span>Soon</span></a></li>
+  </ul>
+</nav>
+
+    <div class="header-actions">
+      <button class="search-btn" id="search-btn" aria-label="Search the site">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+      <a class="btn-newsletter" href="/#newsletter">Subscribe ♡</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="search-overlay" id="search-overlay">
+  <div class="search-panel">
+    <div class="search-panel-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="Search articles, tools, and stories…" autocomplete="off">
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results">
+      <p class="search-hint">Start typing to search everything on Her Digital Playbook.</p>
+    </div>
+  </div>
+  </div>
+<!--/hdp:header-->
 
 <main>
-  <div id="hero-placeholder"></div>
-  <div id="featured-placeholder"></div>
-  <div id="categories-placeholder"></div>
-  <div id="latest-placeholder"></div>
-  <div id="tools-placeholder"></div>
-  <div id="playground-teaser-placeholder"></div>
-  <div id="academy-teaser-placeholder"></div>
-  <div id="newsletter-placeholder"></div>
+  <!--hdp:hero-->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Hey girl, ♡</p>
+      <h1 class="hero-title">Learn.<br>Build.<br>Earn.<br><em>Elevate.</em></h1>
+      <p class="hero-desc" id="hero-typewriter" data-typewriter="Welcome home, gorgeous. This is where we learn about money without making it boring. Come learn how to create income daily, weekly, and monthly through digital skills, freelancing, online business, content, and more. Your dream life doesn't have to stay a dream — let's start building it, one pretty little money move at a time.">Welcome home, gorgeous. This is where we learn about money without making it boring. Come learn how to create income daily, weekly, and monthly through digital skills, freelancing, online business, content, and more. Your dream life doesn't have to stay a dream — let's start building it, one pretty little money move at a time.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#articles">Start Earning, Queen ♡</a>
+        <a class="btn btn-secondary" href="#tools">Play With the Money Tools ♡</a>
+      </div>
+      <div class="hero-actions hero-actions-secondary">
+        <a class="btn btn-girlgang" href="#newsletter">Join The Girl Gang 🎀</a>
+      </div>
+    </div>
+    <div class="hero-image-wrapper">
+      <div class="hero-glow"></div>
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <span class="sparkle sparkle-1">✦</span>
+      <span class="sparkle sparkle-2">✦</span>
+      <span class="sparkle sparkle-3">♡</span>
+      <img class="hero-img" src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_1400,q_auto,f_auto,dpr_auto/v1788910324/file_000000000c3081f4b079237095463112_zpem1i.png" alt="Woman with long dark curly hair working confidently in a pink, candlelit room with coffee, laptop and notebook — living her dream-life energy">
+    </div>
+  </div>
+</section>
+<!--/hdp:hero-->
+  <!--hdp:featured-->
+<section class="featured" id="featured">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Stories ♡</h2>
+      <a class="section-link" href="/index.html#articles">See all stories →</a>
+      <p class="section-sub">Editor picks to kickstart your next chapter</p>
+    </div>
+    <div class="featured-grid" id="featured-grid" data-prerendered="true">
+      <article class="card story-card">
+    <a class="card-img-link" href="/blog/first-2000-online.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870402/file_00000000a1e481f4b8afbef41a657059_xowqqd.png" alt="Girl, Let's Make Your First $2000 Online In 2026" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Girl, Let's Make Your First $2000 Online In 2026</h3>
+      <p class="card-desc">Simple, practical steps to secure your financial future early.</p>
+      <div class="card-footer">
+        <span class="read-time">90 min masterclass</span>
+        <a class="read-more" href="/blog/first-2000-online.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/virtual-assistant-pretty-paid-booked.html">
+      <div class="card-img">
+        <span class="card-category">CAREER GLOW-UP</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870412/file_00000000f98481f48473c1c2247b8030_vvrnrl.png" alt="Pretty, Paid And Booked: How To Become A Virtual Assistant Clients Can't Stop Hiring" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Pretty, Paid And Booked: How To Become A Virtual Assistant Clients Can't Stop Hiring</h3>
+      <p class="card-desc">How to enjoy your life now while building your dream future.</p>
+      <div class="card-footer">
+        <span class="read-time">90 min masterclass</span>
+        <a class="read-more" href="/blog/virtual-assistant-pretty-paid-booked.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/soft-girl-youtube-creator.html">
+      <div class="card-img">
+        <span class="card-category">DIGITAL BAG</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870444/file_00000000ff8881f49839ef647e76a9f0_g2ezax.png" alt="The Soft Girl's Guide To Becoming A Full-Time YouTube Creator" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">The Soft Girl's Guide To Becoming A Full-Time YouTube Creator</h3>
+      <p class="card-desc">Step-by-step guide to stand out, add value, and grow with confidence.</p>
+      <div class="card-footer">
+        <span class="read-time">90 min masterclass</span>
+        <a class="read-more" href="/blog/soft-girl-youtube-creator.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+    </div>
+  </div>
+</section>
+<!--/hdp:featured-->
+  <!--hdp:categories-->
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Explore Categories ♡</h2>
+      <p class="section-sub">Tap a category to filter Latest Articles below</p>
+    </div>
+    <div class="categories-grid" id="categories-grid">
+      <!-- Pills injected by js/render.js from data/store.js -->
+    </div>
+  </div>
+</section>
+<!--/hdp:categories-->
+  <!--hdp:latest-->
+<section class="latest" id="articles">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Latest Articles ♡</h2>
+      <a class="section-link" href="#articles">View all articles →</a>
+      <p class="section-sub" id="latest-sub">Fresh reads from the Playbook</p>
+    </div>
+    <div class="latest-grid" id="latest-grid" data-prerendered="true">
+      <article class="card story-card">
+    <a class="card-img-link" href="/blog/best-money-making-skills-2026.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556219/file_00000000cae081f4b4d5cfe30b4979a1_kd3peh.png" alt="Best Money-Making Skills to Learn in 2026: 15 Skills That Can Help You Earn Online" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Best Money-Making Skills to Learn in 2026: 15 Skills That Can Help You Earn Online</h3>
+      <p class="card-desc">A practical breakdown of 15 real skills that can help you earn online, and a quiz to help you pick just one.</p>
+      <div class="card-footer">
+        <span class="read-time">60 min masterclass</span>
+        <a class="read-more" href="/blog/best-money-making-skills-2026.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/profitable-digital-product-business.html">
+      <div class="card-img">
+        <span class="card-category">BUSINESS MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870445/file_000000001a648243b4d7c83b495bb2d8_k38qok.png" alt="How To Start And Grow A Profitable Digital Product Business" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How To Start And Grow A Profitable Digital Product Business</h3>
+      <p class="card-desc">From concept to income — everything you need to launch a digital product.</p>
+      <div class="card-footer">
+        <span class="read-time">90 min deep-dive masterclass</span>
+        <a class="read-more" href="/blog/profitable-digital-product-business.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/instagram-pays-too-sis.html">
+      <div class="card-img">
+        <span class="card-category">SIDE HUSTLE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870456/file_00000000a83881f48353976a7cc47523_wxz2xc.png" alt="Instagram Pays Too, Sis" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Instagram Pays Too, Sis</h3>
+      <p class="card-desc">Turn your Instagram presence into a real income stream.</p>
+      <div class="card-footer">
+        <span class="read-time">75 min masterclass</span>
+        <a class="read-more" href="/blog/instagram-pays-too-sis.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/linkedin-international-opportunity.html">
+      <div class="card-img">
+        <span class="card-category">FUTURE YOU</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870433/file_00000000da34820ab3e505cf606fcdca_sevtt4.png" alt="Babe, Your Next International Opportunity Is On LinkedIn" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Babe, Your Next International Opportunity Is On LinkedIn</h3>
+      <p class="card-desc">Turn your LinkedIn profile into a genuine opportunity magnet.</p>
+      <div class="card-footer">
+        <span class="read-time">75 min masterclass</span>
+        <a class="read-more" href="/blog/linkedin-international-opportunity.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/soft-girl-passive-income.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MINDSET</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786871338/file_00000000ad2881f4be018301fad55646_worntc.png" alt="The Soft Girl's Guide To Passive Income" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">The Soft Girl's Guide To Passive Income</h3>
+      <p class="card-desc">Realistic, honest ways to build income streams that work for you.</p>
+      <div class="card-footer">
+        <span class="read-time">75 min masterclass</span>
+        <a class="read-more" href="/blog/soft-girl-passive-income.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/build-your-online-empire.html">
+      <div class="card-img">
+        <span class="card-category">CEO ENERGY</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786871231/file_0000000075a881f4ad23aeb2bc9c3294_ntqkn8.png" alt="Build Your Online Empire" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Build Your Online Empire</h3>
+      <p class="card-desc">Turn one income stream into a structured, sustainable business.</p>
+      <div class="card-footer">
+        <span class="read-time">90 min ultimate playbook</span>
+        <a class="read-more" href="/blog/build-your-online-empire.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/budget-like-a-queen.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MINDSET</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870654/file_00000000cc3c8246805ebf8113d46e92_lm2fow.png" alt="Budget Like A Queen: Build Your Wealth" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Budget Like A Queen: Build Your Wealth</h3>
+      <p class="card-desc">A sustainable system for budgeting, saving, and building wealth.</p>
+      <div class="card-footer">
+        <span class="read-time">75 min masterclass</span>
+        <a class="read-more" href="/blog/budget-like-a-queen.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/digital-skills-for-beginners.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556225/file_0000000040e4820a9d054bbe70b57615_d3rnxc.png" alt="Digital Skills for Beginners: 25 Essential Skills and Tools to Learn" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Digital Skills for Beginners: 25 Essential Skills and Tools to Learn</h3>
+      <p class="card-desc">The digital girl starter pack — 25 practical skills and tools organized into a checkable passport, so you always know what to learn next.</p>
+      <div class="card-footer">
+        <span class="read-time">50 min masterclass</span>
+        <a class="read-more" href="/blog/digital-skills-for-beginners.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/how-to-choose-a-career.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556227/file_000000003ab481f4913b2ccc89366436_ezthsu.png" alt="How to Choose a Career: A Beginner's Guide to Finding the Right Career Path" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How to Choose a Career: A Beginner's Guide to Finding the Right Career Path</h3>
+      <p class="card-desc">For the girl who feels completely lost about what she wants to do — a real framework, not a magical passion hunt, plus a Career Discovery Quiz.</p>
+      <div class="card-footer">
+        <span class="read-time">50 min masterclass</span>
+        <a class="read-more" href="/blog/how-to-choose-a-career.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/personal-branding-for-beginners.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556224/file_000000005a48820a91267f0f11b6cef4_vnfpna.png" alt="Personal Branding for Beginners: How to Build Your Brand Online From Scratch" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Personal Branding for Beginners: How to Build Your Brand Online From Scratch</h3>
+      <p class="card-desc">Girl, let's build your personal brand from scratch — niche, audience, positioning, and a real Blueprint you fill in yourself.</p>
+      <div class="card-footer">
+        <span class="read-time">55 min masterclass</span>
+        <a class="read-more" href="/blog/personal-branding-for-beginners.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/how-to-create-and-sell-a-digital-product.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556227/file_00000000f808824391fe04b7d85f1819_vcoe2z.png" alt="How to Create and Sell a Digital Product: A Step-by-Step Beginner's Guide" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How to Create and Sell a Digital Product: A Step-by-Step Beginner's Guide</h3>
+      <p class="card-desc">A hands-on build-along workshop — walk one real digital product from idea to launch using the Digital Product Builder stage tracker.</p>
+      <div class="card-footer">
+        <span class="read-time">75 min masterclass</span>
+        <a class="read-more" href="/blog/how-to-create-and-sell-a-digital-product.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/how-to-get-your-first-freelance-client.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556224/file_00000000a1148210a7ba79f652dadfd6_dfygmp.png" alt="How to Get Your First Freelance Client: A Beginner's Guide to Finding Clients" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How to Get Your First Freelance Client: A Beginner's Guide to Finding Clients</h3>
+      <p class="card-desc">How to get your first client without feeling like a begging salesgirl — real scripts, real outreach, and a Client Simulator to practice on.</p>
+      <div class="card-footer">
+        <span class="read-time">60 min masterclass</span>
+        <a class="read-more" href="/blog/how-to-get-your-first-freelance-client.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/how-to-get-paid-as-a-freelancer.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556255/file_00000000b53081f4bd1a60566b660b9a_pa833e.png" alt="How to Get Paid as a Freelancer: Invoices, Contracts, Deposits and Client Payments" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How to Get Paid as a Freelancer: Invoices, Contracts, Deposits and Client Payments</h3>
+      <p class="card-desc">The digital girl's guide to getting paid — invoices, deposits, contracts, and late payments, with a full Payment Setup Checklist.</p>
+      <div class="card-footer">
+        <span class="read-time">50 min masterclass</span>
+        <a class="read-more" href="/blog/how-to-get-paid-as-a-freelancer.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/how-to-make-your-first-1000-online.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556253/file_000000000a7082109e50b33ad86e2ed0_anx9u0.png" alt="How to Make Your First $1,000 Online: A Step-by-Step Beginner’s Plan" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">How to Make Your First $1,000 Online: A Step-by-Step Beginner’s Plan</h3>
+      <p class="card-desc">The $0 to $1,000 online money game — break your goal into real combinations of sales, clients, or products using the Progress Simulator.</p>
+      <div class="card-footer">
+        <span class="read-time">55 min masterclass</span>
+        <a class="read-more" href="/blog/how-to-make-your-first-1000-online.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/making-money-online-things-beginners-need-to-know.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556232/file_00000000d0c081f4a8ef7b3f625b7a0e_glepwi.png" alt="Making Money Online: 15 Things Beginners Need to Know Before They Start" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Making Money Online: 15 Things Beginners Need to Know Before They Start</h3>
+      <p class="card-desc">Things I wish someone told me before I tried to make money online — 15 honest realities, with myth vs reality reveals for each.</p>
+      <div class="card-footer">
+        <span class="read-time">35 min read</span>
+        <a class="read-more" href="/blog/making-money-online-things-beginners-need-to-know.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+<article class="card story-card">
+    <a class="card-img-link" href="/blog/30-day-digital-skills-challenge.html">
+      <div class="card-img">
+        <span class="card-category">MONEY MOVE</span>
+        <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556237/file_00000000cc8c8210bedd66219df8f786_tzdlsp.png" alt="30-Day Digital Skills Challenge: Learn a Money-Making Skill From Scratch" loading="lazy" decoding="async">
+      </div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">30-Day Digital Skills Challenge: Learn a Money-Making Skill From Scratch</h3>
+      <p class="card-desc">30 days to become a Digital Girl — a real day-by-day challenge with daily missions, XP, and a badge for finishing the whole thing.</p>
+      <div class="card-footer">
+        <span class="read-time">30-day self-paced challenge</span>
+        <a class="read-more" href="/blog/30-day-digital-skills-challenge.html">Read More →</a>
+      </div>
+    </div>
+  </article>
+    </div>
+  </div>
+</section>
+<!--/hdp:latest-->
+  <!--hdp:tools-->
+<section class="tools" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Free Tools ♡</h2>
+      <a class="section-link" href="#tools">View all tools →</a>
+      <p class="section-sub">Practical tools to help you plan, price, and grow</p>
+    </div>
+    <div class="tools-grid" id="tools-grid" data-prerendered="true">
+      <article class="card tool-card">
+    <a class="card-img-link" href="/tools/salary-negotiation-calculator.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785067484/file_00000000c43481f4b9f6f957ce7df0ed_tmr7st.png" alt="Salary Negotiation Calculator" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Salary Negotiation Calculator</h3>
+      <p class="card-desc">Know your worth, girl. Let's build your counter-offer.</p>
+      <a class="btn btn-tool" href="/tools/salary-negotiation-calculator.html">Try It Free</a>
+    </div>
+  </article>
+<article class="card tool-card">
+    <a class="card-img-link" href="/tools/freelance-rate-calculator.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785067838/file_00000000d74481f491ee4f73866522df_m1irsi.png" alt="Freelance Rate Calculator" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Freelance Rate Calculator</h3>
+      <p class="card-desc">Stop guessing your rate, babe. Let's do the real math.</p>
+      <a class="btn btn-tool" href="/tools/freelance-rate-calculator.html">Try It Free</a>
+    </div>
+  </article>
+<article class="card tool-card">
+    <a class="card-img-link" href="/tools/resume-review-checklist.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785068075/file_00000000f47c81f4985aaa7c768a9854_ptaphi.png" alt="Resume Review Checklist" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Resume Review Checklist</h3>
+      <p class="card-desc">Get that glow-up resume recruiters can’t scroll past.</p>
+      <a class="btn btn-tool" href="/tools/resume-review-checklist.html">Try It Free</a>
+    </div>
+  </article>
+<article class="card tool-card">
+    <a class="card-img-link" href="/tools/ai-prompt-builder.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785068533/file_000000000cc481f4b9485f3373dbeefe_hhn0ge.png" alt="AI Prompt Builder" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">AI Prompt Builder</h3>
+      <p class="card-desc">Prompt like a pro, girl — better questions, better AI.</p>
+      <a class="btn btn-tool" href="/tools/ai-prompt-builder.html">Try It Free</a>
+    </div>
+  </article>
+<article class="card tool-card">
+    <a class="card-img-link" href="/tools/business-idea-validator.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785069040/file_00000000345881f4b10374929e3be809_gey16b.png" alt="Business Idea Validator" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Business Idea Validator</h3>
+      <p class="card-desc">Reality-check your dream business before you spend a dime.</p>
+      <a class="btn btn-tool" href="/tools/business-idea-validator.html">Try It Free</a>
+    </div>
+  </article>
+<article class="card tool-card">
+    <a class="card-img-link" href="/tools/personal-budget-planner.html">
+      <div class="card-img"><img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1785069432/file_00000000fcf081f48f345777ffa74c96_pdbrhz.png" alt="Personal Budget Planner" loading="lazy" decoding="async"></div>
+    </a>
+    <div class="card-body">
+      <h3 class="card-title">Personal Budget Planner</h3>
+      <p class="card-desc">Give your money a plan, babe — goals included.</p>
+      <a class="btn btn-tool" href="/tools/personal-budget-planner.html">Try It Free</a>
+    </div>
+  </article>
+    </div>
+  </div>
+</section>
+<!--/hdp:tools-->
+  <!--hdp:playground-teaser-->
+<section class="pg-teaser" id="playground-teaser">
+  <div class="container">
+    <div class="pg-section-head">
+      <span class="pg-eyebrow">NEW</span>
+      <h2>🎀 Come Play With Us</h2>
+      <p>Articles teach you. Tools help you plan. The Playground lets you practice.</p>
+    </div>
+    <div class="pg-card-grid">
+      <a class="pg-card" href="/pages/money-path.html">
+        <span class="pg-card-icon">💸</span>
+        <h3>Find Your Money Path</h3>
+        <p>A quick quiz to discover a direction worth exploring.</p>
+        <span class="pg-card-cta">FIND MY PATH →</span>
+      </a>
+      <a class="pg-card" href="/pages/game-room.html">
+        <span class="pg-card-icon">🎮</span>
+        <h3>Game Room</h3>
+        <p>Mini games for your money, career and business brain.</p>
+        <span class="pg-card-cta">PLAY THE GAMES →</span>
+      </a>
+      <a class="pg-card" href="/pages/client-simulator.html">
+        <span class="pg-card-icon">💼</span>
+        <h3>Client Simulator</h3>
+        <p>Practice real-world freelance client situations.</p>
+        <span class="pg-card-cta">START SIMULATION →</span>
+      </a>
+      <a class="pg-card" href="/pages/templates.html">
+        <span class="pg-card-icon">🎀</span>
+        <h3>Free Templates</h3>
+        <p>Real, usable career, freelance and money resources.</p>
+        <span class="pg-card-cta">EXPLORE TEMPLATES →</span>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <a class="btn btn-primary" href="/pages/playground.html">Enter the Playground →</a>
+    </div>
+  </div>
+</section>
+<!--/hdp:playground-teaser-->
+  <!--hdp:academy-teaser-->
+<section class="ac-section" id="academy-teaser" style="background:var(--color-pink-light);">
+  <div class="container">
+    <div class="ac-section-head">
+      <span class="ac-eyebrow">NEW</span>
+      <h2>🎓 The Playbook Academy</h2>
+      <p>Free courses. Real skills. No gatekeeping. Learn the skills that can help you build your career, grow a business, work online, or create your next opportunity.</p>
+    </div>
+    <div style="text-align:center;">
+      <a class="btn btn-primary" href="/pages/academy.html">Explore the Academy →</a>
+    </div>
+  </div>
+</section>
+<!--/hdp:academy-teaser-->
+  <!--hdp:newsletter-->
+<section class="newsletter" id="newsletter">
+  <div class="container newsletter-wrapper">
+    <div class="newsletter-image">
+      <div class="blob blob-3"></div>
+      <div class="blob blob-4"></div>
+      <img src="https://res.cloudinary.com/s9jk4ddk/image/upload/w_900,q_auto,f_auto,dpr_auto/v1786870646/file_00000000dd9c81f49d10e8ec29f0b6a8_xbxdr2.png" alt="Join the Her Digital Playbook community">
+    </div>
+    <div class="newsletter-panel-wrap">
+      <div class="newsletter-fx" id="newsletter-fx" aria-hidden="true"></div>
+      <div id="newsletter-panel" aria-live="polite">
+        <!-- Default "form" state — newsletter.js swaps this whole
+             panel's content for success/duplicate/error states, and
+             can re-render this exact markup again via renderFormState(). -->
+        <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
+        <p class="newsletter-desc newsletter-desc-glow">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, girl to girl.</p>
+        <ul class="newsletter-perks">
+          <li>♡ Expert insights</li>
+          <li>✎ Practical tips</li>
+          <li>✦ Exclusive resources</li>
+          <li>🎁 Free tools &amp; templates</li>
+        </ul>
+
+        <form class="newsletter-form" id="newsletter-form" novalidate>
+          <div class="newsletter-field">
+            <label for="newsletter-name" class="sr-only">Your name</label>
+            <input type="text" id="newsletter-name" placeholder="Your name" autocomplete="name" aria-describedby="newsletter-name-error">
+            <span class="newsletter-field-error" id="newsletter-name-error" role="alert"></span>
+          </div>
+          <div class="newsletter-field">
+            <label for="newsletter-email" class="sr-only">Your email address</label>
+            <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
+            <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
+          </div>
+          <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
+        </form>
+        <p class="newsletter-note">No spam. Just good things for your inbox. Pinky promise. ♡</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/hdp:newsletter-->
 </main>
 
-<div id="footer-placeholder"></div>
+<!--hdp:footer-->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="brand-col">
+      <a class="logo footer-logo" href="/">
+        <span class="logo-script">Her<span class="logo-heart">♡</span></span>
+        <span class="logo-stack">
+          <span class="logo-caps">Digital Playbook</span>
+        </span>
+      </a>
+      <p class="footer-desc">Helping women build careers, businesses, wealth, and confidence in the digital world.</p>
+    </div>
+    <div>
+      <h4 class="footer-heading">Explore</h4>
+      <ul class="footer-links">
+        <li><a href="/#articles">Articles</a></li>
+        <li><a href="/#categories">Categories</a></li>
+        <li><a href="/#tools">Free Tools</a></li>
+        <li><a href="/pages/playground.html">Playground</a></li>
+        <li><a href="/pages/academy.html">The Playbook Academy</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-heading">Company</h4>
+      <ul class="footer-links">
+        <li><a href="/pages/about.html">About</a></li>
+        <li><a href="/pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-heading">Legal</h4>
+      <ul class="footer-links">
+        <li><a href="/pages/privacy.html">Privacy Policy</a></li>
+        <li><a href="/pages/terms.html">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <span class="copyright">© 2026 Her Digital Playbook. All rights reserved.</span>
+      <span class="footer-script">You're not just building a business, you're building your dream life. ♡</span>
+      <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    </div>
+  </div>
+  </footer>
+<!--/hdp:footer-->
 <div id="card-templates-placeholder" hidden></div>
-<div id="girlgang-popup-placeholder"></div>
+<!--hdp:girlgang-popup-->
+<div class="girlgang-popup-overlay" id="girlgang-popup-overlay" hidden>
+  <div class="girlgang-popup" role="dialog" aria-modal="true" aria-labelledby="girlgang-popup-title">
+    <button class="girlgang-popup-close" id="girlgang-popup-close" type="button" aria-label="Close">✕</button>
+    <div class="girlgang-popup-sparkle">✨</div>
+    <p class="girlgang-popup-eyebrow">Hey girl, wait ♡</p>
+    <h2 class="girlgang-popup-title" id="girlgang-popup-title">You're missing out on the Girl Gang 🎀</h2>
+    <p class="girlgang-popup-desc">Real money tips, career glow-ups, freelance opportunities, and business ideas — delivered straight to your inbox. This is the stuff you don't want to scroll past.</p>
+    <a class="btn btn-girlgang girlgang-popup-cta" href="#newsletter" id="girlgang-popup-cta">Join The Girl Gang 🎀</a>
+    <button class="girlgang-popup-dismiss" id="girlgang-popup-dismiss" type="button">Not right now</button>
+  </div>
+      </div>
+<!--/hdp:girlgang-popup-->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
