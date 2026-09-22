@@ -15,6 +15,7 @@ import { initGirlGangPopup } from './girlgang-popup.js';
 import { maybeShowJoinReminder } from './notifications.js';
 import { GLOSSARY } from '../data/playground.js';
 import { findItemById } from '../data/store.js';
+import { itemPath } from './routes.js';
 import { pgGrantXP, pgMarkDone, pgHasDone, pgCheckQueenBadge } from './playground.js';
 
 const gaEvent = (name, params = {}) => { if (typeof window.gtag === 'function') window.gtag('event', name, params); };
@@ -48,7 +49,7 @@ function matches(entry) {
 function learnMoreHref(link) {
   if (link.id) {
     const item = findItemById(link.id);
-    return item ? `/pages/article.html?id=${item.id}` : null;
+    return item ? itemPath(item) : null;
   }
   return link.href || null;
 }
