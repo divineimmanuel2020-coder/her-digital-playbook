@@ -13,6 +13,7 @@
    ============================================= */
 
 import { awardXP, unlockBadge } from './gamify.js';
+import { itemRelPathById } from './routes.js';
 
 export const PG_PREFIX = 'hdp-playground-';
 
@@ -121,9 +122,8 @@ export function renderKeepExploring(container, items) {
 // Small helper so pages can build a "Keep Exploring" href list from
 // a mix of article ids and other Playground page ids without every
 // page re-writing the same lookup logic.
-// Every Playground page importing this lives in /pages/ itself,
-// alongside article.html — so this is a same-folder reference, not
-// a step up and back down.
+// Every Playground page importing this lives in /pages/, and articles
+// now live in their own static folders (/blog/, /tools/) one level up.
 export function articleHref(id) {
-  return `article.html?id=${id}`;
+  return `../${itemRelPathById(id)}`;
 }
