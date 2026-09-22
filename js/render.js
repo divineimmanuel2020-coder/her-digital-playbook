@@ -7,6 +7,7 @@
    ============================================= */
 
 import { CATEGORIES, FEATURED_STORIES, LATEST_ARTICLES, FREE_TOOLS } from '../data/store.js';
+import { itemRelPath } from './routes.js';
 
 function cloneCard(templateId) {
   const tpl = document.getElementById(templateId);
@@ -21,7 +22,7 @@ function fillStoryCard(item) {
   const card = cloneCard('tpl-story-card');
   if (!card) return null;
 
-  const detailUrl = `pages/article.html?id=${item.id}`;
+  const detailUrl = itemRelPath(item); // e.g. blog/<id>.html
   const img = card.querySelector('img');
   img.src = item.image;
   img.alt = item.title;
@@ -38,7 +39,7 @@ function fillToolCard(item) {
   const card = cloneCard('tpl-tool-card');
   if (!card) return null;
 
-  const detailUrl = `pages/article.html?id=${item.id}`;
+  const detailUrl = itemRelPath(item); // e.g. blog/<id>.html
   const img = card.querySelector('img');
   img.src = item.image;
   img.alt = item.title;
@@ -52,6 +53,8 @@ function fillToolCard(item) {
 export function renderFeatured() {
   const grid = document.getElementById('featured-grid');
   if (!grid) return;
+  // scripts/build.mjs already wrote these cards into index.html — don't add them twice.
+  if (grid.dataset.prerendered === 'true') return;
   FEATURED_STORIES.forEach((item) => {
     const card = fillStoryCard(item);
     if (card) grid.appendChild(card);
@@ -96,6 +99,13 @@ export function renderLatest(filterCategory = 'all') {
   const sub = document.getElementById('latest-sub');
   if (!grid) return;
 
+  // First call: the unfiltered grid is already in the HTML (see scripts/build.mjs).
+  // Leave it alone; any later call (a category click) re-renders as usual.
+  if (filterCategory === 'all' && grid.dataset.prerendered === 'true') {
+    delete grid.dataset.prerendered;
+    return;
+  }
+
   grid.innerHTML = '';
   const items = filterCategory === 'all'
     ? LATEST_ARTICLES
@@ -121,6 +131,7 @@ export function renderLatest(filterCategory = 'all') {
 export function renderTools() {
   const grid = document.getElementById('tools-grid');
   if (!grid) return;
+  if (grid.dataset.prerendered === 'true') return;
   FREE_TOOLS.forEach((item) => {
     const card = fillToolCard(item);
     if (card) grid.appendChild(card);
