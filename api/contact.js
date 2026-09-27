@@ -54,6 +54,42 @@ export default async function handler(req, res) {
     }
   }
 
+  /* ---------- spam filtering ----------
+     Two checks, both enforced here (not just in the browser), since a bot
+     can always skip pages/contact.html's JS and POST straight to this
+     endpoint with whatever payload it wants.
+
+     1. Honeypot ("website"): a form field real visitors never see or
+        fill in (see .contact-hp-field in css/style.css). A non-empty
+        value means whatever submitted this didn't render the page like
+        a browser does — it just filled in every field it found.
+
+     2. Minimum elapsed time: "renderedAt" is the timestamp the contact
+        page's JS captured the instant it loaded. A real person needs a
+        few seconds to read the form and type a message; a script that
+        fills and submits it in well under a second is the "classic
+        automated bot" pattern you saw. A missing/invalid renderedAt
+        (nothing this page's own JS would ever send) is treated the same
+        way, since that means the request bypassed the page entirely.
+
+     Either check failing returns the SAME 200 success response a real
+     sender gets, without calling Resend. Bots that get an honest 4xx
+     tend to notice and adapt their script; a fake success is more
+     likely to make them think the submission "worked" and move on. */
+  const MIN_SUBMIT_MS = 1500;
+  const honeypot = body && body.website ? String(body.website).trim() : '';
+  const renderedAt = body && body.renderedAt ? Number(body.renderedAt) : NaN;
+  const elapsedMs = Date.now() - renderedAt;
+
+  if (honeypot || !Number.isFinite(renderedAt) || elapsedMs < MIN_SUBMIT_MS) {
+    console.warn('[api/contact] Blocked a likely bot submission', {
+      honeypotFilled: !!honeypot,
+      renderedAt: body?.renderedAt,
+      elapsedMs: Number.isFinite(renderedAt) ? elapsedMs : null,
+    });
+    return res.status(200).json({ success: true });
+  }
+
   const name = (body && body.name ? String(body.name) : '').trim();
   const email = (body && body.email ? String(body.email) : '').trim();
   const message = (body && body.message ? String(body.message) : '').trim();
