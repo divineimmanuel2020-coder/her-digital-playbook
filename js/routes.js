@@ -36,6 +36,10 @@ export const STATIC_PAGES = [
   '/pages/templates.html',
   '/pages/glossary.html',
   '/pages/academy.html',
+  // Clean, shareable URL — Vercel rewrites this to join-our-girl-gang.html
+  // (see scripts/build.mjs -> vercelConfig()) without changing the address
+  // bar, so this is the URL that belongs in the sitemap, not the .html one.
+  '/join-our-girl-gang',
 ];
 
 /** "blog/some-id.html" — no leading slash, for use with BASE. */
