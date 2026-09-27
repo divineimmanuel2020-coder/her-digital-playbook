@@ -96,6 +96,16 @@
     <input type="text" placeholder="Your name" required>
     <input type="email" placeholder="Your email" required>
     <textarea placeholder="Your message" required></textarea>
+    <!-- Honeypot: invisible to real visitors, irresistible to bots that
+         auto-fill every field they find. Real users never see or touch
+         this, so it must stay empty — anything in it means a bot filled
+         the form, and api/contact.js rejects the request before it ever
+         reaches Resend. aria-hidden + tabindex="-1" keep it out of the
+         tab order and off screen readers, not just visually hidden. -->
+    <div class="contact-hp-field" aria-hidden="true">
+      <label for="contact-website">Website</label>
+      <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
     <button class="btn btn-primary" type="submit">Send Message</button>
     <p class="newsletter-note" id="contact-note"></p>
   </form>
@@ -137,6 +147,17 @@
         <li><a href="/pages/terms.html">Terms of Use</a></li>
       </ul>
     </div>
+    <div>
+      <h4 class="footer-heading">Connect</h4>
+      <ul class="footer-socials">
+        <li>
+          <a href="https://ng.linkedin.com/in/princess-immanuel-185426251" target="_blank" rel="noopener noreferrer" aria-label="Her Digital Playbook on LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.11 20.45H3.56V9h3.55v11.45z"></path></svg>
+            <span>LinkedIn</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="footer-bottom">
     <div class="container">
@@ -168,10 +189,15 @@
   const form = document.getElementById('contact-form');
   const note = document.getElementById('contact-note');
   const submitBtn = form.querySelector('button[type="submit"]');
+  const honeypot = document.getElementById('contact-website');
+  // When this page finished loading — api/contact.js rejects a submission
+  // that arrives implausibly soon after this, since real visitors need at
+  // least a few seconds to read the form and type into it.
+  const formRenderedAt = Date.now();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const [nameInput, emailInput] = form.querySelectorAll('input');
+    const [nameInput, emailInput] = form.querySelectorAll('input:not(#contact-website)');
     const messageInput = form.querySelector('textarea');
 
     submitBtn.disabled = true;
@@ -187,6 +213,8 @@
           name: nameInput.value,
           email: emailInput.value,
           message: messageInput.value,
+          website: honeypot.value,
+          renderedAt: formRenderedAt,
         }),
       });
       const data = await res.json().catch(() => null);
