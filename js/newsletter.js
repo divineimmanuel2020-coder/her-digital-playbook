@@ -149,8 +149,11 @@ function celebrate(layer) {
    ============================================= */
 
 function renderFormState(panel) {
+  // The big "Join Our Girl Gang" title lives outside #newsletter-panel now
+  // (see sections/newsletter.html, .newsletter-hero-type) — it's the same
+  // typography hero either way, so this reset only needs to restore the
+  // form itself.
   panel.innerHTML = `
-    <h2 class="newsletter-title">Join Our Girl Gang 🎀</h2>
     <p class="newsletter-desc newsletter-desc-glow">Get beautiful Big Sis Letters straight to your inbox — career advice, AI tips, freelancing opportunities, online business ideas, motivation, and practical guidance, girl to girl.</p>
     <ul class="newsletter-perks">
       <li>♡ Expert insights</li>
@@ -299,7 +302,67 @@ function renderUnexpectedError(panel, onRetry) {
    WIRING
    ============================================= */
 
+// The one clean, shareable URL for the Girl Gang section — see
+// join-our-girl-gang.html (built by scripts/build-invite-link.mjs) and
+// vercel.json, which rewrites /join-our-girl-gang to that file.
+const GIRL_GANG_INVITE_URL = 'https://herdigitalplaybook.com/join-our-girl-gang';
+
+/**
+ * Wires the small "Copy invite link" control that sits next to the
+ * typography hero. Independent of the form/panel below it, so it works
+ * even while the form is mid-submit or showing a success/error state.
+ */
+function initGirlGangCopyLink() {
+  const btn = document.getElementById('newsletter-copy-link');
+  const toast = document.getElementById('newsletter-copy-toast');
+  if (!btn) return;
+
+  let hideTimer = null;
+  function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => toast.classList.remove('is-visible'), 2200);
+  }
+
+  function fallbackCopy(text) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.setAttribute('readonly', '');
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch { ok = false; }
+    document.body.removeChild(el);
+    return ok;
+  }
+
+  btn.addEventListener('click', async () => {
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(GIRL_GANG_INVITE_URL);
+        copied = true;
+      } catch {
+        copied = fallbackCopy(GIRL_GANG_INVITE_URL);
+      }
+    } else {
+      copied = fallbackCopy(GIRL_GANG_INVITE_URL);
+    }
+
+    showToast(copied ? '♡ Girl Gang link copied!' : 'Copy this: ' + GIRL_GANG_INVITE_URL);
+    if (copied && typeof window.gtag === 'function') {
+      window.gtag('event', 'newsletter_invite_link_copied');
+    }
+  });
+}
+
 export function initNewsletter() {
+  initGirlGangCopyLink();
+
   const panel = document.getElementById('newsletter-panel');
   const fxLayer = document.getElementById('newsletter-fx');
   if (!panel) return;
