@@ -1693,6 +1693,20 @@ input:focus-visible,
     resize: vertical;
 }
 
+/* Honeypot trap field — positioned off-screen rather than display:none
+   or visibility:hidden. Some bots specifically check for those two
+   properties and skip fields hidden that way, so off-screen positioning
+   (still invisible, still unreachable by tab or screen reader thanks to
+   the aria-hidden + tabindex="-1" in the HTML) catches more of them. */
+.contact-hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 /* =============================================
    13. SEARCH OVERLAY
    ============================================= */
