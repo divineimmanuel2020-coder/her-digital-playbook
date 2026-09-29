@@ -61,7 +61,13 @@ export function config() {
     receiver: process.env.APPLICATION_RECEIVER_EMAIL || 'herdigitalplaybook2@gmail.com',
     siteUrl: (process.env.SITE_URL || 'https://herdigitalplaybook.com').replace(/\/$/, ''),
     linkSecret: process.env.PLAYBOOK_LIVE_LINK_SECRET || serviceKey,
-    retentionDays: Number(process.env.PLAYBOOK_LIVE_RETENTION_DAYS || 0),
+    // Defaults to 180 days so applications aren't kept forever out of the box
+    // (nothing to set up in Vercel for this). Override the number in Vercel's
+    // environment variables any time, or set it to 0 there to turn retention
+    // off entirely and keep applications indefinitely.
+    retentionDays: process.env.PLAYBOOK_LIVE_RETENTION_DAYS === undefined
+      ? 180
+      : Number(process.env.PLAYBOOK_LIVE_RETENTION_DAYS),
     resendBase: process.env.RESEND_API_BASE || 'https://api.resend.com',
   };
 }
