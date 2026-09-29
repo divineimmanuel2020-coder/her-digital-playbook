@@ -324,6 +324,16 @@
     {
       "source": "/join-our-girl-gang",
       "destination": "/join-our-girl-gang.html"
+    },
+    {
+      "source": "/playbook-live",
+      "destination": "/playbook-live.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/playbook-live-maintenance",
+      "schedule": "17 3 * * *"
     }
   ]
 }
