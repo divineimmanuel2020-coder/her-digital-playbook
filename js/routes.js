@@ -40,6 +40,11 @@ export const STATIC_PAGES = [
   // (see scripts/build.mjs -> vercelConfig()) without changing the address
   // bar, so this is the URL that belongs in the sitemap, not the .html one.
   '/join-our-girl-gang',
+  // Same rewrite pattern, for the Playbook Live division page.
+  '/playbook-live',
+  '/pages/playbook-live-privacy.html',
+  '/pages/playbook-live-terms.html',
+  '/pages/playbook-live-safety.html',
 ];
 
 /** "blog/some-id.html" — no leading slash, for use with BASE. */
