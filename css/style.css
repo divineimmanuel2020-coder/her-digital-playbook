@@ -292,9 +292,37 @@ button {
     justify-content: center;
 }
 
+/* The nav now has 11 items, two of them full phrases ("Contact Us,
+   Gorgeous", "Join The Girl Gang 🎀") rather than single words. At its own
+   natural width that content needs roughly as much horizontal space as the
+   site's entire container-max (1280px) — before the logo and header actions
+   even get a share. No realistic amount of font/gap shrinking closes that
+   gap without either making the text illegibly small or hiding items off
+   the edge of the screen, so the header now uses the same hamburger + drawer
+   menu at every screen size, not just mobile/tablet. This guarantees every
+   item is always visible and reachable, on any screen. See the (now
+   redundant-but-harmless) hamburger/nav-list overrides in responsive.css. */
 .nav-list {
     display: flex;
-    gap: var(--spacing-lg);
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background: rgba(255, 253, 250, 0.98);
+    backdrop-filter: var(--glass-blur);
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-lg) 0;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+    z-index: 99;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.nav-list.open {
+    transform: translateY(0);
 }
 
 .nav-list a {
@@ -303,6 +331,7 @@ button {
     position: relative;
     padding-bottom: 4px;
     color: var(--color-text-primary);
+    white-space: nowrap;
 }
 
 .nav-list a.active {
@@ -369,7 +398,7 @@ button {
 }
 
 .hamburger {
-    display: none;
+    display: flex; /* menu icon now shows at every screen size — see .nav-list comment above */
     flex-direction: column;
     gap: 5px;
     padding: 4px;
