@@ -42,28 +42,41 @@ export default async function handler(req, res) {
 
   const type = String(body.applicationType || '');
   if (!TYPES[type] || !TYPES[type].needsVideo) {
+    console.warn('[playbook-live] VALIDATION rejected upload-url request — bad applicationType', { type });
     return res.status(400).json({ success: false, error: 'invalid-type' });
   }
 
   const fileType = String(body.fileType || '').toLowerCase();
   const fileSize = Number(body.fileSize);
   if (!VIDEO_TYPES[fileType]) {
+    console.warn('[playbook-live] VALIDATION rejected upload-url request — bad fileType', { type, fileType });
     return res.status(400).json({ success: false, error: 'invalid-file-type' });
   }
   if (!Number.isFinite(fileSize) || fileSize <= 0) {
+    console.warn('[playbook-live] VALIDATION rejected upload-url request — bad fileSize', { type, fileSize: body.fileSize });
     return res.status(400).json({ success: false, error: 'invalid-file-size' });
   }
   if (fileSize > MAX_VIDEO_BYTES) {
+    console.warn('[playbook-live] VALIDATION rejected upload-url request — file too large', { type, fileSize });
     return res.status(413).json({ success: false, error: 'file-too-large', maxBytes: MAX_VIDEO_BYTES });
   }
 
   if (await rateLimited(req, 'upload-url', 8, 3600, c)) {
+    console.warn('[playbook-live] RATE_LIMIT triggered for upload-url', { type });
     return res.status(429).json({ success: false, error: 'rate-limited' });
   }
 
   const path = `${type}/${crypto.randomUUID()}.${VIDEO_TYPES[fileType]}`;
   const signed = await createSignedUploadUrl(c, path);
-  if (!signed) return res.status(502).json({ success: false, error: 'upload-unavailable' });
+  if (!signed) {
+    // createSignedUploadUrl() already logged the underlying Supabase error
+    // (status code + response body) tagged "UPLOAD_URL creation failed" —
+    // check there first. Common causes: the playbook-live-applications
+    // bucket doesn't exist yet (run the SQL setup script), or
+    // SUPABASE_SERVICE_ROLE_KEY / SUPABASE_URL are wrong or missing in
+    // Vercel's Production environment specifically (not just Development/Preview).
+    return res.status(502).json({ success: false, error: 'upload-unavailable' });
+  }
 
   return res.status(200).json({ success: true, path: signed.path, token: signed.token, maxBytes: MAX_VIDEO_BYTES });
 }
