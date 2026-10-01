@@ -178,7 +178,7 @@ export async function rateLimited(req, action, max, windowSec, c = config()) {
     if (used !== null && used >= max) return true;
     await dbRequest(c, 'POST', RATE_TABLE, { body: { ip_hash: hash, action }, prefer: 'return=minimal' });
   } catch (err) {
-    console.error('[playbook-live] rate-limit check failed (allowing request):', err?.message);
+    console.error('[playbook-live] RATE_LIMIT check itself failed (allowing the request through):', err?.message);
   }
   return false;
 }
@@ -199,7 +199,7 @@ export async function createSignedUploadUrl(c, path) {
   const r = await storageJson(c, 'POST', `object/upload/sign/${BUCKET}/${encPath(path)}`);
   const rel = r.data && (r.data.url || r.data.signedURL);
   if (!r.ok || !rel) {
-    console.error('[playbook-live] signed upload URL failed', r.status, typeof r.data === 'string' ? r.data.slice(0, 200) : r.data);
+    console.error('[playbook-live] UPLOAD_URL creation failed', { status: r.status, body: typeof r.data === 'string' ? r.data.slice(0, 200) : r.data });
     return null;
   }
   const token = new URL(rel, 'https://x.invalid').searchParams.get('token');
@@ -210,23 +210,53 @@ export async function createSignedDownloadUrl(c, path, seconds = 300) {
   const r = await storageJson(c, 'POST', `object/sign/${BUCKET}/${encPath(path)}`, { expiresIn: seconds });
   const rel = r.data && (r.data.signedURL || r.data.signedUrl);
   if (!r.ok || !rel) {
-    console.error('[playbook-live] signed download URL failed', r.status);
+    console.error('[playbook-live] SIGNED_URL (download) creation failed', { status: r.status });
     return null;
   }
   return `${c.supabaseUrl}/storage/v1${rel.startsWith('/') ? '' : '/'}${rel}`;
 }
 
-/** HEAD the private object with the service key: { exists, size, contentType }. */
-export async function objectHead(c, path) {
-  const res = await fetch(`${c.supabaseUrl}/storage/v1/object/authenticated/${BUCKET}/${encPath(path)}`, {
-    method: 'HEAD',
-    headers: sbHeaders(c),
-  });
-  if (!res.ok) return { exists: false };
+/**
+ * Looks up a private object's metadata with the service key — used to confirm
+ * a video really landed in storage before an application is saved.
+ *
+ * IMPORTANT: this must call /object/info/{bucket}/{path}, NOT
+ * /object/authenticated/{bucket}/{path}. The "authenticated" path downloads
+ * the object itself (meant for GET); it isn't a metadata/HEAD endpoint, and
+ * requests against it were the reason every video-based application was
+ * failing with "video-missing" even after a completely successful upload —
+ * this check could never pass. /object/info/ is Supabase's actual documented
+ * endpoint for this and returns { metadata: { size, mimetype, ... } }.
+ *
+ * Returns { exists, size, contentType }.
+ */
+export async function objectInfo(c, path) {
+  const url = `${c.supabaseUrl}/storage/v1/object/info/${BUCKET}/${encPath(path)}`;
+  let res;
+  try {
+    res = await fetch(url, { method: 'GET', headers: sbHeaders(c) });
+  } catch (err) {
+    console.error('[playbook-live] SIGNED_URL/OBJECT_INFO network error', { path, message: err?.message });
+    return { exists: false };
+  }
+  if (res.status === 404) return { exists: false };
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    console.error('[playbook-live] OBJECT_INFO lookup failed', { path, status: res.status, body: body.slice(0, 300) });
+    return { exists: false };
+  }
+  let json;
+  try {
+    json = await res.json();
+  } catch (err) {
+    console.error('[playbook-live] OBJECT_INFO returned non-JSON response', { path, message: err?.message });
+    return { exists: false };
+  }
+  const meta = (json && json.metadata) || {};
   return {
     exists: true,
-    size: Number(res.headers.get('content-length')) || 0,
-    contentType: String(res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase(),
+    size: Number(meta.size ?? meta.contentLength) || 0,
+    contentType: String(meta.mimetype || meta.mimeType || '').split(';')[0].trim().toLowerCase(),
   };
 }
 
@@ -378,7 +408,7 @@ export async function sendOwnerEmail(c, row) {
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => '');
-    console.error('[playbook-live] Resend error', res.status, detail.slice(0, 300));
+    console.error('[playbook-live] EMAIL_SEND failed', { status: res.status, applicationId: row.application_id, body: detail.slice(0, 300) });
     return false;
   }
   return true;
