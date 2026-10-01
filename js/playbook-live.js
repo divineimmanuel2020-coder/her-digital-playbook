@@ -41,7 +41,12 @@ const MESSAGES = {
   'video-missing': "We couldn't confirm your video upload. Please try again.",
   'video-invalid': "We couldn't accept that video file. Please upload an MP4, MOV or WebM video under 50 MB.",
   'video-already-used': "That video has already been submitted. Please choose your video again.",
-  upload: "We couldn't upload your video. Please check your connection and try again.",
+  upload: "Your video could not be uploaded. Please try again.",
+  // The server couldn't even issue a place to upload to (e.g. a Supabase
+  // outage or misconfiguration) — from the applicant's side this is
+  // indistinguishable from any other upload failure, so it gets the same
+  // message. Vercel's function logs show the real cause, tagged UPLOAD_URL.
+  'upload-unavailable': "Your video could not be uploaded. Please try again.",
 };
 
 /* ---------- analytics (non-personal only) ---------- */
@@ -216,10 +221,14 @@ async function uploadVideo(form, state, extra) {
   if (!issued.ok) throw new SubmitError(issued.data.error || 'upload');
 
   const client = window.hdpSupabase;
-  if (!client?.storage) throw new SubmitError('upload');
+  if (!client?.storage) {
+    console.error('[playbook-live] VIDEO_UPLOAD: window.hdpSupabase is not available — check that the Supabase SDK <script> tag loaded before js/supabase.js');
+    throw new SubmitError('upload');
+  }
   const body = file.type === type ? file : new File([file], file.name, { type });
   const { error } = await client.storage.from(BUCKET).uploadToSignedUrl(issued.data.path, issued.data.token, body, { contentType: type });
   if (error) {
+    console.error('[playbook-live] VIDEO_UPLOAD failed', { path: issued.data.path, message: error.message || error });
     track('application_video_upload_error', { application_type: form.dataset.type });
     throw new SubmitError('upload');
   }
