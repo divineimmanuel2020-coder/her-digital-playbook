@@ -18,12 +18,21 @@
 import {
   TABLE, TYPES, HOURS, ROLES, HOST_RANGES, MONTHLY_RANGES, MAX_VIDEO_BYTES, VIDEO_TYPES,
   config, isConfigured, readJson, looksLikeBot, rateLimited, ipHash, cleanLine, cleanText,
-  newApplicationId, objectHead, deleteObjects, dbRequest, notifyOwner,
+  newApplicationId, objectInfo, deleteObjects, dbRequest, notifyOwner,
 } from './_playbook-live.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const VIDEO_PATH_RE = /^(host|team)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(mp4|mov|webm)$/;
 const YES_NO = ['Yes', 'No'];
+
+// Every log line below is tagged with one of these stages, exactly matching
+// the diagnostic requirement: grep your Vercel logs for the tag to jump
+// straight to the failing step. None of them ever include a secret/key —
+// only ids, paths, and safe status info.
+const STAGE = {
+  VALIDATION: 'VALIDATION', RATE_LIMIT: 'RATE_LIMIT', VIDEO_CHECK: 'VIDEO_CHECK',
+  APPLICATION_SAVE: 'APPLICATION_SAVE', EMAIL_SEND: 'EMAIL_SEND',
+};
 
 function fail(res, status, error, extra = {}) {
   return res.status(status).json({ success: false, error, ...extra });
@@ -137,24 +146,37 @@ export default async function handler(req, res) {
   if (!TYPES[type]) return fail(res, 400, 'invalid-type');
 
   const checked = validate(type, body);
-  if (checked.error) return fail(res, 400, checked.error, { field: checked.field });
+  if (checked.error) {
+    console.warn(`[playbook-live] ${STAGE.VALIDATION} rejected`, { type, error: checked.error, field: checked.field });
+    return fail(res, 400, checked.error, { field: checked.field });
+  }
   const row = checked.row;
 
-  if (await rateLimited(req, 'apply', 6, 3600, c)) return fail(res, 429, 'rate-limited');
+  if (await rateLimited(req, 'apply', 6, 3600, c)) {
+    console.warn(`[playbook-live] ${STAGE.RATE_LIMIT} triggered for apply`, { type });
+    return fail(res, 429, 'rate-limited');
+  }
 
   // ---- video: must be a path we issued, and really be in the private bucket ----
   if (TYPES[type].needsVideo) {
     const path = String(body.videoPath || '');
-    if (!VIDEO_PATH_RE.test(path) || !path.startsWith(`${type}/`)) return fail(res, 400, 'video-missing');
-    const head = await objectHead(c, path);
-    if (!head.exists) return fail(res, 400, 'video-missing');
-    if (head.size > MAX_VIDEO_BYTES || (head.contentType && !VIDEO_TYPES[head.contentType])) {
+    if (!VIDEO_PATH_RE.test(path) || !path.startsWith(`${type}/`)) {
+      console.error(`[playbook-live] ${STAGE.VIDEO_CHECK} rejected — path failed shape/prefix check`, { type, path });
+      return fail(res, 400, 'video-missing');
+    }
+    const info = await objectInfo(c, path);
+    if (!info.exists) {
+      console.error(`[playbook-live] ${STAGE.VIDEO_CHECK} rejected — object not found in storage`, { type, path });
+      return fail(res, 400, 'video-missing');
+    }
+    if (info.size > MAX_VIDEO_BYTES || (info.contentType && !VIDEO_TYPES[info.contentType])) {
+      console.error(`[playbook-live] ${STAGE.VIDEO_CHECK} rejected — size/type invalid, deleting object`, { type, path, size: info.size, contentType: info.contentType });
       await deleteObjects(c, [path]);
       return fail(res, 400, 'video-invalid');
     }
     row.video_path = path;
-    row.video_size_bytes = head.size || null;
-    row.video_content_type = head.contentType || null;
+    row.video_size_bytes = info.size || null;
+    row.video_content_type = info.contentType || null;
   }
 
   // ---- gentle duplicate protection: same email + same path within 10 minutes ----
@@ -177,17 +199,23 @@ export default async function handler(req, res) {
     } else if (ins.status === 409 && ins.data && /video_path/.test(JSON.stringify(ins.data))) {
       return fail(res, 409, 'video-already-used');
     } else if (ins.status !== 409) {
-      console.error('[api/playbook-live-apply] Supabase insert error', ins.status, ins.data);
+      console.error(`[playbook-live] ${STAGE.APPLICATION_SAVE} failed`, { type, status: ins.status, data: ins.data });
       return fail(res, 502, 'storage-failed');
     }
   }
-  if (!saved) return fail(res, 502, 'storage-failed');
+  if (!saved) {
+    console.error(`[playbook-live] ${STAGE.APPLICATION_SAVE} failed — exhausted retries on ID collisions`, { type });
+    return fail(res, 502, 'storage-failed');
+  }
 
   // ---- notify the owner (the application is safe even if this fails; cron retries) ----
   const notified = await notifyOwner(c, saved).catch((err) => {
-    console.error('[api/playbook-live-apply] notify error', err?.message);
+    console.error(`[playbook-live] ${STAGE.EMAIL_SEND} threw`, { applicationId: saved.application_id, message: err?.message });
     return false;
   });
+  if (!notified) {
+    console.warn(`[playbook-live] ${STAGE.EMAIL_SEND} did not succeed — application saved, daily cron will retry`, { applicationId: saved.application_id });
+  }
 
   return res.status(200).json({ success: true, applicationId: saved.application_id, notified });
 }
