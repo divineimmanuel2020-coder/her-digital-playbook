@@ -15,7 +15,11 @@ const ACADEMY_SEARCH_ITEMS = ACADEMY_COURSES.map((c) => ({
   id: c.id, title: c.title, category: c.category, icon: '🎓', url: `/pages/course.html?id=${c.id}`,
 }));
 
-const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES, ...ACADEMY_SEARCH_ITEMS];
+const PLAYBOOK_LIVE_SEARCH_ITEM = {
+  id: 'playbook-live', title: 'Playbook Live', category: 'One-on-one video conversation opportunities for women 18+ — Explore Playbook Live', icon: '🎀', url: '/playbook-live',
+};
+
+const SEARCHABLE_ITEMS = [PLAYBOOK_LIVE_SEARCH_ITEM, ...ALL_ITEMS, ...PLAYGROUND_PAGES, ...ACADEMY_SEARCH_ITEMS];
 
 export function initSearch() {
   const btn = document.getElementById('search-btn');
