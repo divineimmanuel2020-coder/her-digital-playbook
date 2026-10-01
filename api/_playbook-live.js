@@ -186,7 +186,10 @@ export async function rateLimited(req, action, max, windowSec, c = config()) {
 export async function storageJson(c, method, path, body) {
   const res = await fetch(`${c.supabaseUrl}/storage/v1/${path}`, {
     method,
-    headers: sbHeaders(c, { 'Content-Type': 'application/json' }),
+    // Only declare JSON when there IS a body. Supabase Storage rejects a request
+    // with Content-Type: application/json and an empty body (400), which is what
+    // the body-less "object/upload/sign" call used to send.
+    headers: sbHeaders(c, body === undefined ? {} : { 'Content-Type': 'application/json' }),
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   let data = null;
