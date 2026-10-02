@@ -57,14 +57,21 @@ const CALLOUTS = {
 };
 
 export function applyBold(text) {
-  return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // [label](/internal-path) — internal links only, so a typo can never
+    // produce a javascript: or off-site link.
+    .replace(/\[([^\]\n]+)\]\((\/[^\s)"<>]*)\)/g, '<a class="article-link" href="$2">$1</a>');
 }
 
 export function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
-export function formatArticleBody(content, articleId) {
+export function formatArticleBody(content, articleId, opts = {}) {
+  const editorial = !!opts.editorial;
+  let noteIndex = 0;
+  let onepageIndex = 0;
   const blocks = content.split('\n\n');
   const chapters = [];
   let chapterIndex = 0;
@@ -93,9 +100,78 @@ export function formatArticleBody(content, articleId) {
         return `
           <div class="chapter-head" id="${id}">
             <h2 class="article-h2"><span class="chapter-num">${chapterNum}</span>${title}</h2>
-            <button class="chapter-complete-btn" data-chapter="${articleId}-${chapterIndex - 1}" type="button">
+            ${editorial ? '' : `<button class="chapter-complete-btn" data-chapter="${articleId}-${chapterIndex - 1}" type="button">
               <span class="check-icon">✓</span> Mark chapter complete
-            </button>
+            </button>`}
+          </div>`;
+      }
+
+      /* ---- editorial-only components (no XP, no badges) ---- */
+
+      if (trimmed.startsWith('%%PLAYBOOKNOTE')) {
+        const lines = trimmed.split('\n').slice(1);
+        let prompt = 'What is the biggest thing standing between you and starting?';
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('PROMPT:')) prompt = l.slice(7).trim();
+        });
+        const nid = `${articleId}-note-${noteIndex++}`;
+        return `
+          <aside class="playbook-note" data-note-id="${nid}" aria-label="Playbook note">
+            <p class="playbook-note-label">Playbook Note</p>
+            <label class="playbook-note-prompt" for="${nid}">${applyBold(prompt)}</label>
+            <textarea id="${nid}" class="playbook-note-input" rows="4" placeholder="Write it here. It stays on this device." maxlength="2000"></textarea>
+            <p class="playbook-note-status" role="status" aria-live="polite">Private — saved only in this browser.</p>
+          </aside>`;
+      }
+
+      if (trimmed.startsWith('%%ONEPAGE')) {
+        const lines = trimmed.split('\n').slice(1);
+        let title = 'Your One-Page Playbook';
+        const fields = [];
+        lines.forEach((line) => {
+          const l = line.trim();
+          if (l.startsWith('TITLE:')) title = l.slice(6).trim();
+          else if (l.startsWith('FIELD:')) {
+            const [label, placeholder] = l.slice(6).split('|').map((s) => s.trim());
+            fields.push({ label, placeholder: placeholder || '' });
+          }
+        });
+        const oid = `${articleId}-onepage-${onepageIndex++}`;
+        return `
+          <section class="onepage-card" data-onepage-id="${oid}" aria-label="${esc(title)}">
+            <p class="playbook-note-label">Your One-Page Playbook</p>
+            <h3 class="onepage-title">${applyBold(title)}</h3>
+            <div class="onepage-fields">
+              ${fields.map((f, i) => `
+              <div class="onepage-field">
+                <label for="${oid}-f${i}">${applyBold(f.label)}</label>
+                <textarea id="${oid}-f${i}" data-field-index="${i}" data-field-label="${esc(f.label)}" rows="2" placeholder="${esc(f.placeholder)}" maxlength="600"></textarea>
+              </div>`).join('')}
+            </div>
+            <div class="onepage-actions">
+              <button class="btn btn-primary onepage-save" type="button">Save My Playbook</button>
+              <button class="btn btn-secondary onepage-print" type="button">Print / Save as PDF</button>
+            </div>
+            <p class="playbook-note-status onepage-status" role="status" aria-live="polite">Private — saved only in this browser.</p>
+          </section>`;
+      }
+
+      if (trimmed.startsWith('|')) {
+        const rows = trimmed
+          .split('\n')
+          .map((r) => r.trim())
+          .filter((r) => r.startsWith('|'))
+          .map((r) => r.replace(/^\||\|$/g, '').split('|').map((c) => c.trim()));
+        const isSep = (r) => r.every((c) => /^:?-{2,}:?$/.test(c));
+        const head = rows[0];
+        const body = rows.slice(1).filter((r) => !isSep(r));
+        return `
+          <div class="article-table-wrap" role="region" aria-label="Comparison table" tabindex="0">
+            <table class="article-table">
+              <thead><tr>${head.map((c) => `<th scope="col">${applyBold(c)}</th>`).join('')}</tr></thead>
+              <tbody>${body.map((r) => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row">${applyBold(c)}</th>` : `<td>${applyBold(c)}</td>`)).join('')}</tr>`).join('')}</tbody>
+            </table>
           </div>`;
       }
 
@@ -690,12 +766,55 @@ function statsSidebarHtml() {
 
 
 /* =============================================
+   EDITORIAL LAYOUT — calm, single column, no XP / badges / streaks.
+   Used by items flagged `editorial: true` in data/store.js.
+   ============================================= */
+
+function editorialHtml(item, bodyHtml, chapters, allItems) {
+  const picks = (item.related || []).map((id) => allItems.find((i) => i.id === id)).filter(Boolean).slice(0, 4);
+  const academy = item.academy;
+  return `
+    <article class="editorial-main">
+      <a class="back-link" href="/#articles">← All articles</a>
+      <p class="editorial-kicker"><span>${esc(item.category)}</span><span aria-hidden="true">·</span><span>${esc(item.readTime || '')}</span></p>
+      <h1 class="editorial-title">${esc(item.title)}</h1>
+      <p class="editorial-dek">${esc(item.excerpt)}</p>
+      <figure class="editorial-cover">
+        <img src="${optimizeCloudinaryUrl(item.image, 900)}" alt="${esc(item.imageAlt || item.title)}" fetchpriority="high" decoding="async">
+      </figure>
+      ${chapters.length ? `
+      <details class="editorial-toc">
+        <summary>In this guide · ${chapters.length} chapters</summary>
+        <ol>${chapters.map((c) => `<li><a href="#${c.id}">${esc(c.title)}</a></li>`).join('')}</ol>
+      </details>` : ''}
+      <div class="article-body editorial-body">${bodyHtml}</div>
+      ${picks.length ? `
+      <section class="editorial-more" aria-labelledby="more-${esc(item.id)}">
+        <h2 id="more-${esc(item.id)}" class="editorial-more-title">You might also like</h2>
+        <div class="tool-recs-grid">
+          ${picks.map((i) => `
+          <a class="tool-rec-card" href="${itemPath(i)}" data-internal-article="${esc(i.id)}">
+            <img src="${optimizeCloudinaryUrl(i.image, 400)}" alt="" loading="lazy" decoding="async">
+            <span><strong>${esc(i.title)}</strong><em>${esc(i.readTime || i.category)}</em></span>
+          </a>`).join('')}
+        </div>
+      </section>` : ''}
+      ${academy ? `
+      <aside class="editorial-cta">
+        <p class="playbook-note-label">Keep going</p>
+        <p>${esc(academy.text)}</p>
+        <a class="btn btn-primary" href="/pages/course.html?id=${esc(academy.id)}">${esc(academy.label)} →</a>
+      </aside>` : ''}
+    </article>`;
+}
+
+/* =============================================
    PAGE BODY — what goes inside #article-content
    ============================================= */
 
 export function renderArticleContent(item, allItems) {
   const isTool = item.type === 'tool';
-  const { html: bodyHtml, chapters } = formatArticleBody(item.content, item.id);
+  const { html: bodyHtml, chapters } = formatArticleBody(item.content, item.id, { editorial: !!item.editorial });
 
   if (isTool) {
     return {
@@ -711,6 +830,10 @@ export function renderArticleContent(item, allItems) {
       <div id="tool-container" class="mt-lg"><noscript><p class="section-sub">This interactive tool needs JavaScript. The guide above explains how it works.</p></noscript></div>
     `,
     };
+  }
+
+  if (item.editorial) {
+    return { isTool, chapters, layoutClass: 'editorial-layout', html: editorialHtml(item, bodyHtml, chapters, allItems) };
   }
 
   const related = allItems.filter((i) => i.id !== item.id && i.type !== 'tool' && i.category === item.category);
