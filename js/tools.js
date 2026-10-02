@@ -9,7 +9,7 @@
 
 import { findItemById } from '../data/store.js';
 import { BASE } from './base.js';
-import { itemRelPath } from './routes.js';
+import { itemPath } from './routes.js';
 
 function currency(n) {
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
@@ -50,7 +50,7 @@ function recommendations(ids) {
       <p class="tool-list-title">📚 Your Recommended Reading</p>
       <div class="tool-recs-grid">
         ${items.map((item) => `
-          <a class="tool-rec-card" href="${BASE}${itemRelPath(item)}">
+          <a class="tool-rec-card" href="${BASE}${itemPath(item).slice(1)}">
             <img src="${item.image}" alt="">
             <span>
               <strong>${item.title}</strong>
