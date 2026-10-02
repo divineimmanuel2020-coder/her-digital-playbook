@@ -6,6 +6,56 @@
       "permanent": true
     },
     {
+      "source": "/blog/how-to-make-a-living-online-without-showing-your-face.html",
+      "destination": "/how-to-make-a-living-online-without-showing-your-face",
+      "permanent": true
+    },
+    {
+      "source": "/blog/remote-online-jobs-that-can-grow-toward-5000-a-month.html",
+      "destination": "/remote-online-jobs-that-can-grow-toward-5000-a-month",
+      "permanent": true
+    },
+    {
+      "source": "/blog/35-semi-passive-income-streams.html",
+      "destination": "/35-semi-passive-income-streams",
+      "permanent": true
+    },
+    {
+      "source": "/blog/30-passive-income-ideas-for-beginners.html",
+      "destination": "/30-passive-income-ideas-for-beginners",
+      "permanent": true
+    },
+    {
+      "source": "/blog/build-your-first-3000-month-online-income-system.html",
+      "destination": "/build-your-first-3000-month-online-income-system",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-to-use-chatgpt-and-claude-to-build-income-streams.html",
+      "destination": "/how-to-use-chatgpt-and-claude-to-build-income-streams",
+      "permanent": true
+    },
+    {
+      "source": "/blog/what-to-build-before-quitting-your-9-to-5.html",
+      "destination": "/what-to-build-before-quitting-your-9-to-5",
+      "permanent": true
+    },
+    {
+      "source": "/blog/1000-to-5000-online-income-ladder.html",
+      "destination": "/1000-to-5000-online-income-ladder",
+      "permanent": true
+    },
+    {
+      "source": "/blog/21-online-skills-that-can-change-your-income.html",
+      "destination": "/21-online-skills-that-can-change-your-income",
+      "permanent": true
+    },
+    {
+      "source": "/blog/90-day-plan-to-build-your-first-online-income-stream.html",
+      "destination": "/90-day-plan-to-build-your-first-online-income-stream",
+      "permanent": true
+    },
+    {
       "source": "/pages/article.html",
       "has": [
         {
@@ -39,6 +89,126 @@
         }
       ],
       "destination": "/blog/soft-girl-youtube-creator.html",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-make-a-living-online-without-showing-your-face"
+        }
+      ],
+      "destination": "/how-to-make-a-living-online-without-showing-your-face",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "remote-online-jobs-that-can-grow-toward-5000-a-month"
+        }
+      ],
+      "destination": "/remote-online-jobs-that-can-grow-toward-5000-a-month",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "35-semi-passive-income-streams"
+        }
+      ],
+      "destination": "/35-semi-passive-income-streams",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "30-passive-income-ideas-for-beginners"
+        }
+      ],
+      "destination": "/30-passive-income-ideas-for-beginners",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "build-your-first-3000-month-online-income-system"
+        }
+      ],
+      "destination": "/build-your-first-3000-month-online-income-system",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "how-to-use-chatgpt-and-claude-to-build-income-streams"
+        }
+      ],
+      "destination": "/how-to-use-chatgpt-and-claude-to-build-income-streams",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "what-to-build-before-quitting-your-9-to-5"
+        }
+      ],
+      "destination": "/what-to-build-before-quitting-your-9-to-5",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "1000-to-5000-online-income-ladder"
+        }
+      ],
+      "destination": "/1000-to-5000-online-income-ladder",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "21-online-skills-that-can-change-your-income"
+        }
+      ],
+      "destination": "/21-online-skills-that-can-change-your-income",
+      "permanent": true
+    },
+    {
+      "source": "/pages/article.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "90-day-plan-to-build-your-first-online-income-stream"
+        }
+      ],
+      "destination": "/90-day-plan-to-build-your-first-online-income-stream",
       "permanent": true
     },
     {
@@ -328,6 +498,46 @@
     {
       "source": "/playbook-live",
       "destination": "/playbook-live.html"
+    },
+    {
+      "source": "/how-to-make-a-living-online-without-showing-your-face",
+      "destination": "/blog/how-to-make-a-living-online-without-showing-your-face.html"
+    },
+    {
+      "source": "/remote-online-jobs-that-can-grow-toward-5000-a-month",
+      "destination": "/blog/remote-online-jobs-that-can-grow-toward-5000-a-month.html"
+    },
+    {
+      "source": "/35-semi-passive-income-streams",
+      "destination": "/blog/35-semi-passive-income-streams.html"
+    },
+    {
+      "source": "/30-passive-income-ideas-for-beginners",
+      "destination": "/blog/30-passive-income-ideas-for-beginners.html"
+    },
+    {
+      "source": "/build-your-first-3000-month-online-income-system",
+      "destination": "/blog/build-your-first-3000-month-online-income-system.html"
+    },
+    {
+      "source": "/how-to-use-chatgpt-and-claude-to-build-income-streams",
+      "destination": "/blog/how-to-use-chatgpt-and-claude-to-build-income-streams.html"
+    },
+    {
+      "source": "/what-to-build-before-quitting-your-9-to-5",
+      "destination": "/blog/what-to-build-before-quitting-your-9-to-5.html"
+    },
+    {
+      "source": "/1000-to-5000-online-income-ladder",
+      "destination": "/blog/1000-to-5000-online-income-ladder.html"
+    },
+    {
+      "source": "/21-online-skills-that-can-change-your-income",
+      "destination": "/blog/21-online-skills-that-can-change-your-income.html"
+    },
+    {
+      "source": "/90-day-plan-to-build-your-first-online-income-stream",
+      "destination": "/blog/90-day-plan-to-build-your-first-online-income-stream.html"
     }
   ],
   "crons": [
