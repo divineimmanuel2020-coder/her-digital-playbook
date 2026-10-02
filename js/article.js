@@ -812,6 +812,75 @@ function checkLevelComplete(chapters) {
   }
 }
 
+/* =============================================
+   EDITORIAL ARTICLES — Playbook Note + One-Page Playbook.
+   No XP, no badges. Everything stays in this browser's localStorage;
+   typed text is never sent anywhere. GA4 gets anonymous events only.
+   ============================================= */
+
+const gaEvent = (name, params = {}) => {
+  if (typeof window.gtag === 'function') window.gtag('event', name, params);
+};
+
+function readStore(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function writeStore(key, value) {
+  try { localStorage.setItem(key, value); return true; } catch { return false; }
+}
+
+function initEditorial(container, articleId) {
+  gaEvent('article_view', { article_id: articleId, layout: 'editorial' });
+
+  container.querySelectorAll('.playbook-note').forEach((box) => {
+    const input = box.querySelector('.playbook-note-input');
+    const status = box.querySelector('.playbook-note-status');
+    const key = `hdp-note-${box.dataset.noteId}`;
+    const saved = readStore(key);
+    if (saved) input.value = saved;
+    let timer;
+    let reported = false;
+    input.addEventListener('input', () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const ok = writeStore(key, input.value);
+        status.textContent = ok ? 'Saved on this device.' : 'Could not save in this browser.';
+        if (ok && input.value.trim() && !reported) {
+          reported = true;
+          gaEvent('playbook_note_used', { article_id: articleId });
+        }
+      }, 400);
+    });
+  });
+
+  container.querySelectorAll('.onepage-card').forEach((card) => {
+    const key = `hdp-onepage-${card.dataset.onepageId}`;
+    const fields = [...card.querySelectorAll('textarea')];
+    const status = card.querySelector('.onepage-status');
+    try {
+      const saved = JSON.parse(readStore(key) || '[]');
+      fields.forEach((f, i) => { if (typeof saved[i] === 'string') f.value = saved[i]; });
+    } catch { /* ignore a corrupted value */ }
+
+    card.querySelector('.onepage-save').addEventListener('click', () => {
+      const ok = writeStore(key, JSON.stringify(fields.map((f) => f.value)));
+      status.textContent = ok ? 'Saved. Your playbook is waiting for you on this device.' : 'Could not save in this browser.';
+      if (ok) gaEvent('playbook_saved', { article_id: articleId });
+    });
+
+    card.querySelector('.onepage-print').addEventListener('click', () => {
+      document.body.classList.add('printing-playbook');
+      const done = () => { document.body.classList.remove('printing-playbook'); window.removeEventListener('afterprint', done); };
+      window.addEventListener('afterprint', done);
+      window.print();
+    });
+  });
+
+  container.querySelectorAll('[data-internal-article]').forEach((a) => {
+    a.addEventListener('click', () => gaEvent('internal_article_click', { from_article: articleId, to_article: a.dataset.internalArticle }));
+  });
+}
+
 async function init() {
   const container = document.getElementById('article-content');
   const dataEl = document.getElementById('article-data');
@@ -850,6 +919,12 @@ async function init() {
         toolContainer.innerHTML = `<p class="section-sub">This tool is coming soon — check back shortly!</p>`;
       }
     }
+    optimizeImages(document);
+    return;
+  }
+
+  if (page.editorial) {
+    initEditorial(container, id);
     optimizeImages(document);
     return;
   }
