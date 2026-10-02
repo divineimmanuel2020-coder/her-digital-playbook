@@ -9,7 +9,7 @@ import { ALL_ITEMS } from '../data/store.js';
 import { PLAYGROUND_PAGES } from '../data/playground.js';
 import { ACADEMY_COURSES } from '../data/academy.js';
 import { BASE } from './base.js';
-import { itemRelPath } from './routes.js';
+import { itemPath } from './routes.js';
 
 const ACADEMY_SEARCH_ITEMS = ACADEMY_COURSES.map((c) => ({
   id: c.id, title: c.title, category: c.category, icon: '🎓', url: `/pages/course.html?id=${c.id}`,
@@ -59,7 +59,7 @@ export function initSearch() {
     results.innerHTML = matches
       .slice(0, 8)
       .map((item) => {
-        const href = item.url ? `${BASE}${item.url.replace(/^\//, '')}` : `${BASE}${itemRelPath(item)}`;
+        const href = item.url ? `${BASE}${item.url.replace(/^\//, '')}` : `${BASE}${itemPath(item).slice(1)}`;
         const thumb = item.image
           ? `<img src="${item.image}" alt="">`
           : `<span class="search-result-icon">${item.icon || '🎀'}</span>`;
