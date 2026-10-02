@@ -7,7 +7,7 @@
    ============================================= */
 
 import { CATEGORIES, FEATURED_STORIES, LATEST_ARTICLES, FREE_TOOLS } from '../data/store.js';
-import { itemRelPath } from './routes.js';
+import { itemPath } from './routes.js';
 
 function cloneCard(templateId) {
   const tpl = document.getElementById(templateId);
@@ -22,7 +22,7 @@ function fillStoryCard(item) {
   const card = cloneCard('tpl-story-card');
   if (!card) return null;
 
-  const detailUrl = itemRelPath(item); // e.g. blog/<id>.html
+  const detailUrl = itemPath(item).slice(1); // e.g. blog/<id>.html, or <id> for clean URLs
   const img = card.querySelector('img');
   img.src = item.image;
   img.alt = item.title;
@@ -39,7 +39,7 @@ function fillToolCard(item) {
   const card = cloneCard('tpl-tool-card');
   if (!card) return null;
 
-  const detailUrl = itemRelPath(item); // e.g. blog/<id>.html
+  const detailUrl = itemPath(item).slice(1); // e.g. blog/<id>.html, or <id> for clean URLs
   const img = card.querySelector('img');
   img.src = item.image;
   img.alt = item.title;
