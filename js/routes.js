@@ -52,9 +52,14 @@ export function itemRelPath(item) {
   return `${item.type === 'tool' ? TOOL_DIR : ARTICLE_DIR}/${item.id}.html`;
 }
 
-/** "/blog/some-id.html" — root-absolute, for static HTML. */
+/**
+ * The public URL of an item — root-absolute, for static HTML.
+ * Items flagged `cleanUrl: true` in data/store.js live at a clean root path
+ * ("/some-id", no folder, no ".html", no query string). The file on disk is
+ * still blog/<id>.html; vercel.json rewrites /<id> to it (see build.mjs).
+ */
 export function itemPath(item) {
-  return `/${itemRelPath(item)}`;
+  return item.cleanUrl ? `/${item.id}` : `/${itemRelPath(item)}`;
 }
 
 /** Same as itemPath, starting from an id. Falls back to /blog/. */
