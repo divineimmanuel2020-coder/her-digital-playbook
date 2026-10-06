@@ -19,6 +19,70 @@
    without every consumer needing its own import.
    ============================================= */
 
+/* =============================================
+   ANONYMOUS ANALYTICS TRACKER (feeds the private admin dashboard)
+   Sits BEFORE the Supabase client on purpose: it is wrapped in try/catch and
+   has no dependencies, so it can never break — or be broken by — the code below.
+   Sends only: page path + title, a random visitor id, a random session id,
+   the referring site's hostname, and how long the page was visible.
+   No names, emails, form contents or IP addresses. Country is worked out on
+   the server. Stores two random ids in localStorage (no cookies).
+   Owner opt-out: open any page with ?notrack=1 on a device to stop counting
+   that device; ?notrack=0 turns it back on.
+   ============================================= */
+try {
+  (function () {
+    if (!/(^|\.)herdigitalplaybook\.com$/i.test(location.hostname)) return;
+    var ls = window.localStorage;
+    var flag = new URLSearchParams(location.search).get('notrack');
+    if (flag === '1') ls.setItem('hdp_notrack', '1');
+    else if (flag === '0') ls.removeItem('hdp_notrack');
+    if (ls.getItem('hdp_notrack') === '1' || navigator.webdriver) return;
+
+    var rnd = function () {
+      return (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+          });
+    };
+    var send = function (o) {
+      var body = JSON.stringify(o);
+      try { if (navigator.sendBeacon && navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }))) return; } catch (e) {}
+      try { fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true, credentials: 'omit' }).catch(function () {}); } catch (e) {}
+    };
+
+    var vid = ls.getItem('hdp_v');
+    if (!vid) { vid = rnd(); ls.setItem('hdp_v', vid); }
+    var now = Date.now(), sess = null;
+    try { sess = JSON.parse(ls.getItem('hdp_s') || 'null'); } catch (e) {}
+    if (!sess || !sess.id || now - sess.t > 30 * 60 * 1000) sess = { id: rnd(), t: now };   // new session after 30 min idle
+    sess.t = now; ls.setItem('hdp_s', JSON.stringify(sess));
+
+    var id = rnd(), isArticle = 0, ref = '';
+    try { isArticle = JSON.parse(document.getElementById('article-data').textContent).type === 'article' ? 1 : 0; } catch (e) {}
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+
+    var shownAt = document.visibilityState === 'visible' ? Date.now() : 0, acc = 0, last = 0;
+    var flush = function () {
+      if (shownAt) { acc += Date.now() - shownAt; shownAt = 0; }
+      var s = Math.round(acc / 1000);
+      if (s > 0 && s !== last) {
+        last = s; send({ k: 'e', id: id, s: s });
+        try { sess.t = Date.now(); ls.setItem('hdp_s', JSON.stringify(sess)); } catch (e) {}
+      }
+    };
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') flush(); else if (!shownAt) shownAt = Date.now();
+    });
+    window.addEventListener('pagehide', flush);
+
+    var start = function () {
+      send({ k: 'v', id: id, vid: vid, sid: sess.id, p: location.pathname, t: document.title, r: ref, a: isArticle, tp: navigator.maxTouchPoints || 0 });
+    };
+    if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
+  })();
+} catch (e) { /* analytics must never affect the site */ }
+
 (function () {
   // -----------------------------------------------------------------
   // 1. CONFIGURATION
