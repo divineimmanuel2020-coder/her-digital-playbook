@@ -28,23 +28,15 @@ export const STATIC_PAGES = [
   '/pages/contact.html',
   '/pages/privacy.html',
   '/pages/terms.html',
-  '/pages/playground.html',
-  '/pages/start-here.html',
-  '/pages/money-path.html',
-  '/pages/game-room.html',
-  '/pages/client-simulator.html',
-  '/pages/templates.html',
-  '/pages/glossary.html',
-  '/pages/academy.html',
   // Clean, shareable URL — Vercel rewrites this to join-our-girl-gang.html
   // (see scripts/build.mjs -> vercelConfig()) without changing the address
   // bar, so this is the URL that belongs in the sitemap, not the .html one.
   '/join-our-girl-gang',
-  // Same rewrite pattern, for the Playbook Live division page.
-  '/playbook-live',
-  '/pages/playbook-live-privacy.html',
-  '/pages/playbook-live-terms.html',
-  '/pages/playbook-live-safety.html',
+  // TEMPORARILY LEFT OUT while the AdSense review is open (their content is
+  // built in the browser, so the raw HTML is thin): /pages/playground.html,
+  // start-here, money-path, game-room, client-simulator, templates, glossary,
+  // academy. Also left out: /playbook-live and its 3 legal pages.
+  // Put them back here once those pages have real text in the raw HTML.
 ];
 
 /** "blog/some-id.html" — no leading slash, for use with BASE. */
