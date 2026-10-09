@@ -974,3 +974,84 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+/* =============================================
+   AUTHOR IDENTITY — byline, author box, Person schema
+   Runs on every article page. Skipped for tools, and skipped if the
+   page already has a byline in its HTML. To change the name, role or
+   bio, edit the constants below.
+   ============================================= */
+const AUTHOR_NAME = 'Princess Immanuel';
+const AUTHOR_ROLE = 'Founder, Her Digital Playbook';
+const AUTHOR_URL = '/pages/about.html#founder';
+const AUTHOR_BIO = 'Princess is a product designer and UX engineer who builds digital businesses. She designs and publishes Her Digital Playbook with one rule: practical steps, honest expectations and no income promises. Everything here is educational and is not financial, legal or professional advice.';
+
+function injectAuthorIdentity() {
+  const container = document.getElementById('article-content');
+  if (!container || container.querySelector('.article-byline')) return;
+
+  let pageData = {};
+  try { pageData = JSON.parse(document.getElementById('article-data')?.textContent || '{}'); } catch (e) { /* ignore */ }
+  if (pageData.type === 'tool') return;
+
+  // Published date comes from the page's own Article schema, when it has one.
+  // (The schema block is either a single object or a list of objects.)
+  let published = '';
+  let ldScript = null;
+  document.querySelectorAll('script[type="application/ld+json"]').forEach((el) => {
+    try {
+      const parsed = JSON.parse(el.textContent);
+      const article = (Array.isArray(parsed) ? parsed : [parsed]).find((o) => o && o['@type'] === 'Article');
+      if (article && !ldScript) {
+        ldScript = { el, parsed, article };
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(article.datePublished || '');
+        if (m) {
+          const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+          published = `${months[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
+        }
+      }
+    } catch (e) { /* ignore */ }
+  });
+
+  const byline = document.createElement('p');
+  byline.className = 'article-byline';
+  byline.innerHTML = `By <a href="${AUTHOR_URL}" rel="author">${AUTHOR_NAME}</a> · ${AUTHOR_ROLE}${published ? ` · Published ${published}` : ''}`;
+
+  const anchor = container.querySelector('.editorial-dek') || container.querySelector('.article-meta-row');
+  if (anchor) anchor.insertAdjacentElement('afterend', byline);
+  else {
+    const hero = container.querySelector('.article-hero-img, .editorial-cover');
+    if (hero) hero.insertAdjacentElement('beforebegin', byline);
+    else return;
+  }
+
+  const body = container.querySelector('.article-body');
+  if (body) {
+    const box = document.createElement('aside');
+    box.className = 'author-box';
+    box.setAttribute('aria-label', 'About the author');
+    box.innerHTML = `
+      <p class="author-box-label">About the author</p>
+      <p class="author-box-name"><a href="${AUTHOR_URL}" rel="author">${AUTHOR_NAME}</a></p>
+      <p class="author-box-role">${AUTHOR_ROLE}</p>
+      <p class="author-box-bio">${AUTHOR_BIO}</p>
+      <a class="author-box-link" href="${AUTHOR_URL}">More about Princess \u2192</a>`;
+    body.insertAdjacentElement('afterend', box);
+  }
+
+  if (!document.querySelector('meta[name="author"]')) {
+    const meta = document.createElement('meta');
+    meta.name = 'author';
+    meta.content = AUTHOR_NAME;
+    document.head.appendChild(meta);
+  }
+  if (ldScript) {
+    ldScript.article.author = { '@type': 'Person', name: AUTHOR_NAME, jobTitle: AUTHOR_ROLE, url: `https://herdigitalplaybook.com${AUTHOR_URL}` };
+    ldScript.el.textContent = JSON.stringify(ldScript.parsed);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  try { injectAuthorIdentity(); } catch (err) { console.warn('author identity skipped', err); }
+});
