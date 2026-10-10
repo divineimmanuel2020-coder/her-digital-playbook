@@ -580,6 +580,10 @@ export function formatArticleBody(content, articleId, opts = {}) {
         return `<blockquote class="pull-quote">${applyBold(trimmed.slice(2))}</blockquote>`;
       }
 
+      if (trimmed.startsWith('#### ')) {
+        return `<h3 class="article-h3">${applyBold(trimmed.slice(5))}</h3>`;
+      }
+
       if (trimmed.startsWith('### ')) {
         const lines = trimmed.split('\n');
         const question = lines[0].replace(/^###\s*Q:\s*/, '').trim();
@@ -655,6 +659,40 @@ function heroLevelCardHtml(item) {
         <button class="btn btn-primary hero-lets-go" type="button">Let's Go! →</button>
       </div>
     </div>`;
+}
+
+
+/* =============================================
+   AUTHOR IDENTITY — byline + author box
+   One place to change the name, role or bio shown on every article.
+   (js/article.js also adds these at load if a page lacks them.)
+   ============================================= */
+
+const AUTHOR_NAME = 'Princess Immanuel';
+const AUTHOR_ROLE = 'Founder, Her Digital Playbook';
+const AUTHOR_URL = '/pages/about.html#founder';
+
+function formatPublished(dateStr) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || '');
+  if (!m) return '';
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${months[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
+}
+
+function bylineHtml(item) {
+  const published = formatPublished(item.date);
+  return `<p class="article-byline">By <a href="${AUTHOR_URL}" rel="author">${AUTHOR_NAME}</a><span aria-hidden="true"> · </span>${AUTHOR_ROLE}${published ? `<span aria-hidden="true"> · </span>Published ${published}` : ''}</p>`;
+}
+
+function authorBoxHtml() {
+  return `
+      <aside class="author-box" aria-label="About the author">
+        <p class="author-box-label">About the author</p>
+        <p class="author-box-name"><a href="${AUTHOR_URL}" rel="author">${AUTHOR_NAME}</a></p>
+        <p class="author-box-role">${AUTHOR_ROLE}</p>
+        <p class="author-box-bio">Princess is a product designer and UX engineer who builds digital businesses. She designs and publishes Her Digital Playbook with one rule: practical steps, honest expectations and no income promises. Everything here is educational and is not financial, legal or professional advice.</p>
+        <a class="author-box-link" href="${AUTHOR_URL}">More about Princess →</a>
+      </aside>`;
 }
 
 const QUOTES = [
@@ -779,6 +817,7 @@ function editorialHtml(item, bodyHtml, chapters, allItems) {
       <p class="editorial-kicker"><span>${esc(item.category)}</span><span aria-hidden="true">·</span><span>${esc(item.readTime || '')}</span></p>
       <h1 class="editorial-title">${esc(item.title)}</h1>
       <p class="editorial-dek">${esc(item.excerpt)}</p>
+      ${bylineHtml(item)}
       <figure class="editorial-cover">
         <img src="${optimizeCloudinaryUrl(item.image, 900)}" alt="${esc(item.imageAlt || item.title)}" fetchpriority="high" decoding="async">
       </figure>
@@ -788,6 +827,7 @@ function editorialHtml(item, bodyHtml, chapters, allItems) {
         <ol>${chapters.map((c) => `<li><a href="#${c.id}">${esc(c.title)}</a></li>`).join('')}</ol>
       </details>` : ''}
       <div class="article-body editorial-body">${bodyHtml}</div>
+      ${authorBoxHtml()}
       ${picks.length ? `
       <section class="editorial-more" aria-labelledby="more-${esc(item.id)}">
         <h2 id="more-${esc(item.id)}" class="editorial-more-title">You might also like</h2>
@@ -855,8 +895,10 @@ export function renderArticleContent(item, allItems) {
         <button class="save-btn" id="save-for-later-btn" type="button">♡ Save for later</button>
         <button class="save-btn" id="sound-toggle-btn" type="button">🔈 Sound Off</button>
       </div>
+      ${bylineHtml(item)}
       <div class="article-hero-img"><img src="${optimizeCloudinaryUrl(item.image, 1200)}" alt="${esc(item.title)}" fetchpriority="high" decoding="async"></div>
       <div class="article-body">${bodyHtml}</div>
+      ${authorBoxHtml()}
       ${levelCompleteHtml(item, nextItem)}
       ${quoteCardHtml(item.id)}
       ${relatedCardsHtml(allItems, item.id, item.category)}
