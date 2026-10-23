@@ -26,11 +26,26 @@ import { showWelcomeNotification } from './notifications.js';
    ============================================= */
 
 function isValidName(name) {
-  return name.trim().length >= 2;
+  // A real-looking name: letters (any language), spaces, apostrophes,
+  // hyphens and full stops. No digits, symbols or keyboard mashing.
+  // The server runs a stricter version of this same check.
+  const n = name.replace(/\s+/g, ' ').trim();
+  if (n.length < 2 || n.length > 60) return false;
+  if (!/^[\p{L}\p{M}][\p{L}\p{M} '’.\-]*$/u.test(n)) return false;
+  if (/(.)\1{3,}/iu.test(n)) return false;
+  return n.split(' ').every((word) => {
+    const letters = word.replace(/[^\p{L}]/gu, '');
+    if (!letters) return false;
+    if (/^[A-Za-z]+$/.test(letters)) {
+      if (letters.length >= 4 && !/[aeiouy]/i.test(letters)) return false;
+      if (/[bcdfghjklmnpqrstvwxz]{6,}/i.test(letters)) return false;
+    }
+    return true;
+  });
 }
 
 function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 }
 
 /* =============================================
@@ -45,14 +60,63 @@ function isValidEmail(email) {
    show without knowing anything about HTTP status codes itself.
    ============================================= */
 
-async function insertSubscriber(name, email) {
-  let res;
-  try {
-    res = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email }),
+// The signup form gets a short-lived signed token from the server as it
+// loads. /api/subscribe refuses any signup that does not carry a genuine
+// one, which stops bots that skip the form and post straight to the API.
+let tokenPromise = null;
+
+function fetchToken() {
+  tokenPromise = fetch('/api/subscribe', { method: 'GET', cache: 'no-store' })
+    .then((res) => (res.ok ? res.json() : Promise.reject(new Error('token http ' + res.status))))
+    .then((data) => {
+      if (!data || !data.success || !data.sig) throw new Error('token missing');
+      return { t: data.t, sig: data.sig, readyAt: Date.now() + (data.minAgeMs || 2000) + 500 };
     });
+  // Never leave an unhandled rejection behind; the caller handles failure.
+  tokenPromise.catch(() => {});
+  return tokenPromise;
+}
+
+async function getToken() {
+  if (!tokenPromise) fetchToken();
+  let token;
+  try {
+    token = await tokenPromise;
+  } catch (_) {
+    token = await fetchToken(); // one fresh attempt
+  }
+  // The server wants the token to be a couple of seconds old (a person
+  // needs time to type). Wait out any remainder rather than failing.
+  const wait = token.readyAt - Date.now();
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+  return token;
+}
+
+async function postSubscribe(name, email, website, token) {
+  return fetch('/api/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, website, t: token.t, sig: token.sig }),
+  });
+}
+
+async function insertSubscriber(name, email, website = '') {
+  let res;
+  let token;
+  try {
+    token = await getToken();
+    res = await postSubscribe(name, email, website, token);
+    // An old page left open for hours has an expired token. Quietly get a
+    // fresh one and try once more so the reader never sees a problem.
+    if (res.status === 400) {
+      let peek = null;
+      try { peek = await res.clone().json(); } catch (_) { /* ignore */ }
+      if (peek && peek.error === 'verification-failed') {
+        tokenPromise = null;
+        token = await getToken();
+        res = await postSubscribe(name, email, website, token);
+      }
+    }
   } catch (networkErr) {
     // fetch() throws a TypeError when the network itself fails
     // (offline, DNS, CORS-from-nowhere) — before our function ever
@@ -77,6 +141,18 @@ async function insertSubscriber(name, email) {
   if (res.status === 409 || (data && data.error === 'duplicate')) {
     const err = new Error('duplicate subscriber');
     err.kind = 'duplicate';
+    throw err;
+  }
+
+  if (data && (data.error === 'invalid-name' || data.error === 'invalid-email')) {
+    const err = new Error(data.error);
+    err.kind = data.error;
+    throw err;
+  }
+
+  if (res.status === 429 || (data && data.error === 'too-many-attempts')) {
+    const err = new Error('too many attempts');
+    err.kind = 'too-many';
     throw err;
   }
 
@@ -171,6 +247,10 @@ function renderFormState(panel) {
         <label for="newsletter-email" class="sr-only">Your email address</label>
         <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" aria-describedby="newsletter-email-error">
         <span class="newsletter-field-error" id="newsletter-email-error" role="alert"></span>
+      </div>
+      <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+        <label for="newsletter-website">Leave this field empty</label>
+        <input type="text" id="newsletter-website" name="company_website" tabindex="-1" autocomplete="off">
       </div>
       <button class="btn btn-primary" id="newsletter-submit" type="submit">Join The Girl Gang 🎀</button>
     </form>
@@ -379,7 +459,11 @@ export function initNewsletter() {
     const nameError = document.getElementById('newsletter-name-error');
     const emailError = document.getElementById('newsletter-email-error');
     const submitBtn = document.getElementById('newsletter-submit');
+    const honeypot = document.getElementById('newsletter-website');
     if (!form) return;
+
+    // Ask the server for this form's anti-bot token as soon as it appears.
+    fetchToken();
 
     function setLoading(isLoading) {
       submitBtn.disabled = isLoading;
@@ -399,7 +483,9 @@ export function initNewsletter() {
       let valid = true;
 
       if (!isValidName(name)) {
-        nameError.textContent = "Girl, don't forget to tell me your name. 💕";
+        nameError.textContent = name
+          ? 'Please use your real name so I know who to say hello to. 💕'
+          : "Girl, don't forget to tell me your name. 💕";
         valid = false;
       }
       if (!isValidEmail(email)) {
@@ -408,12 +494,24 @@ export function initNewsletter() {
       }
       if (!valid) return;
 
-      lastAttempt = { name, email };
+      lastAttempt = { name, email, website: honeypot ? honeypot.value : '' };
       setLoading(true);
       try {
-        await insertSubscriber(name, email);
+        await insertSubscriber(name, email, lastAttempt.website);
         renderSuccess(panel, fxLayer);
       } catch (err) {
+        if (err.kind === 'invalid-name' || err.kind === 'invalid-email' || err.kind === 'too-many') {
+          // Stay on the form and say exactly what to fix.
+          setLoading(false);
+          if (err.kind === 'invalid-name') {
+            nameError.textContent = 'Please use your real name so I know who to say hello to. 💕';
+          } else if (err.kind === 'invalid-email') {
+            emailError.textContent = 'Please use a real email address you check, so your welcome letter can reach you. 🎀';
+          } else {
+            emailError.textContent = 'That was a lot of tries in a short time. Please wait a few minutes and try again. 💕';
+          }
+          return;
+        }
         handleSubmitError(err);
       }
     });
@@ -441,7 +539,7 @@ export function initNewsletter() {
       retryBtn.textContent = 'Trying again...';
     }
     try {
-      await insertSubscriber(lastAttempt.name, lastAttempt.email);
+      await insertSubscriber(lastAttempt.name, lastAttempt.email, lastAttempt.website || '');
       renderSuccess(panel, fxLayer);
     } catch (err) {
       handleSubmitError(err);
