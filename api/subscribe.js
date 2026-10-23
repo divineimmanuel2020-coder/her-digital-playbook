@@ -25,6 +25,15 @@
 
 import { WELCOME_EMAIL_TEMPLATE } from './welcome-email-template.js';
 import { WELCOME_EMAIL_TEMPLATE_PLAIN } from './welcome-email-template-plain.js';
+import {
+  issueToken,
+  verifyToken,
+  clientIp,
+  tooManyAttempts,
+  validateName,
+  validateEmail,
+  domainCanReceiveMail,
+} from './_antispam.js';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -37,14 +46,12 @@ const SITE_URL = process.env.SITE_URL || 'https://herdigitalplaybook.com';
 // fully styled one — no code changes needed to switch back and
 // forth while you compare Gmail inbox placement.
 const EMAIL_VARIANT = (process.env.WELCOME_EMAIL_VARIANT || 'styled').toLowerCase();
+// Signs the anti-bot form token. Uses SUBSCRIBE_TOKEN_SECRET if you add one in
+// Vercel; otherwise it safely reuses your existing service-role key, so no
+// new setting is required.
+const TOKEN_SECRET = process.env.SUBSCRIBE_TOKEN_SECRET || SUPABASE_SERVICE_ROLE_KEY;
 
-function isValidName(name) {
-  return typeof name === 'string' && name.trim().length >= 2;
-}
-
-function isValidEmail(email) {
-  return typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
+// Name and email checks live in ./_antispam.js (validateName / validateEmail).
 
 /* =============================================
    SUPABASE — insert the subscriber using the service_role key.
@@ -143,8 +150,19 @@ async function sendWelcomeEmail(name, email) {
    HANDLER
    ============================================= */
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store');
+
+  // The signup form asks for a short-lived signed token as it loads. A bot
+  // that posts straight to this endpoint never gets one, so it is turned away.
+  if (req.method === 'GET') {
+    if (!TOKEN_SECRET) {
+      return res.status(500).json({ success: false, error: 'server-misconfigured' });
+    }
+    return res.status(200).json({ success: true, ...issueToken(TOKEN_SECRET) });
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ success: false, error: 'method-not-allowed' });
   }
 
@@ -163,16 +181,42 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'invalid-json' });
     }
   }
+  body = body && typeof body === 'object' ? body : {};
 
-  const name = (body && body.name ? String(body.name) : '').trim();
-  const email = (body && body.email ? String(body.email) : '').trim();
+  // 1. Honeypot. The form has a hidden field that people never see or fill
+  //    in, but bots fill in every field. We act as if it worked, so the bot
+  //    learns nothing, and we do not save anything or send any email.
+  if (typeof body.website === 'string' && body.website.trim() !== '') {
+    return res.status(200).json({ success: true, emailSent: true });
+  }
 
-  if (!isValidName(name)) {
-    return res.status(400).json({ success: false, error: 'missing-name' });
+  // 2. Slow down anyone hammering the form from one place.
+  if (tooManyAttempts(clientIp(req))) {
+    return res.status(429).json({ success: false, error: 'too-many-attempts' });
   }
-  if (!isValidEmail(email)) {
-    return res.status(400).json({ success: false, error: 'missing-email' });
+
+  // 3. Must carry a genuine, not-too-fresh, not-too-old form token.
+  if (!TOKEN_SECRET || !verifyToken(TOKEN_SECRET, body.t, body.sig)) {
+    return res.status(400).json({ success: false, error: 'verification-failed' });
   }
+
+  // 4. A real-looking name.
+  const nameCheck = validateName(body.name);
+  if (!nameCheck.ok) {
+    return res.status(400).json({ success: false, error: 'invalid-name' });
+  }
+
+  // 5. A real-looking email, on a domain that can actually receive mail.
+  const emailCheck = validateEmail(body.email);
+  if (!emailCheck.ok) {
+    return res.status(400).json({ success: false, error: 'invalid-email' });
+  }
+  if (!(await domainCanReceiveMail(emailCheck.domain))) {
+    return res.status(400).json({ success: false, error: 'invalid-email' });
+  }
+
+  const name = nameCheck.name;
+  const email = emailCheck.email;
 
   let insertResult;
   try {
@@ -204,4 +248,3 @@ export default async function handler(req, res) {
 
   return res.status(200).json({ success: true, emailSent: true });
 }
-   
