@@ -8,6 +8,8 @@
 
 import { CATEGORIES, FEATURED_STORIES, LATEST_ARTICLES, FREE_TOOLS } from '../data/store.js';
 import { itemPath } from './routes.js';
+import { readingTime, feedImage } from './feed-utils.js';
+import { initMasonry } from './masonry.js';
 
 function cloneCard(templateId) {
   const tpl = document.getElementById(templateId);
@@ -32,6 +34,32 @@ function fillStoryCard(item) {
   card.querySelector('.card-desc').textContent = item.excerpt;
   card.querySelector('.read-time').textContent = item.readTime || '';
   card.querySelector('.read-more').href = detailUrl;
+  return card;
+}
+
+/* Homepage masonry feed card — mirrors feedCard() in scripts/build.mjs. */
+function fillFeedCard(item) {
+  const card = cloneCard('tpl-feed-card');
+  if (!card) return null;
+
+  const detailUrl = itemPath(item).slice(1); // e.g. blog/<id>.html, or <id> for clean URLs
+  const image = feedImage(item.image);
+  const img = card.querySelector('img');
+  img.src = image.src;
+  if (image.srcset) {
+    img.srcset = image.srcset;
+    img.sizes = image.sizes;
+  }
+  img.alt = item.title;
+  img.loading = 'lazy';
+  img.decoding = 'async';
+  card.dataset.category = item.category || '';
+  card.querySelector('.feed-link').href = detailUrl;
+  card.querySelector('.feed-title').textContent = item.title;
+  const desc = card.querySelector('.feed-desc');
+  if (item.excerpt) desc.textContent = item.excerpt;
+  else desc.remove();
+  card.querySelector('.feed-time').textContent = readingTime(item);
   return card;
 }
 
@@ -103,6 +131,7 @@ export function renderLatest(filterCategory = 'all') {
   // Leave it alone; any later call (a category click) re-renders as usual.
   if (filterCategory === 'all' && grid.dataset.prerendered === 'true') {
     delete grid.dataset.prerendered;
+    initMasonry(grid);
     return;
   }
 
@@ -119,13 +148,15 @@ export function renderLatest(filterCategory = 'all') {
 
   if (items.length === 0) {
     grid.innerHTML = '<p class="section-sub">No articles here yet — check back soon!</p>';
+    initMasonry(grid);
     return;
   }
 
   items.forEach((item) => {
-    const card = fillStoryCard(item);
+    const card = fillFeedCard(item);
     if (card) grid.appendChild(card);
   });
+  initMasonry(grid);
 }
 
 export function renderTools() {
