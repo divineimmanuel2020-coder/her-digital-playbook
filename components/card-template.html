@@ -39,3 +39,20 @@
     </div>
   </article>
 </template>
+
+<!--
+  FEED CARD (homepage masonry feed — #latest-grid)
+  Order is fixed: cover, title, short description, reading time.
+  The whole card is ONE link (no nested links/buttons). The cover is
+  never cropped: see .feed-cover in css/style.css.
+-->
+<template id="tpl-feed-card">
+  <article class="feed-card" data-category="">
+    <a class="feed-link" href="#">
+      <span class="feed-cover"><img src="" alt=""></span>
+      <h3 class="feed-title"></h3>
+      <p class="feed-desc"></p>
+      <span class="feed-meta"><svg class="feed-clock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="feed-time"></span></span>
+    </a>
+  </article>
+</template>
