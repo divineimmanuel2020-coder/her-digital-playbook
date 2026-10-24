@@ -31,7 +31,7 @@ export function optimizeImages(scope = document) {
     const src = img.getAttribute('src');
 
     if (src) {
-      const width = img.closest('.card-img') ? 700 : img.closest('.newsletter-image, .page-hero') ? 900 : 1200;
+      const width = img.closest('.card-img, .feed-cover') ? 700 : img.closest('.newsletter-image, .page-hero') ? 900 : 1200;
       img.setAttribute('src', optimizeCloudinaryUrl(src, width));
     }
 
