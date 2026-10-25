@@ -1,10 +1,8 @@
-<section class="latest" id="articles">
+<section class="latest" id="articles" aria-label="All articles">
+  <!-- Old "Categories" nav/footer links point at /#categories; land them on the feed. -->
+  <span id="categories" aria-hidden="true"></span>
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Latest Articles ♡</h2>
-      <a class="section-link" href="#articles">View all articles →</a>
-      <p class="section-sub" id="latest-sub">Fresh reads from the Playbook</p>
-    </div>
+    <h2 class="visually-hidden">All articles</h2>
     <div class="feed-masonry" id="latest-grid">
       <!-- Cards injected by js/render.js from data/store.js -->
     </div>
