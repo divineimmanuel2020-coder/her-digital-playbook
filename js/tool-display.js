@@ -4,11 +4,10 @@
    tool. Shared by scripts/build.mjs (static HTML written into index.html)
    and js/render.js (browser fallback), so both always produce the same HTML.
 
-   Per-tool wording comes from data/store.js (FREE_TOOLS):
-     display: { main, sub }   big word + the smaller words under it
-                              (default: first word / the rest of the title)
-     short:                   one-line description for this list
-                              (default: the full excerpt)
+   Per-tool wording lives in TOOL_COPY below, keyed by tool id. A tool in
+   data/store.js may also carry its own `display: { main, sub }` and `short`,
+   which win over TOOL_COPY. With neither, the title is split after its first
+   word and the full excerpt is used.
    ============================================= */
 
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -31,13 +30,23 @@ function ornament(index) {
 const ARROW =
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
+const TOOL_COPY = {
+  'salary-negotiation-calculator': { main: 'Salary', sub: 'Negotiation Calculator', short: 'Turn your offer into an opening ask, a target and a floor, with the words to say.' },
+  'freelance-rate-calculator': { main: 'Freelance', sub: 'Rate Calculator', short: 'Find the hourly rate that covers your tax, costs and time off.' },
+  'resume-review-checklist': { main: 'Resume', sub: 'Review Checklist', short: "Audit your resume, fix weak bullets and match a job post's keywords." },
+  'ai-prompt-builder': { main: 'AI Prompt', sub: 'Builder', short: 'Turn a rough idea into a detailed prompt, with a five-step chain for big jobs.' },
+  'business-idea-validator': { main: 'Business', sub: 'Idea Validator', short: 'Score your idea and test the money in three scenarios before you build.' },
+  'personal-budget-planner': { main: 'Personal', sub: 'Budget Planner', short: 'See where your money really goes and get a split that fits your costs.' },
+};
+
 export function toolDisplay(item) {
-  const d = item.display || {};
+  const copy = TOOL_COPY[item.id] || {};
+  const d = item.display || copy;
   const words = String(item.title || '').trim().split(/\s+/);
   return {
     main: d.main || words[0] || '',
     sub: d.sub || words.slice(1).join(' '),
-    short: item.short || item.excerpt || '',
+    short: item.short || copy.short || item.excerpt || '',
   };
 }
 
