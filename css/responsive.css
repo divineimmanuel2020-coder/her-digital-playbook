@@ -60,8 +60,7 @@
 
     /* Featured & Latest & Tools – still 3 columns */
     .featured-grid,
-    .latest-grid,
-    .tools-grid {
+    .latest-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: var(--spacing-md);
     }
@@ -155,8 +154,7 @@
 
     /* Featured, Latest, Tools – 2 columns */
     .featured-grid,
-    .latest-grid,
-    .tools-grid {
+    .latest-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-md);
     }
@@ -286,8 +284,7 @@
 
     /* Featured, Latest, Tools – 1 column */
     .featured-grid,
-    .latest-grid,
-    .tools-grid {
+    .latest-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
@@ -451,8 +448,7 @@
 
     /* Featured, Latest, Tools – 1 column */
     .featured-grid,
-    .latest-grid,
-    .tools-grid {
+    .latest-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
