@@ -11,8 +11,7 @@
 .btn,
 .btn-primary,
 .btn-secondary,
-.btn-newsletter,
-.btn-tool {
+.btn-newsletter {
     transition: all var(--transition-base);
 }
 
@@ -314,14 +313,6 @@ select {
 .read-more:hover {
     transform: translateX(4px);
     color: var(--color-accent-dark);
-}
-
-/* Tool button hover (transition) */
-.btn-tool:hover {
-    transform: translateY(-2px);
-    background: var(--color-accent);
-    color: #fff;
-    border-color: var(--color-accent);
 }
 
 /* =============================================
