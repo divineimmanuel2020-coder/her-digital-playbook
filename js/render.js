@@ -8,6 +8,7 @@
 
 import { CATEGORIES, FEATURED_STORIES, LATEST_ARTICLES, FREE_TOOLS } from '../data/store.js';
 import { itemPath } from './routes.js';
+import { toolRowHtml } from './tool-display.js';
 import { readingTime, feedImage } from './feed-utils.js';
 import { initMasonry } from './masonry.js';
 
@@ -60,21 +61,6 @@ function fillFeedCard(item) {
   if (item.excerpt) desc.textContent = item.excerpt;
   else desc.remove();
   card.querySelector('.feed-time').textContent = readingTime(item);
-  return card;
-}
-
-function fillToolCard(item) {
-  const card = cloneCard('tpl-tool-card');
-  if (!card) return null;
-
-  const detailUrl = itemPath(item).slice(1); // e.g. blog/<id>.html, or <id> for clean URLs
-  const img = card.querySelector('img');
-  img.src = item.image;
-  img.alt = item.title;
-  card.querySelector('.card-img-link').href = detailUrl;
-  card.querySelector('.card-title').textContent = item.title;
-  card.querySelector('.card-desc').textContent = item.excerpt;
-  card.querySelector('.btn-tool').href = detailUrl;
   return card;
 }
 
@@ -160,11 +146,9 @@ export function renderLatest(filterCategory = 'all') {
 }
 
 export function renderTools() {
-  const grid = document.getElementById('tools-grid');
-  if (!grid) return;
-  if (grid.dataset.prerendered === 'true') return;
-  FREE_TOOLS.forEach((item) => {
-    const card = fillToolCard(item);
-    if (card) grid.appendChild(card);
-  });
+  const list = document.getElementById('tools-grid');
+  if (!list) return;
+  if (list.dataset.prerendered === 'true') return;
+  // Same markup scripts/build.mjs writes into index.html (see js/tool-display.js).
+  list.innerHTML = FREE_TOOLS.map((item, i) => toolRowHtml(item, i, itemPath(item).slice(1))).join('');
 }
