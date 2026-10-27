@@ -112,6 +112,34 @@ function renderGameComplete(game, allDone) {
   renderKeepExploring(document.getElementById('keep-exploring'), keep);
 }
 
+/* Price This: turns the chosen range into the hourly rate it implies, from the
+   round's estimated hours. The hours are stated assumptions, not facts about any client. */
+const PRICE_ASSUMPTIONS = [
+  { hours: [14, 22], bounds: [[0, 100], [100, 300], [300, 600], [600, null]] },
+  { hours: [20, 35], bounds: [[0, 200], [200, 500], [500, 1000], [1000, null]] },
+  { hours: [12, 25], bounds: [[0, 300], [300, 800], [800, 1500], [1500, null]] },
+  { hours: [30, 45], bounds: [[0, 300], [300, 800], [800, 1500], [1500, null]] },
+];
+
+function priceFeedback(round, i) {
+  const a = PRICE_ASSUMPTIONS[GAME_PRICE_THIS.indexOf(round)];
+  if (!a) return "There's no single correct price here. This is an educational exercise: what matters is that your number honestly accounts for the considerations above.";
+  const [lo, hi] = a.bounds[i];
+  const [hMin, hMax] = a.hours;
+  const unit = round.ranges[i].includes('/mo') ? 'per month' : 'for the project';
+  const money = (n) => `$${Math.round(n).toLocaleString('en-US')}`;
+  const low = lo / hMax;
+  const high = hi === null ? null : hi / hMin;
+  let rate;
+  if (hi === null) rate = `at least about ${money(low)} per hour`;
+  else if (lo === 0) rate = `up to about ${money(high)} per hour`;
+  else rate = `roughly ${money(low)} to ${money(high)} per hour`;
+  return `At ${round.ranges[i]} ${unit}, and an estimated ${hMin} to ${hMax} hours of work, you would earn ${rate} before tax, software and unpaid admin time. `
+    + 'Those hours are an assumption for a careful, newer freelancer: faster or more experienced people may need fewer. '
+    + 'There is no single correct price, but a good check is to divide the price by your real hours and ask whether you would accept that rate in a job. '
+    + 'Re-pick a different range to compare.';
+}
+
 function nextRound(game) {
   roundIndex++;
   if (roundIndex >= game.data.length) finishGame(game);
@@ -132,7 +160,7 @@ function renderRound() {
         <div class="pathquiz-options" id="round-options">
           ${round.options.map((o, i) => `<button class="pathquiz-option" data-index="${i}" type="button"><span class="pathquiz-icon">→</span>${o.label}</button>`).join('')}
         </div>
-        <p class="scenario-feedback" id="round-feedback" hidden></p>
+        <p class="scenario-feedback" id="round-feedback" role="status" hidden></p>
         <div class="pg-game-nav" id="round-nav" hidden><button class="btn btn-primary" id="next-round" type="button">Next →</button></div>
       </div>`;
     stageRoot.querySelectorAll('.pathquiz-option').forEach((btn) => {
@@ -159,7 +187,7 @@ function renderRound() {
           <button class="pg-binary-btn" data-value="false" type="button">${game.labels[0]}</button>
           <button class="pg-binary-btn" data-value="true" type="button">${game.labels[1]}</button>
         </div>
-        <p class="scenario-feedback" id="round-feedback" hidden></p>
+        <p class="scenario-feedback" id="round-feedback" role="status" hidden></p>
         <div class="pg-game-nav" id="round-nav" hidden><button class="btn btn-primary" id="next-round" type="button">Next →</button></div>
       </div>`;
     stageRoot.querySelectorAll('.pg-binary-btn').forEach((btn) => {
@@ -187,7 +215,7 @@ function renderRound() {
         <div class="pathquiz-options" id="round-options">
           ${round.options.map((label, i) => `<button class="pathquiz-option" data-index="${i}" type="button"><span class="pathquiz-icon">→</span>${label}</button>`).join('')}
         </div>
-        <p class="scenario-feedback" id="round-feedback" hidden></p>
+        <p class="scenario-feedback" id="round-feedback" role="status" hidden></p>
         <div class="pg-game-nav" id="round-nav" hidden><button class="btn btn-primary" id="next-round" type="button">Next →</button></div>
       </div>`;
     stageRoot.querySelectorAll('.pathquiz-option').forEach((btn) => {
@@ -217,7 +245,7 @@ function renderRound() {
         <div class="pg-price-options" id="round-options">
           ${round.ranges.map((r, i) => `<button class="pg-price-btn" data-index="${i}" type="button">${r}</button>`).join('')}
         </div>
-        <p class="scenario-feedback" id="round-feedback" hidden></p>
+        <p class="scenario-feedback" id="round-feedback" role="status" hidden></p>
         <div class="pg-game-nav" id="round-nav" hidden><button class="btn btn-primary" id="next-round" type="button">Next →</button></div>
       </div>`;
     stageRoot.querySelectorAll('.pg-price-btn').forEach((btn) => {
@@ -226,7 +254,7 @@ function renderRound() {
         stageRoot.querySelectorAll('.pg-price-btn').forEach((b) => b.classList.remove('selected'));
         btn.classList.add('selected');
         const feedback = document.getElementById('round-feedback');
-        feedback.textContent = "There's no single correct price here — this is an educational exercise. What matters is that your number honestly accounts for the considerations above, not just a guess.";
+        feedback.textContent = priceFeedback(round, Number(btn.dataset.index));
         feedback.hidden = false;
         document.getElementById('round-nav').hidden = false;
         awardRoundXP(activeGame, roundIndex);
@@ -250,7 +278,9 @@ async function init() {
   initGirlGangPopup();
   maybeShowJoinReminder();
   renderTabs();
-  stageRoot.innerHTML = '<p class="pg-empty-state">Pick a game above to get started. 🎮</p>';
+  const wanted = new URLSearchParams(location.search).get('game');
+  if (wanted && GAMES.some((g) => g.id === wanted)) startGame(wanted);
+  else stageRoot.innerHTML = '<p class="pg-empty-state">Pick a game above to get started. 🎮</p>';
 }
 
 document.addEventListener('DOMContentLoaded', init);
