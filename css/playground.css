@@ -1281,3 +1281,10 @@ ol.mp-list { list-style: decimal; }
 .pg-template-links a { color: var(--color-accent-dark); }
 .pg-template-status { min-height: 1.2rem; margin: 0.5rem 0 0; font-size: 0.88rem; color: var(--color-text-secondary); }
 @media (min-width: 720px) { .pg-template-guide { grid-template-columns: 1fr 1fr; } }
+
+/* ---- Homepage Playground teaser: same text-led list as the Playground page ---- */
+.pg-teaser.pgh { background: linear-gradient(180deg, #fde9ef 0%, var(--color-warm-white) 100%); padding: var(--spacing-xl) 0 var(--spacing-2xl); }
+.pg-teaser.pgh .container { max-width: 760px; }
+.pgh-teaser-head { margin-bottom: 0.5rem; }
+.pgh-teaser-head .pgh-sub { margin-bottom: 0.5rem; }
+.pgh-teaser-cta { margin: 1.75rem 0 0; text-align: center; }
