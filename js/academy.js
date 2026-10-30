@@ -956,6 +956,7 @@ function overview(pr, seq) {
           h("h2", { class: "ac-h2" }, "What you will learn"),
           h("ul", { class: "ac-outcomes" }, (course.learningOutcomes || []).map((o) => h("li", {}, o)))
         ),
+        courseAbout(st),
         h(
           "section",
           { class: "ac-block", id: "syllabus" },
@@ -967,7 +968,7 @@ function overview(pr, seq) {
             return h(
               "details",
               { class: "ac-mod", open: mi === 0 && !enrolled || nextIt?.module?.id === m.id || void 0 },
-              h("summary", {}, h("span", { class: "ac-mod-n" }, mi + 1), h("span", { class: "ac-mod-t" }, m.title, h("small", {}, `${lessons.length} items`)), h("span", { class: "ac-mod-d" }, `${mDone}/${lessons.length}`)),
+              h("summary", {}, h("span", { class: "ac-mod-n" }, mi + 1), h("span", { class: "ac-mod-t" }, m.title, h("small", {}, `${lessons.length} items \xB7 ${lessons.reduce((a, l2) => a + (l2.duration || 0), 0)} min`)), h("span", { class: "ac-mod-d" }, `${mDone}/${lessons.length}`)),
               h("p", { class: "ac-muted ac-mod-obj" }, m.objective),
               h("ul", { class: "ac-rows" }, lessons.map((l) => {
                 const it = l.type === "assessment" ? { kind: "assessment", id: m.id } : { kind: "lesson", id: l.id };
@@ -988,11 +989,13 @@ function overview(pr, seq) {
           }))
         ),
         course.capstone && h("section", { class: "ac-block ac-capstone-card" }, h("p", { class: "ac-eyebrow" }, "Final challenge"), h("h2", { class: "ac-h2" }, `\u{1F3C6} ${course.capstone.title}`), h("p", {}, course.capstone.objective), h("a", { class: "ac-btn ac-btn-ghost", href: link.course(course.id, { capstone: 1 }), "data-nav": true }, "Preview the capstone")),
-        (course.tools || []).length > 0 && h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "Tools you will use"), h("ul", { class: "ac-chips" }, course.tools.map((t) => h("li", {}, t))))
+        (course.tools || []).length > 0 && h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "Tools you will use"), h("ul", { class: "ac-chips" }, course.tools.map((t) => h("li", {}, t)))),
+        courseExtras(st)
       ),
       h(
         "aside",
         { class: "ac-side" },
+        glanceCard(st),
         h(
           "div",
           { class: "ac-card" },
@@ -1006,6 +1009,65 @@ function overview(pr, seq) {
     ),
     related()
   );
+}
+// ---- Coursera-style course page sections ----
+var PACE_OPTIONS = [2, 4, 6, 10];
+function finishDate(weeks) {
+  const d = new Date();
+  d.setDate(d.getDate() + weeks * 7);
+  return d.toLocaleDateString(void 0, { day: "numeric", month: "long", year: "numeric" });
+}
+function glanceCard(st) {
+  const weeks = Math.max(1, Math.ceil(st.hours / 4));
+  return h(
+    "div",
+    { class: "ac-card ac-glance" },
+    h("h3", { class: "ac-h3" }, "Course at a glance"),
+    h(
+      "dl",
+      {},
+      [["Level", course.difficulty], ["Format", "100% online, self-paced"], ["Total time", `About ${st.hours} hours`], ["Pace", `About ${weeks} ${weeks === 1 ? "week" : "weeks"} at 4 hours a week`], ["Graded work", `${plural(st.assessments, "assessment")}${st.projects ? `, ${plural(st.projects, "project")}` : ""}${st.capstone ? ", 1 capstone" : ""}`], ["Certificate", "Free: Pass, Merit or Distinction"]].map(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])
+    )
+  );
+}
+function courseAbout(st) {
+  const out = [];
+  if (course.about) out.push(h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "About this course"), rich(course.about)));
+  if ((course.audience || []).length) out.push(h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "Who this course is for"), h("ul", { class: "ac-outcomes" }, course.audience.map((a) => h("li", {}, a)))));
+  if ((course.careerOutcomes || []).length) out.push(h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "Where this can take you"), h("ul", { class: "ac-careers" }, course.careerOutcomes.map((o) => h("li", {}, h("strong", {}, o.role), h("span", {}, o.note))))));
+  return out;
+}
+function courseExtras(st) {
+  const out = [];
+  const pace = h("p", { class: "ac-pace-out", "aria-live": "polite" });
+  const sel = h("select", { class: "ac-select", id: "ac-pace", "aria-label": "Hours you can study each week" }, PACE_OPTIONS.map((n) => h("option", { value: n, selected: n === 4 || void 0 }, `${n} hours a week`)));
+  const paint = () => {
+    const wk = Math.max(1, Math.ceil(st.hours / Number(sel.value)));
+    pace.textContent = `About ${wk} ${wk === 1 ? "week" : "weeks"}. If you start today you could finish by ${finishDate(wk)}.`;
+  };
+  sel.addEventListener("change", paint);
+  paint();
+  out.push(h("section", { class: "ac-block ac-planner" }, h("h2", { class: "ac-h2" }, "Plan your pace"), h("p", { class: "ac-muted" }, "Self-paced: there are no deadlines. Tell us how much time you have and we will estimate when you could finish."), h("label", { class: "ac-field" }, h("span", {}, "I can study"), sel), pace));
+  const bands = [["Distinction", "90% or more"], ["Merit", "80% to 89%"], ["Pass", "70% to 79%"]];
+  out.push(h(
+    "section",
+    { class: "ac-block" },
+    h("h2", { class: "ac-h2" }, "How you are assessed"),
+    h("p", { class: "ac-muted" }, "Your overall score is built from three parts. You need 70% overall to earn the certificate."),
+    h("ul", { class: "ac-weights" }, [["Lesson knowledge checks", 20, "Short checks after every lesson. Your best score on each counts."], ["Module assessments", 40, "A shuffled test at the end of each module. Retake as often as you like."], ["Capstone", 40, "A final piece of work you assess against a rubric, plus written reflection."]].map(([t, w, d]) => h("li", {}, h("div", { class: "ac-weight-top" }, h("strong", {}, t), h("span", {}, `${w}%`)), h("div", { class: "ac-bar" }, h("span", { style: `width:${w * 2.5}%` })), h("small", {}, d)))),
+    h("ul", { class: "ac-chips" }, bands.map(([b, r]) => h("li", {}, `${b}: ${r}`)))
+  ));
+  const faq = [
+    ["Is this course really free?", "Yes. The lessons, assessments, projects, capstone and certificate are all free."],
+    ["How long will it take?", `About ${st.hours} hours in total, including practice, projects and the capstone. You set the pace.`],
+    ["Do I have to take the lessons in order?", "You can open any lesson from the syllabus, but each module builds on the one before it, so we recommend going in order."],
+    ["What if I do not pass an assessment?", "Nothing is lost. Review the lessons and retake it as often as you like. Questions and answers are shuffled each time, and your best score is kept."],
+    ["Where is my progress saved?", "In your browser on this device. If you clear your browser data or switch devices you will start fresh, so finish and claim your certificate on the device you learn on."],
+    ["How do I earn the certificate?", "Finish every lesson, pass every module assessment, complete the projects, pass the capstone, and reach 70% overall."],
+    ...course.faq || []
+  ];
+  out.push(h("section", { class: "ac-block" }, h("h2", { class: "ac-h2" }, "Frequently asked questions"), faq.map(([q, a]) => h("details", { class: "ac-faq" }, h("summary", {}, q), h("p", {}, a)))));
+  return out;
 }
 function related() {
   const paths = LEARNING_PATHS2.filter((p) => p.courseIds.includes(course.id));
@@ -1047,6 +1109,28 @@ function stepNav(seq, it, canNext, nextLabel = "Next") {
   const p = prevOf(seq, it), n = nextOf(seq, it);
   return h("div", { class: "ac-stepnav" }, p ? h("a", { class: "ac-btn ac-btn-ghost", href: hrefFor(p), "data-nav": true }, `\u2190 ${p.title.slice(0, 40)}`) : h("span"), n ? h("a", { class: `ac-btn ac-btn-${canNext ? "primary" : "ghost"}`, href: hrefFor(n), "data-nav": true }, `${nextLabel}: ${n.title.slice(0, 40)} \u2192`) : h("a", { class: "ac-btn ac-btn-primary", href: link.course(course.id, { claim: 1 }), "data-nav": true }, "Finish \u2713"));
 }
+// ---- rich text helpers (paragraphs, "- " bullets, **bold**) ----
+function inline(str) {
+  return String(str ?? "").split(/\*\*(.+?)\*\*/g).map((part, i) => i % 2 ? h("strong", {}, part) : part);
+}
+function rich(text, cls = "ac-prose") {
+  const out = [];
+  let list = null;
+  String(text ?? "").split(/\n+/).forEach((line) => {
+    if (/^\s*[-\u2022]\s+/.test(line)) {
+      if (!list) {
+        list = h("ul", { class: "ac-bullets" });
+        out.push(list);
+      }
+      list.append(h("li", {}, inline(line.replace(/^\s*[-\u2022]\s+/, ""))));
+    } else {
+      list = null;
+      if (line.trim()) out.push(h("p", { class: cls }, inline(line)));
+    }
+  });
+  return out;
+}
+var wordCount = (s2) => String(s2 || "").split(/\s+/).filter(Boolean).length;
 function lessonView(it, seq, pr) {
   const l = it.lesson, c = l.content;
   const done = pr.completedLessons.includes(l.id);
@@ -1061,7 +1145,7 @@ function lessonView(it, seq, pr) {
   saveCurrent();
   const stepsKey = `steps:${course.id}:${l.id}`;
   const ticked = new Set(load(stepsKey, []));
-  const takeaways = [c.successCriteria, c.concept.split(/(?<=[.!?])\s/)[0], c.commonMistakes && `Avoid this: ${c.commonMistakes.split(/(?<=[.!?])\s/)[0]}`].filter(Boolean);
+  const takeaways = c.takeaways && c.takeaways.length ? c.takeaways : [c.successCriteria, c.concept.split(/(?<=[.!?])\s/)[0], c.commonMistakes && `Avoid this: ${c.commonMistakes.split(/(?<=[.!?])\s/)[0]}`].filter(Boolean);
   const noteBox = h("textarea", { class: "ac-input", rows: 5, maxlength: 4e3, placeholder: "Your notes, your attempt, or your answer to the practice task. It saves as you type.", "aria-label": "Your notes for this lesson" });
   noteBox.value = getNote(course.id, l.id);
   let nt;
@@ -1083,13 +1167,18 @@ function lessonView(it, seq, pr) {
   const checkHost = h("section", { class: "ac-block ac-check", id: "ac-check" });
   runCheck(checkHost, it, c.knowledgeCheck || [], pr, seq);
   const prog = h("div", { class: "ac-lesson-progress" });
-  const sections = [["learn", "Learn"], ["steps", "Do it"], ["example", "See it"], ["practice", "Practise"], ["check", "Check"]];
+  const has = { deep: (c.sections || []).length > 0, terms: (c.keyTerms || []).length > 0, cs: !!c.caseStudy, tpl: !!c.template };
+  const sections = [["learn", "Learn"], has.deep && ["deep", "Go deeper"], has.terms && ["terms", "Key terms"], ["steps", "Do it"], ["example", "See it"], has.cs && ["case", "Case study"], has.tpl && ["template", "Template"], ["practice", "Practise"], ["check", "Check"]].filter(Boolean);
+  const readWords = wordCount(c.concept) + wordCount(c.whyItMatters) + (c.sections || []).reduce((a, x) => a + wordCount(x.body), 0) + wordCount(c.example) + (c.caseStudy ? wordCount(c.caseStudy.situation) + wordCount((c.caseStudy.moves || []).join(" ")) + wordCount(c.caseStudy.result) + wordCount(c.caseStudy.lesson) : 0);
+  const readMins = Math.max(1, Math.round(readWords / 200));
+  const practiceMins = Math.max(5, (l.duration || 12) - readMins);
   const body = h(
     "article",
     { class: "ac-lesson" },
     h("p", { class: "ac-eyebrow" }, `${it.module.title} \xB7 ${TYPE_LABEL[l.type] || "Lesson"}${l.duration ? ` \xB7 ${l.duration} min` : ""}`),
     h("h1", { class: "ac-h1 ac-h1-sm", "data-top": true }, l.title),
-    h("p", { class: "ac-muted" }, it.module.objective),
+    (c.objectives || []).length > 0 ? h("aside", { class: "ac-objectives" }, h("strong", {}, "By the end of this lesson you will be able to:"), h("ul", {}, c.objectives.map((o) => h("li", {}, o)))) : h("p", { class: "ac-muted" }, it.module.objective),
+    h("p", { class: "ac-lesson-meta" }, `About ${readMins} min of reading \xB7 ${practiceMins} min of practice and checks`),
     h("div", { class: "ac-lesson-tools" }, bm, done && h("span", { class: "ac-pill good" }, "\u2713 Completed")),
     h("ol", { class: "ac-jump", "aria-label": "On this page" }, sections.map(([id, label]) => h("li", {}, h("a", { href: `#ac-s-${id}`, onclick: (e) => {
       e.preventDefault();
@@ -1099,35 +1188,67 @@ function lessonView(it, seq, pr) {
       "section",
       { class: "ac-block", id: "ac-s-learn" },
       h("h2", { class: "ac-h2" }, "Learn"),
-      c.concept.split(/\n+/).map((p) => h("p", { class: "ac-prose" }, p)),
-      h("aside", { class: "ac-callout" }, h("strong", {}, "Why this matters"), h("p", {}, c.whyItMatters))
+      rich(c.concept),
+      h("aside", { class: "ac-callout" }, h("strong", {}, "Why this matters"), rich(c.whyItMatters, "ac-callout-p"))
     ),
+    has.deep && h("section", { class: "ac-block", id: "ac-s-deep" }, h("h2", { class: "ac-h2" }, "Go deeper"), c.sections.map((x) => h("div", { class: "ac-deep" }, h("h3", { class: "ac-h3" }, x.title), rich(x.body)))),
+    has.terms && h("section", { class: "ac-block", id: "ac-s-terms" }, h("h2", { class: "ac-h2" }, "Key terms"), h("dl", { class: "ac-terms" }, c.keyTerms.map((t) => [h("dt", {}, t.term), h("dd", {}, t.def)]))),
     h(
       "section",
       { class: "ac-block", id: "ac-s-steps" },
       h("h2", { class: "ac-h2" }, "Do it, step by step"),
       h("p", { class: "ac-muted ac-small" }, "Tick each step as you do it. Your ticks are saved."),
-      h("ol", { class: "ac-steps" }, (c.howTo || []).map((s, i) => {
+      h("ol", { class: "ac-steps" }, (c.howTo || []).map((s2, i) => {
         const cb = h("input", { type: "checkbox", checked: ticked.has(i) || void 0, id: `st-${i}` });
         cb.addEventListener("change", () => {
           if (cb.checked) ticked.add(i);
           else ticked.delete(i);
           save(stepsKey, [...ticked]);
         });
-        return h("li", {}, h("label", { for: `st-${i}` }, cb, h("span", {}, s)));
+        return h("li", {}, h("label", { for: `st-${i}` }, cb, h("span", {}, inline(s2))));
       }))
     ),
-    h("section", { class: "ac-block", id: "ac-s-example" }, h("h2", { class: "ac-h2" }, "See it in action"), h("div", { class: "ac-example" }, h("span", { class: "ac-eyebrow" }, "Worked example"), h("p", {}, c.example))),
+    h("section", { class: "ac-block", id: "ac-s-example" }, h("h2", { class: "ac-h2" }, "See it in action"), h("div", { class: "ac-example" }, h("span", { class: "ac-eyebrow" }, "Worked example"), rich(c.example, "ac-example-p"))),
+    has.cs && h(
+      "section",
+      { class: "ac-block", id: "ac-s-case" },
+      h("h2", { class: "ac-h2" }, "Case study"),
+      h(
+        "div",
+        { class: "ac-case" },
+        h("span", { class: "ac-eyebrow" }, "Illustrative scenario (a composite, not a real person)"),
+        h("h3", { class: "ac-h3" }, c.caseStudy.title),
+        h("p", {}, h("strong", {}, "The situation. "), c.caseStudy.situation),
+        (c.caseStudy.moves || []).length > 0 && h("div", {}, h("strong", {}, "What she did"), h("ol", { class: "ac-bullets" }, c.caseStudy.moves.map((m) => h("li", {}, m)))),
+        h("p", {}, h("strong", {}, "The result. "), c.caseStudy.result),
+        h("p", { class: "ac-case-lesson" }, h("strong", {}, "The lesson. "), c.caseStudy.lesson)
+      )
+    ),
+    has.tpl && h(
+      "section",
+      { class: "ac-block", id: "ac-s-template" },
+      h("h2", { class: "ac-h2" }, "Template you can reuse"),
+      c.template.intro && h("p", { class: "ac-muted ac-small" }, c.template.intro),
+      h("div", { class: "ac-template" }, h("div", { class: "ac-template-head" }, h("strong", {}, c.template.title), h("button", { type: "button", class: "ac-btn ac-btn-ghost", onclick: async (e) => {
+        const b = e.currentTarget;
+        const ok = await copyText(c.template.body);
+        b.textContent = ok ? "Copied \u2713" : "Copy failed";
+        setTimeout(() => {
+          b.textContent = "Copy template";
+        }, 1800);
+      } }, "Copy template")), h("pre", {}, c.template.body))
+    ),
     h(
       "section",
       { class: "ac-block", id: "ac-s-practice" },
       h("h2", { class: "ac-h2" }, "Practise"),
-      h("div", { class: "ac-practice" }, h("span", { class: "ac-eyebrow" }, "Your task"), h("p", {}, c.practice)),
+      h("div", { class: "ac-practice" }, h("span", { class: "ac-eyebrow" }, "Your task"), rich(c.practice, "ac-example-p")),
+      c.stretch && h("div", { class: "ac-practice ac-stretch" }, h("span", { class: "ac-eyebrow" }, "Stretch challenge (optional)"), h("p", {}, c.stretch)),
       noteBox,
       noteStatus,
-      h("div", { class: "ac-reflect" }, h("strong", {}, "Reflect before you move on"), h("p", {}, `Without looking back, explain "${l.title}" in two sentences, as if to a friend. Then say one place you could use it this week. Writing it in your notes makes it far more likely to stick.`))
+      h("div", { class: "ac-reflect" }, h("strong", {}, "Reflect before you move on"), h("p", {}, c.reflection || `Without looking back, explain "${l.title}" in two sentences, as if to a friend. Then say one place you could use it this week. Writing it in your notes makes it far more likely to stick.`))
     ),
-    h("section", { class: "ac-block ac-recap" }, h("h2", { class: "ac-h2" }, "Key takeaways"), h("ul", {}, takeaways.map((t) => h("li", {}, t))), c.commonMistakes && h("aside", { class: "ac-callout warn" }, h("strong", {}, "Common mistakes"), h("p", {}, c.commonMistakes))),
+    h("section", { class: "ac-block ac-recap" }, h("h2", { class: "ac-h2" }, "Key takeaways"), h("ul", {}, takeaways.map((t) => h("li", {}, inline(t)))), c.commonMistakes && h("aside", { class: "ac-callout warn" }, h("strong", {}, "Common mistakes"), h("p", {}, c.commonMistakes))),
     h("div", { id: "ac-s-check" }, checkHost),
     h("div", { id: "ac-after" }),
     prog
@@ -1169,6 +1290,7 @@ function runCheck(host, it, qs, pr, seq) {
     mount(
       fb,
       h("p", { class: x.ok ? "good" : "bad" }, x.ok ? "\u2713 Correct." : `\u2717 Not quite. The best answer is: ${q.options[q.correct]}`),
+      q.explain && h("p", { class: "ac-explain" }, h("strong", {}, "Why: "), q.explain),
       h("button", { type: "button", class: "ac-btn ac-btn-primary", onclick: () => {
         i++;
         ask();
@@ -1240,7 +1362,7 @@ function assessmentView(it, seq, pr) {
         if (x.ok) right++;
         log.push({ q, picked: x.o, ok: x.ok });
         recordQuestion(course.id, `assess-${it.id}`, q.qi, q, x.ok);
-        mount(fb, h("p", { class: x.ok ? "good" : "bad" }, x.ok ? "\u2713 Correct." : `\u2717 Not quite. Correct: ${q.options[q.correct]}`), h("button", { type: "button", class: "ac-btn ac-btn-primary", onclick: () => {
+        mount(fb, h("p", { class: x.ok ? "good" : "bad" }, x.ok ? "\u2713 Correct." : `\u2717 Not quite. Correct: ${q.options[q.correct]}`), q.explain && h("p", { class: "ac-explain" }, h("strong", {}, "Why: "), q.explain), h("button", { type: "button", class: "ac-btn ac-btn-primary", onclick: () => {
           i++;
           ask();
         } }, i === qs.length - 1 ? "Finish assessment" : "Next question \u2192"));
@@ -1260,7 +1382,7 @@ function assessmentView(it, seq, pr) {
         h("div", { class: "ac-result", "data-q": true }, h("div", { class: `ac-result-score${res.passed ? " pass" : ""}` }, `${score}%`), h("div", {}, h("h1", { class: "ac-h2", "data-top": true }, res.passed ? "You passed \u2713" : "Not passed yet"), h("p", {}, res.passed ? `Great work. You answered ${right} of ${qs.length} correctly.` : `You need ${a.passScore || 70}%. Review the module lessons and try again. Your best score is kept.`))),
         h("div", { class: "ac-actions" }, res.passed && n && navBtn("Continue \u2192", hrefFor(n)), res.passed && !n && navBtn("Finish the course \u2713", link.course(course.id, { claim: 1 })), btn("Try again", run, res.passed ? "ghost" : "primary"), !res.passed && navBtn("Review the lessons", link.course(course.id), "ghost")),
         h("h2", { class: "ac-h3" }, "Review your answers"),
-        h("ol", { class: "ac-review" }, log.map((x) => h("li", { class: x.ok ? "ok" : "no" }, h("strong", {}, x.q.q), h("span", {}, x.ok ? `\u2713 ${x.picked}` : `\u2717 You chose: ${x.picked}`), !x.ok && h("span", { class: "good" }, `Correct: ${x.q.options[x.q.correct]}`))))
+        h("ol", { class: "ac-review" }, log.map((x) => h("li", { class: x.ok ? "ok" : "no" }, h("strong", {}, x.q.q), h("span", {}, x.ok ? `\u2713 ${x.picked}` : `\u2717 You chose: ${x.picked}`), !x.ok && h("span", { class: "good" }, `Correct: ${x.q.options[x.q.correct]}`), x.q.explain && h("span", { class: "ac-explain" }, `Why: ${x.q.explain}`))))
       );
       bringIntoView($("[data-q]", host));
       say(res.passed ? "Assessment passed" : "Assessment not passed");
