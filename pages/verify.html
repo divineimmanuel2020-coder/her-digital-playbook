@@ -10,11 +10,13 @@
   gtag('js', new Date());
   gtag('config', 'G-NSGZ1LLL0D');
 </script>
-<title>Certificate Verification | Her Digital Playbook</title>
-<meta name="description" content="Check the details of a Playbook Academy Certificate of Course Completion.">
-<link rel="canonical" href="https://herdigitalplaybook.com/pages/verify.html">
-<meta property="og:title" content="Certificate Verification | Her Digital Playbook">
+<title>Verify a Certificate | The Playbook Academy</title>
+<meta name="description" content="Check that the details on a Playbook Academy certificate have not been changed.">
+<link rel="canonical" href="https://herdigitalplaybook.com/pages/academy.html">
+<meta property="og:title" content="The Playbook Academy | Her Digital Playbook">
+<meta property="og:description" content="Free courses. Real skills. No gatekeeping.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://herdigitalplaybook.com/pages/academy.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght;700&family=Plus+Jakarta+Sans:ital,wght,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/variables.css">
@@ -22,6 +24,10 @@
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
 <link rel="stylesheet" href="../css/academy.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9364889137165221"
+     crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -79,18 +85,9 @@
   </div>
 <!--/hdp:header-->
 
-<section class="page-hero">
-  <div class="container">
-    <h1>Certificate Verification</h1>
-    <p>Check the details behind a Playbook Academy certificate ID.</p>
-  </div>
-</section>
-
-<section class="ac-section">
-  <div class="container" style="max-width:600px;">
-    <div id="verify-root"></div>
-  </div>
-</section>
+<main class="acx" id="main">
+<div id="ac-verify"><div class="ac-wrap ac-claim"><p>Loading…</p></div></div>
+</main>
 
 <!--hdp:footer-->
 <footer class="footer">
@@ -138,7 +135,22 @@
   </div>
   </footer>
 <!--/hdp:footer-->
+<!--hdp:girlgang-popup-->
+<div class="girlgang-popup-overlay" id="girlgang-popup-overlay" hidden>
+  <div class="girlgang-popup" role="dialog" aria-modal="true" aria-labelledby="girlgang-popup-title">
+    <button class="girlgang-popup-close" id="girlgang-popup-close" type="button" aria-label="Close">✕</button>
+    <div class="girlgang-popup-sparkle">✨</div>
+    <p class="girlgang-popup-eyebrow">Hey girl, wait ♡</p>
+    <h2 class="girlgang-popup-title" id="girlgang-popup-title">You're missing out on the Girl Gang 🎀</h2>
+    <p class="girlgang-popup-desc">Real money tips, career glow-ups, freelance opportunities, and business ideas — delivered straight to your inbox. This is the stuff you don't want to scroll past.</p>
+    <a class="btn btn-girlgang girlgang-popup-cta" href="#newsletter" id="girlgang-popup-cta">Join The Girl Gang 🎀</a>
+    <button class="girlgang-popup-dismiss" id="girlgang-popup-dismiss" type="button">Not right now</button>
+  </div>
+      </div>
+<!--/hdp:girlgang-popup-->
 
-<script type="module" src="../js/verify.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script type="module" src="../js/academy.js"></script>
 </body>
 </html>
