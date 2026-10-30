@@ -328,3 +328,43 @@
 .acx [data-top] { scroll-margin-top: 5rem; }
 .acx-home-courses li { display: flex; }
 .acx-home-courses a { flex: 1; }
+
+/* =============================================
+   ACADEMY DEPTH UPGRADE: rich lessons + Coursera-style course page
+   ============================================= */
+.acx .ac-callout-p { margin: 0.35rem 0 0; line-height: 1.7; }
+.acx .ac-example-p { margin: 0.3rem 0 0.7rem; line-height: 1.75; }
+.acx .ac-lesson-meta { margin: 0 0 0.8rem; font-size: 0.85rem; font-weight: 700; color: var(--ac-muted); }
+.acx .ac-objectives { margin: 0 0 1rem; padding: 1rem 1.1rem; background: #fff; border: 1px solid var(--ac-line); border-left: 4px solid var(--ac-rose); border-radius: 0.3rem 0.9rem 0.9rem 0.3rem; }
+.acx .ac-objectives ul { margin: 0.5rem 0 0; padding-left: 1.2rem; line-height: 1.65; }
+.acx .ac-deep { margin: 0 0 1.4rem; }
+.acx .ac-deep .ac-h3 { font-family: var(--ac-serif); font-size: 1.2rem; }
+.acx .ac-bullets { margin: 0 0 1rem; padding-left: 1.3rem; line-height: 1.75; }
+.acx .ac-bullets li { margin-bottom: 0.3rem; }
+.acx .ac-terms { display: grid; gap: 0.5rem; margin: 0; }
+.acx .ac-terms dt { font-weight: 800; color: var(--ac-plum); }
+.acx .ac-terms dd { margin: 0 0 0.6rem; padding-bottom: 0.6rem; border-bottom: 1px dashed var(--ac-line); line-height: 1.6; }
+.acx .ac-case { padding: 1.2rem; background: #f6f1ff; border-radius: 1rem; line-height: 1.7; }
+.acx .ac-case p { margin: 0.5rem 0; }
+.acx .ac-case-lesson { padding: 0.7rem 0.9rem; background: #fff; border-radius: 0.7rem; }
+.acx .ac-template { border: 1px solid var(--ac-line); border-radius: 1rem; overflow: hidden; background: #fff; }
+.acx .ac-template-head { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem; background: var(--ac-rose-soft); }
+.acx .ac-template pre { margin: 0; padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; font: 0.9rem/1.65 var(--font-body, system-ui, sans-serif); color: var(--ac-ink); }
+.acx .ac-stretch { background: #eef9f1; }
+.acx .ac-explain { display: block; margin: 0.5rem 0 0.2rem; padding: 0.6rem 0.8rem; background: #fff7e6; border-radius: 0.6rem; font-size: 0.92rem; line-height: 1.55; color: var(--ac-ink); }
+.acx .ac-glance dl { margin: 0; }
+.acx .ac-glance dt { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ac-rose); }
+.acx .ac-glance dd { margin: 0 0 0.7rem; font-weight: 600; line-height: 1.4; }
+.acx .ac-planner { padding: 1.1rem; background: #fff; border: 1px solid var(--ac-line); border-radius: 1rem; }
+.acx .ac-pace-out { margin: 0.7rem 0 0; font-weight: 700; color: var(--ac-plum); }
+.acx .ac-weights { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.9rem; }
+.acx .ac-weight-top { display: flex; justify-content: space-between; margin-bottom: 0.3rem; }
+.acx .ac-weights small { display: block; margin-top: 0.3rem; color: var(--ac-muted); line-height: 1.5; }
+.acx .ac-faq { margin: 0 0 0.5rem; background: #fff; border: 1px solid var(--ac-line); border-radius: 0.8rem; }
+.acx .ac-faq summary { padding: 0.85rem 1rem; font-weight: 700; color: var(--ac-plum); cursor: pointer; }
+.acx .ac-faq p { margin: 0; padding: 0 1rem 0.9rem; line-height: 1.65; }
+.acx .ac-careers { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.acx .ac-careers li { padding: 0.8rem 1rem; background: #fff; border: 1px solid var(--ac-line); border-radius: 0.8rem; }
+.acx .ac-careers strong { display: block; color: var(--ac-plum); }
+.acx .ac-careers span { font-size: 0.92rem; color: var(--ac-muted); line-height: 1.5; }
+@media (min-width: 720px) { .acx .ac-careers { grid-template-columns: 1fr 1fr; } }
