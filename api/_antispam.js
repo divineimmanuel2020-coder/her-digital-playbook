@@ -2,7 +2,7 @@
    /api/_antispam.js
    Shared anti-bot helpers for the signup form. The leading
    underscore keeps Vercel from turning this file into a public
-   endpoint (same convention as _playbook-live.js).
+   endpoint.
 
    Why this exists: bots were calling /api/subscribe directly,
    skipping the form entirely, so every fake signup also triggered

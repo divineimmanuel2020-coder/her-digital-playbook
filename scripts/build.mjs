@@ -310,7 +310,6 @@ function homepage() {
   html = inject(html, 'latest', sectionWithCards('sections/latest-articles.html', 'latest-grid', LATEST_ARTICLES.map(feedCard).join('\n')));
   html = inject(html, 'tools', sectionWithCards('sections/free-tools.html', 'tools-grid', FREE_TOOLS.map(toolCard).join('\n')));
   html = inject(html, 'playground-teaser', read('sections/playground-teaser.html').trim());
-  html = inject(html, 'academy-teaser', read('sections/academy-teaser.html').trim());
   html = inject(html, 'newsletter', read('sections/newsletter.html').trim());
   html = inject(html, 'footer', footerHtml);
   html = inject(html, 'girlgang-popup', popupHtml);
@@ -468,26 +467,19 @@ function vercelConfig() {
     { source: '/tools', destination: '/#tools', permanent: false },
   ];
 
-  // /join-our-girl-gang and /playbook-live are REWRITES, not redirects: the
+  // /join-our-girl-gang is a REWRITE, not a redirect: the
   // browser's address bar keeps showing the clean URL while Vercel quietly
   // serves the file below.
-  const cleanUrlRewrites = ['/join-our-girl-gang', '/playbook-live'];
+  const cleanUrlRewrites = ['/join-our-girl-gang'];
   const articleRewrites = cleanItems.map((i) => ({ source: `/${i.id}`, destination: `/${itemRelPath(i)}` }));
   cfg.rewrites = [
-    ...(cfg.rewrites || []).filter((r) => !cleanUrlRewrites.includes(r.source) && !cleanSources.has(r.source)),
+    ...(cfg.rewrites || []).filter((r) => !cleanUrlRewrites.includes(r.source) && !cleanSources.has(r.source) && r.source !== '/playbook-live'),
     ...cleanUrlRewrites.map((source) => ({ source, destination: `${source}.html` })),
     ...articleRewrites,
   ];
 
-  // Daily housekeeping for Playbook Live — retries any owner-notification
-  // email that failed to send, clears uploaded videos that never became a
-  // finished application, and (only if PLAYBOOK_LIVE_RETENTION_DAYS is set
-  // in Vercel's environment variables) deletes applications older than that.
-  // Needs the CRON_SECRET environment variable — see api/_playbook-live.js.
-  cfg.crons = [
-    ...(cfg.crons || []).filter((c) => c.path !== '/api/playbook-live-maintenance'),
-    { path: '/api/playbook-live-maintenance', schedule: '17 3 * * *' },
-  ];
+  // No scheduled jobs are used.
+  delete cfg.crons;
 
   return JSON.stringify(cfg, null, 2) + '\n';
 }
@@ -522,10 +514,6 @@ for (const f of fs.readdirSync(abs('pages')).filter((n) => n.endsWith('.html')).
 }
 write('pages/article.html', legacyRedirectPage());
 write('join-our-girl-gang.html', invitePage());
-// Playbook Live's own HTML already has all its content — this just bakes
-// the shared header/footer into it, same as every other generated page.
-write('playbook-live.html', inlineChrome(read('playbook-live.html')));
-
 // 4. sitemap + redirects
 write('sitemap.xml', sitemap());
 write('vercel.json', vercelConfig());

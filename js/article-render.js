@@ -810,7 +810,6 @@ function statsSidebarHtml() {
 
 function editorialHtml(item, bodyHtml, chapters, allItems) {
   const picks = (item.related || []).map((id) => allItems.find((i) => i.id === id)).filter(Boolean).slice(0, 4);
-  const academy = item.academy;
   return `
     <article class="editorial-main">
       <a class="back-link" href="/#articles">← All articles</a>
@@ -839,12 +838,6 @@ function editorialHtml(item, bodyHtml, chapters, allItems) {
           </a>`).join('')}
         </div>
       </section>` : ''}
-      ${academy ? `
-      <aside class="editorial-cta">
-        <p class="playbook-note-label">Keep going</p>
-        <p>${esc(academy.text)}</p>
-        <a class="btn btn-primary" href="/pages/course.html?id=${esc(academy.id)}">${esc(academy.label)} →</a>
-      </aside>` : ''}
     </article>`;
 }
 

@@ -20,8 +20,7 @@ export const SITE_URL = 'https://herdigitalplaybook.com';
 export const ARTICLE_DIR = 'blog';
 export const TOOL_DIR = 'tools';
 
-// Fixed pages that belong in the sitemap. my-academy, certificate and
-// verify are personal/utility pages and intentionally left out.
+// Fixed pages that belong in the sitemap.
 export const STATIC_PAGES = [
   '/',
   '/pages/about.html',
@@ -34,8 +33,7 @@ export const STATIC_PAGES = [
   '/join-our-girl-gang',
   // TEMPORARILY LEFT OUT while the AdSense review is open (their content is
   // built in the browser, so the raw HTML is thin): /pages/playground.html,
-  // start-here, money-path, game-room, client-simulator, templates, glossary,
-  // academy. Also left out: /playbook-live and its 3 legal pages.
+  // start-here, money-path, game-room, client-simulator, templates, glossary.
   // Put them back here once those pages have real text in the raw HTML.
 ];
 

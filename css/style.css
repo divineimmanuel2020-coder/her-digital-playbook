@@ -4673,16 +4673,6 @@ input:focus-visible,
 .author-box-bio { margin: 0 0 12px; font-size: .92rem; line-height: 1.6; color: var(--color-text-primary); }
 .author-box-link { font-size: .88rem; font-weight: 700; color: var(--color-accent-dark); text-decoration: none; }
 .author-box-link:hover { text-decoration: underline; }
-
-/* =============================================
-   PLAYBOOK LIVE — TEMPORARILY HIDDEN DURING THE ADSENSE REVIEW
-   To bring it back, delete this block. The page itself still works
-   at /playbook-live (it is set to noindex in playbook-live.html).
-   ============================================= */
-li:has(> a[href="/playbook-live"]),
-a[href="/playbook-live"],
-#playbook-live-teaser { display: none !important; }
-
 /* =============================================
    EDITORIAL TYPOGRAPHY v2 — long-form "free ebook" articles
    Anton (display caps) + Caveat (script) + Plus Jakarta Sans (body).

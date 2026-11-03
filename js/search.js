@@ -7,19 +7,10 @@
 
 import { ALL_ITEMS } from '../data/store.js';
 import { PLAYGROUND_PAGES } from '../data/playground.js';
-import { ACADEMY_COURSES } from '../data/academy.js';
 import { BASE } from './base.js';
 import { itemPath } from './routes.js';
 
-const ACADEMY_SEARCH_ITEMS = ACADEMY_COURSES.map((c) => ({
-  id: c.id, title: c.title, category: c.category, icon: '🎓', url: `/pages/course.html?id=${c.id}`,
-}));
-
-const PLAYBOOK_LIVE_SEARCH_ITEM = {
-  id: 'playbook-live', title: 'Playbook Live', category: 'One-on-one video conversation opportunities for women 18+ — Explore Playbook Live', icon: '🎀', url: '/playbook-live',
-};
-
-const SEARCHABLE_ITEMS = [PLAYBOOK_LIVE_SEARCH_ITEM, ...ALL_ITEMS, ...PLAYGROUND_PAGES, ...ACADEMY_SEARCH_ITEMS];
+const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES];
 
 export function initSearch() {
   const btn = document.getElementById('search-btn');

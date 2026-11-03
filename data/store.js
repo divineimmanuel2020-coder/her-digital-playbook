@@ -40,7 +40,6 @@ const STORY_ARTICLES = [
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870402/file_00000000a1e481f4b8afbef41a657059_xowqqd.png',
     related: ["how-to-get-your-first-freelance-client","how-to-make-your-first-1000-online","90-day-plan-to-build-your-first-online-income-stream","1000-to-5000-online-income-ladder"],
-    academy: { id: "freelancing-foundations-academy", text: "Want guided lessons after this guide? The free Freelancing Foundations course walks you through finding and keeping your first clients.", label: "Explore Freelancing Foundations" },
     content: `Come and sit with me, love. Let us talk about making your first $2,000 online, and let us do it the way a good teacher would: slowly, plainly and with nothing left out.
 
 Maybe you have seen the posts. A woman on your timeline "made her first $2k from her phone," and you wondered how, and whether it could possibly be real for someone like you. Some of it is real. A lot of it is polished, partial or sold to you with a link at the end. So before we build anything, I want you to know exactly what this guide is and is not.
@@ -277,7 +276,7 @@ The most common beginner trap is watching tutorial after tutorial and never prod
 
 - **The tool's own help centre.** Almost every app has beginner guides written by the makers.
 - **Video platforms.** Search "[skill] for beginners" and pick a recent, clear video. Check the date, because interfaces change.
-- **Free courses.** Our free Academy courses on this site are designed for beginners, and many libraries and community centres offer free classes too.
+- **Free courses.** Many libraries and community centres offer free classes for beginners.
 - **Free trials and free plans.** Try tools before paying anything.
 - **Communities.** Beginner groups can be helpful, but treat advice from strangers carefully.
 
@@ -765,7 +764,7 @@ A designer can partner with a copywriter, a photographer or a VA. When you refer
 
 #### Keep learning
 
-Raising your skill raises your price. Spend a little time each week sharpening your weakest area. Our free Academy courses can help.
+Raising your skill raises your price. Spend a little time each week sharpening your weakest area.
 
 #### A note on passive income
 
@@ -802,7 +801,7 @@ A short, honest list. Check current features, limits and prices on each.
 | Task tracking | A free board or to-do app |
 | Invoicing | A free template, or a free invoicing tool |
 | Portfolio | A free page, public folder or profile section |
-| Learning | Free Academy courses, help centres and video tutorials |
+| Learning | Help centres and free video tutorials |
 
 #### When to pay for a tool
 
@@ -1287,7 +1286,7 @@ Follow the thirty-day plan above. By day thirty you should have a chosen path, t
 
 #### Days 31 to 60: reach out consistently and gather proof
 
-Send two to five personal messages a day. Hold conversations. Offer small trials with limits. Deliver well and ask for testimonials. Raise your price slightly after each success. Improve your weakest skill with a free Academy course.
+Send two to five personal messages a day. Hold conversations. Offer small trials with limits. Deliver well and ask for testimonials. Raise your price slightly after each success. Keep improving your weakest skill.
 
 #### Days 61 to 90: earn and refine
 
@@ -1414,7 +1413,6 @@ I am rooting for you, babe. Begin tonight, go gently and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870412/file_00000000f98481f48473c1c2247b8030_vvrnrl.png',
     related: ["21-online-skills-that-can-change-your-income", "how-to-get-your-first-freelance-client", "how-to-get-paid-as-a-freelancer", "remote-online-jobs-that-can-grow-toward-5000-a-month"],
-    academy: { id: 'virtual-assistance-academy', text: 'Want guided lessons and exercises? The free Virtual Assistance course takes you from the basics to your first client.', label: 'Explore Virtual Assistance' },
     content: `Come and sit beside me, babe. I am going to teach you how to become a virtual assistant, and I am going to teach it the way I would if you had never heard the phrase before, with nothing assumed and nothing skipped.
 
 By the end of this guide, you will know exactly what a virtual assistant is and what the work looks like on an ordinary day. You will know which skills and tools you need and how to learn them. You will know how to choose a niche so you stand out, how to turn what you do into clear services and packages, how to build a profile and portfolio that look polished and trustworthy, and where to go to find your first clients. You will know how to price your work, write a simple agreement, send an invoice and get paid. You will know how to onboard a client smoothly, run your days, protect their confidential information and keep your boundaries. And you will have a clear plan for growing from your first client to a calm, fully booked business.
@@ -1612,8 +1610,6 @@ You can learn most of these with free tutorials, official help centers and pract
 - Watch a beginner tutorial.
 - Immediately practice on a made-up client scenario.
 - Save what you made as a sample.
-
-The Playbook Academy offers a free Virtual Assistance course with exercises and projects.
 
 #### What you do not need
 
@@ -2745,7 +2741,6 @@ You do not need to be ready. You need to begin, one small, useful thing at a tim
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870444/file_00000000ff8881f49839ef647e76a9f0_g2ezax.png',
     related: ["instagram-pays-too-sis","personal-branding-for-beginners","soft-girl-passive-income","profitable-digital-product-business"],
-    academy: { id: "personal-branding-academy", text: "Want guided lessons to go with this guide? The free Personal Branding course helps you build a clear, trusted presence on camera and online.", label: "Explore Personal Branding" },
     content: `Come and sit with me, love. Let us talk about YouTube: the place where a woman with a phone, a window and something useful to say can build an audience, a body of work and, for some, a real income.
 
 I want to be gentle and honest at the same time. The title of this guide says "full-time," and that is a real possibility for some creators. But it is not the usual result, and it is almost never fast. Most channels grow slowly. Many earn little for a long time. Some never earn at all. A few build something that replaces a salary, and they usually did it by combining several kinds of income, not by views alone. This guide shows you how that works from zero, so you can decide with open eyes and then build properly.
@@ -4242,7 +4237,7 @@ So here is your next step, and it is small. Tonight, choose your niche and write
 
 When it is slow, remember that slow is still moving. When a video flops, learn from it. When someone writes a kind comment, save it. And when you want to quit, take a rest, not a decision.
 
-When you are ready for more, here are good next steps. [Instagram Pays Too, Sis](/blog/instagram-pays-too-sis.html) shows how to use another platform alongside YouTube. [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) helps people remember who you are. [The Soft Girl's Guide To Passive Income](/blog/soft-girl-passive-income.html) shows how to build income from content that keeps working. [How To Start And Grow A Profitable Digital Product Business](/blog/profitable-digital-product-business.html) helps you turn your knowledge into products. And our free Academy courses are a gentle place to practise.
+When you are ready for more, here are good next steps. [Instagram Pays Too, Sis](/blog/instagram-pays-too-sis.html) shows how to use another platform alongside YouTube. [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) helps people remember who you are. [The Soft Girl's Guide To Passive Income](/blog/soft-girl-passive-income.html) shows how to build income from content that keeps working. [How To Start And Grow A Profitable Digital Product Business](/blog/profitable-digital-product-business.html) helps you turn your knowledge into products.
 
 I am rooting for you, babe. Begin tonight, go gently and keep going.
 `,
@@ -4264,7 +4259,6 @@ const NEWEST_ARTICLES = [
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669353/file_00000000f12081f485f48daeabb7f720_ytogww.png',
     imageAlt: 'Editorial collage of screens, websites, video thumbnails, Pinterest boards and product mockups forming a faceless silhouette',
     related: ["how-to-get-your-first-freelance-client", "35-semi-passive-income-streams", "30-passive-income-ideas-for-beginners", "how-to-create-and-sell-a-digital-product"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want to start with services? The Freelancing Foundations course walks you through finding and keeping your first clients.', label: 'Explore Freelancing Foundations' },
     content: `Hey love. Come and sit with me for a while, because I think I know exactly what brought you here.
 
 Maybe you have watched women online who seem to be everywhere: filming their mornings, posting dances, talking to the camera, building a "personal brand." And somewhere inside you a voice says, "I could never do that." Maybe you are private by nature. Maybe your family would not approve. Maybe you have a job and cannot risk your boss finding your page. Maybe you are simply tired, and the idea of performing for strangers every day makes you want to close the laptop.
@@ -5164,7 +5158,6 @@ I am rooting for you, gorgeous. Build it quietly, and build it well.`,
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669350/file_00000000be0081f49af745bace94a389_y0jbw5.png',
     imageAlt: 'A floating workspace above a city with objects representing different remote careers',
     related: ["21-online-skills-that-can-change-your-income", "what-to-build-before-quitting-your-9-to-5", "best-money-making-skills-2026", "virtual-assistant-pretty-paid-booked"],
-    academy: { id: 'virtual-assistance-academy', text: 'Curious about the first career on the list? The Virtual Assistance course covers the skills and the first steps.', label: 'Explore Virtual Assistance' },
     content: `Come here, love, and sit by me, because I want to tell you about a woman named Lola, and I think you will see yourself in her somewhere.
 
 Lola is thirty-four. She is a shop supervisor in a mid-sized city, on her feet for nine hours a day, answering to a manager who changes the rota on Sunday night. She is good at her job. She knows every regular customer's name and she can sense a shoplifter from across the shop. But her back aches, her feet ache and her mother, who lives with her, is getting older and lonelier in the long afternoons Lola cannot be home for.
@@ -6278,7 +6271,6 @@ I am rooting for you, babe. Find your first rung, and climb with your eyes open.
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669357/file_00000000a8248210a8b01f031e71528b_werbks.png',
     imageAlt: 'A dreamy bedroom at night with streams of digital products, content and transactions flowing around it',
     related: ["30-passive-income-ideas-for-beginners", "soft-girl-passive-income", "how-to-create-and-sell-a-digital-product", "build-your-first-3000-month-online-income-system"],
-    academy: { id: 'digital-product-business-academy', text: 'Ready to build your first asset? The Digital Product Business course shows you how to create and sell one.', label: 'Explore Digital Product Business' },
     content: `Come sit by me, babe. Pour yourself something warm, because I want to tell you about a woman called Sade, and about a word that has probably cost people more money than almost any other word on the internet. The word is "passive."
 
 Sade is thirty-three. She is an accountant at a mid-sized firm, careful with numbers and tired of trading every hour of her life for a paycheck. One night, after a long week of month-end deadlines, she lies on her sofa with her phone and watches a video of a smiling man on a beach. "I make money while I sleep," he says. "Passive income. Ten thousand a month. All you need is my course." Sade, who spends her days checking whether other people's numbers add up, narrows her eyes and says to the ceiling, "But where does the money come from?"
@@ -7417,7 +7409,6 @@ I am rooting for you, babe. Build one honest asset, and let it grow.`,
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669345/file_0000000088e881f48f08c4cbf34ed70d_ef9mfw.png',
     imageAlt: 'A conceptual income garden where different income models grow as plants',
     related: ["35-semi-passive-income-streams", "soft-girl-passive-income", "how-to-create-and-sell-a-digital-product", "90-day-plan-to-build-your-first-online-income-stream"],
-    academy: { id: 'digital-product-business-academy', text: 'Want to turn one of these ideas into a real product? The Digital Product Business course walks you through it.', label: 'Explore Digital Product Business' },
     content: `Come sit down, babe, and bring your phone, because I want to talk about those videos. You know the ones. "30 passive income ideas ranked from worst to best!" A confident voice, a countdown timer and a list that always seems to end with something you cannot afford.
 
 I want to introduce you to a woman called Amaka, who watched one of them at two in the morning during her break at the call centre where she works nights. Amaka is twenty-seven, quick, funny and permanently tired. She has a flatmate called Bola who sings in the shower, a mother who phones every Sunday asking whether she is eating properly and a laptop she balances on her knees in bed. That night, as the video counted down from number thirty, she grabbed her notebook and wrote, "Who decided this ranking? On what?"
@@ -8593,7 +8584,6 @@ I am rooting for you, babe. Rank your own list, run your own test and let the ev
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669375/file_00000000466c81f4aeb5b15f2f05202d_mtudn5.png',
     imageAlt: 'An architectural structure where different income streams form interconnected rooms',
     related: ["1000-to-5000-online-income-ladder", "how-to-get-paid-as-a-freelancer", "how-to-make-your-first-1000-online", "90-day-plan-to-build-your-first-online-income-stream"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Building on services? The Freelancing Foundations course covers pricing, proposals and client management.', label: 'Explore Freelancing Foundations' },
     content: `Hey love. Come and sit with me, because we are going to talk about money in a way that is a little bit different from what you usually see.
 
 You have probably seen the screenshots. "$3,000 a month from my laptop." "From zero to three thousand in ninety days." They look exciting, and they usually leave out the three most important things: what was left after costs, how long it really took, and what the person was actually **doing** every week to make it happen. So you are left with a number and a feeling, and no idea what to do on Monday.
@@ -9526,7 +9516,6 @@ I am rooting for you, gorgeous. Build the system, and let the number follow.`,
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669376/file_00000000cc48821097b729e84b8a5b9e_avron9.png',
     imageAlt: 'A futuristic editorial desk where human creativity meets abstract AI systems',
     related: ["remote-online-jobs-that-can-grow-toward-5000-a-month", "35-semi-passive-income-streams", "best-money-making-skills-2026", "how-to-create-and-sell-a-digital-product"],
-    academy: { id: 'digital-marketing-foundations', text: 'Want to put AI to work on real marketing? The Digital Marketing Foundations course gives you the fundamentals first.', label: 'Explore Digital Marketing Foundations' },
     content: `Come sit by me, babe, and let me tell you about a woman named Tola, because I have a feeling you have lived part of her story already.
 
 Tola is thirty, and until last year she taught English at a secondary school. She loved the students and was exhausted by everything around them: the marking, the meetings, the endless forms. She took a year's break to figure out what came next, and during that year she did what almost everyone does. She watched videos. Hundreds of videos, with titles like "Make $10,000 a month with AI while you sleep," "ChatGPT money hack nobody tells you" and "I replaced my entire income with AI in 30 days."
@@ -10686,7 +10675,6 @@ I am rooting for you, babe. Use the tool, keep the responsibility and let your c
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669385/file_0000000089f8820a8eb42ef2976bc807_ykwyvh.png',
     imageAlt: 'An office clock and elevator contrasted with an open doorway leading to an independent workspace',
     related: ["1000-to-5000-online-income-ladder", "build-your-first-3000-month-online-income-system", "how-to-make-your-first-1000-online", "90-day-plan-to-build-your-first-online-income-stream"],
-    academy: { id: 'entrepreneurship-foundations', text: 'Planning a bigger move? The Entrepreneurship Foundations course helps you think through the business side calmly.', label: 'Explore Entrepreneurship Foundations' },
     content: `Come here, babe. Sit down with me for a minute, and let me hold your hands while I say this, because I think you need to hear it from someone who is not going to rush you.
 
 It is Sunday evening. The light outside is going soft and gold, and instead of enjoying it, there is a small, heavy knot forming in your stomach. You know exactly what it is. It is tomorrow. It is the alarm, the commute or the login, the meeting that could have been an email, the manager who says "quick question" and means forty minutes. And somewhere under the knot, a quiet thought has been repeating for months: "I cannot do this forever."
@@ -11833,7 +11821,6 @@ I am rooting for you, babe. Build the bridge. Then walk across it when you are r
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669374/file_0000000082c481f4889a0dbc1646f472_vhkvkb.png',
     imageAlt: 'An elegant staircase marked 100, 500, 1K, 2K, 3K and 5K dollars',
     related: ["build-your-first-3000-month-online-income-system", "how-to-make-your-first-1000-online", "what-to-build-before-quitting-your-9-to-5", "90-day-plan-to-build-your-first-online-income-stream"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Climbing the first few rungs with services? Freelancing Foundations covers offers, pricing and clients.', label: 'Explore Freelancing Foundations' },
     content: `Hey love. Come and sit with me, because I want to explain something that nobody explained to me in a simple way, and it would have saved a lot of women a lot of frustration.
 
 Here is the thing. When most people think about growing their income, they think about **more.** More clients, more hours, more posts, more courses, more hustle. And so when income stalls at, say, $800 a month, they do more of what got them there, and nothing changes. They feel stuck and tired and they start believing the old story: "Maybe this is just my ceiling."
@@ -12678,7 +12665,6 @@ I am rooting for you, gorgeous. Climb at your own pace, and climb with your eyes
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669375/file_00000000c71481f4a3c4acaa640b9c4d_hlvdeu.png',
     imageAlt: 'A conceptual toolbox holding symbols for SEO, code, design, copy, video and data',
     related: ["best-money-making-skills-2026", "digital-skills-for-beginners", "30-day-digital-skills-challenge", "remote-online-jobs-that-can-grow-toward-5000-a-month"],
-    academy: { id: 'content-creation', text: 'Ready to practice a skill? Pick a course in the Academy and build your first portfolio piece.', label: 'Browse the Academy' },
     content: `Come closer, love. I want to tell you about a girl named Ceci, because I have a feeling you are going to recognize her.
 
 Ceci is twenty-seven, and she works the night shift at a hotel front desk. She is good at it, polite to rude guests, calm when the printer jams and quick with a smile at three in the morning. She is also bone tired. Every night between one and four, when the lobby is quiet, she scrolls her phone and watches women her age talk about "high-income skills." Copywriting. Video editing. Social media management. No-code. UGC. SEO. A different skill every minute, each one promising to change a life.
@@ -13473,7 +13459,7 @@ Here is the method, babe. It works for almost any beginner-friendly skill, and i
 
 #### Where to learn
 
-There are plenty of free beginner resources: video tutorials, official help centers for tools, community forums and free courses. The Playbook Academy has free courses on many of these skills, with exercises and projects. If you pay for anything, pay for something you have already tested with a free version first.
+There are plenty of free beginner resources: video tutorials, official help centers for tools, community forums and free courses. If you pay for anything, pay for something you have already tested with a free version first.
 
 #### The two-hour block
 
@@ -13834,7 +13820,6 @@ I am rooting for you, babe. Choose, start and let your work do the talking.`,
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/v1790669401/file_00000000752c81f49a766902db0755ab_aiftw0.png',
     imageAlt: 'A luxury editorial planner showing the phases Foundation, Proof and Revenue',
     related: ["how-to-make-your-first-1000-online", "how-to-get-your-first-freelance-client", "build-your-first-3000-month-online-income-system", "1000-to-5000-online-income-ladder"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want guidance on the outreach and client steps in this plan? Freelancing Foundations takes you through them in order.', label: 'Explore Freelancing Foundations' },
     content: `Hey love. Put the kettle on, find a notebook, and get comfortable, because this guide is going to be the one you come back to every Sunday for the next three months.
 
 Here is what I know about you. You have probably started something before. A course you did not finish, an Instagram page that went quiet, a business idea that lived in your Notes app for a year. And every time it stopped, a small voice told you the same thing: "I am just not consistent." I want to gently tell you that voice is wrong. You were not inconsistent. You were working without a plan, and nobody can stay consistent with a feeling.
@@ -14658,7 +14643,6 @@ I am rooting for you, gorgeous. See you at day ninety.`,
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556219/file_00000000cae081f4b4d5cfe30b4979a1_kd3peh.png',
     related: ["21-online-skills-that-can-change-your-income", "digital-skills-for-beginners", "30-day-digital-skills-challenge", "how-to-make-your-first-1000-online"],
-    academy: { id: 'digital-marketing-foundations', text: 'Want to build a skill with exercises and projects? The free Academy has courses for many of the skills in this guide.', label: 'Browse the Academy' },
     content: `Come and sit beside me, babe. Imagine we are at a kitchen table with a pot of tea, a notebook between us and nowhere to be. I am going to teach you something, and I am going to teach it as though you have never heard any of it before, because that is the only way I know to make sure nothing gets skipped.
 
 The subject is skills: which ones can earn you money online right now, what each one actually involves, how to learn it, how to find your first customers and how to turn it from something you can do into money in your account.
@@ -15358,7 +15342,7 @@ Let me teach you the learning method that works across nearly every skill in thi
 
 #### Where to learn
 
-There are many free beginner resources: video tutorials, official help centers for tools, community forums and free courses. The Playbook Academy offers free courses in many of the skills in this guide, with exercises and projects. If you decide to pay for anything, test the free version first and make sure it teaches by doing.
+There are many free beginner resources: video tutorials, official help centers for tools, community forums and free courses. If you decide to pay for anything, test the free version first and make sure it teaches by doing.
 
 #### How to protect your learning time
 
@@ -15917,7 +15901,6 @@ You do not need to be ready. You need to begin, one small, useful thing at a tim
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870445/file_000000001a648243b4d7c83b495bb2d8_k38qok.png',
     related: ["how-to-create-and-sell-a-digital-product","instagram-pays-too-sis","30-passive-income-ideas-for-beginners","budget-like-a-queen"],
-    academy: { id: "digital-product-business-academy", text: "Want guided lessons to go with this guide? The free Digital Product Business course walks you from idea to first launch.", label: "Explore Digital Product Business" },
     content: `Come and sit with me, love. Let us talk about building a digital product business: not a quick trick, not a "make a template and watch the money roll in" fantasy, but a real, honest small business that sells things you create once and deliver many times.
 
 If you have ever thought "I know things people might pay for, but I do not know how to turn that into a product," this guide is for you. If you already tried and made a few sales, or none, this guide is for you too. We will go from the very first idea all the way to launching, supporting customers and growing a small catalogue of products.
@@ -17396,7 +17379,7 @@ So here is your next step, and it is small. Tonight, list ten things people ask 
 
 When it is slow, remember that slow is still moving. When someone gives you feedback, thank them. When someone buys, deliver beautifully.
 
-When you are ready for more, here are good next steps. [How To Create And Sell A Digital Product](/blog/how-to-create-and-sell-a-digital-product.html) is a step-by-step companion for your first product. [Instagram Pays Too, Sis](/blog/instagram-pays-too-sis.html) shows you how to find buyers on Instagram. [30 Passive Income Ideas For Beginners](/30-passive-income-ideas-for-beginners) gives a calm look at what is real. [Budget Like A Queen](/blog/budget-like-a-queen.html) helps you manage your money. And our free Academy courses are a gentle place to practise.
+When you are ready for more, here are good next steps. [How To Create And Sell A Digital Product](/blog/how-to-create-and-sell-a-digital-product.html) is a step-by-step companion for your first product. [Instagram Pays Too, Sis](/blog/instagram-pays-too-sis.html) shows you how to find buyers on Instagram. [30 Passive Income Ideas For Beginners](/30-passive-income-ideas-for-beginners) gives a calm look at what is real. [Budget Like A Queen](/blog/budget-like-a-queen.html) helps you manage your money.
 
 I am rooting for you, babe. Begin tonight, go gently and keep going.
 `,
@@ -17417,7 +17400,6 @@ I am rooting for you, babe. Begin tonight, go gently and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870456/file_00000000a83881f48353976a7cc47523_wxz2xc.png',
     related: ["personal-branding-for-beginners","how-to-get-your-first-freelance-client","how-to-create-and-sell-a-digital-product","soft-girl-youtube-creator"],
-    academy: { id: "personal-branding-academy", text: "Want guided lessons to go with this guide? The free Personal Branding course helps you build a clear, trusted presence.", label: "Explore Personal Branding" },
     content: `Come and sit with me, sis. Let us talk about the thing you do every day anyway: scrolling Instagram. What if some of that time, and some of that account you already have, could start earning for you?
 
 I will be honest with you from the first line. Instagram can pay. It pays some women a little, some women a lot, and many women nothing at all. The difference is almost never luck or a perfect aesthetic. It is usually understanding how the money actually flows, choosing the right way to earn for your situation and doing a handful of unglamorous things consistently. This guide teaches you all of that from zero.
@@ -18971,7 +18953,6 @@ I am rooting for you, sis. Begin tonight, go gently and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786870433/file_00000000da34820ab3e505cf606fcdca_sevtt4.png',
     related: ["personal-branding-for-beginners", "remote-online-jobs-that-can-grow-toward-5000-a-month", "how-to-get-your-first-freelance-client", "how-to-get-paid-as-a-freelancer"],
-    academy: { id: 'personal-branding-academy', text: 'Want guided exercises for your professional profile? The Personal Branding course walks you through them.', label: 'Explore Personal Branding' },
     content: `Come and sit beside me, love. Picture us at a table with a laptop open between us and a cup of tea going cold, because I am about to teach you how to use one website to open doors in countries you may never have visited.
 
 The website is LinkedIn. And before you roll your eyes and say, "I thought that was only for people in suits," let me promise you something. By the time you finish this guide, you will understand exactly what LinkedIn is, why it matters if you want opportunities beyond your own city or country, how to build a profile that works while you sleep, how to meet people without feeling fake, how to message strangers politely, how to search for international and remote opportunities, how to deal with the practical things like work permits, time zones and pay, and how to avoid the scams that target hopeful people. You will also have a clear ninety-day plan, so you know exactly what to do tomorrow.
@@ -20227,7 +20208,6 @@ You do not need to be ready. You need to be visible, honest and consistent. I am
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1786871338/file_00000000ad2881f4be018301fad55646_worntc.png',
     related: ["profitable-digital-product-business","30-passive-income-ideas-for-beginners","35-semi-passive-income-streams","what-to-build-before-quitting-your-9-to-5"],
-    academy: { id: "digital-product-business-academy", text: "Want guided lessons to go with this guide? The free Digital Product Business course walks you from idea to first launch.", label: "Explore Digital Product Business" },
     content: `Come and sit with me, love. Let us talk about passive income, the phrase everyone loves and almost nobody explains honestly.
 
 You have probably seen the posts: "I make money while I sleep," "build it once and watch it grow," "quit your job with this one passive income hack." And you have probably felt two things at the same time: a little hope and a little suspicion. Good. Keep both. Hope will get you started. Suspicion will keep you safe.
@@ -24477,7 +24457,7 @@ Food is often the most flexible big category.
 #### Learning and growth
 
 - This is one of the best places to spend. Skills increase your earning power.
-- Prefer free or low-cost learning first, and pay for a course when it clearly leads to income or a better job. Our free Academy and guides are a place to start.
+- Prefer free or low-cost learning first, and pay for a course when it clearly leads to income or a better job. Free guides and tutorials are a place to start.
 
 #### Fun
 
@@ -24854,7 +24834,6 @@ I am rooting for you, babe. Take it one week at a time, and let your money follo
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556225/file_0000000040e4820a9d054bbe70b57615_d3rnxc.png',
     related: ["30-day-digital-skills-challenge","21-online-skills-that-can-change-your-income","how-to-get-your-first-freelance-client","best-money-making-skills-2026"],
-    academy: { id: "virtual-assistance-academy", text: "Want guided lessons and exercises? The free Virtual Assistance course builds the everyday digital skills clients and employers look for.", label: "Explore Virtual Assistance" },
     content: `Come and sit beside me, love. Whatever you want to do with your life, whether that is getting a better job, starting a small business, freelancing, studying, or simply feeling less lost every time a screen asks you to "log in to continue," it begins with the same foundation: basic digital skills.
 
 Here is something nobody says out loud. Most people are never taught these things. We are handed a phone at twelve and a laptop at eighteen, and everyone quietly assumes we figured out the rest. Some of us did. Many of us just learned to hide our confusion very well. If you have ever nodded along when someone said "just send it as a PDF" or "put it in the shared drive" while having no idea what they meant, you are in excellent company, and today we fix that.
@@ -25606,7 +25585,7 @@ When you are new, copy examples. Follow a tutorial exactly. Rebuild a template. 
 
 - **Official help centres.** Almost every tool has a free guide written by the people who made it.
 - **Video platforms.** Search for "[tool name] for beginners" and choose a short, recent video. Check the date, because interfaces change.
-- **Free courses.** Our own free Academy on this site has beginner-friendly courses. Other sites and libraries offer free options too.
+- **Free courses.** Libraries and other sites offer free beginner options.
 - **Library and community centres.** Many offer free computer access and sometimes classes.
 - **Friends and groups.** A friend who is slightly ahead of you is often the best teacher. Online communities can help too, but treat advice from strangers with care.
 
@@ -25808,7 +25787,7 @@ You do not need a long shopping list. Here is a sensible starter setup.
 | Password safety | Your phone's built-in password manager |
 | PDF and scanning | Your phone's scanner and free PDF tools |
 | Practice typing | A free typing website |
-| Learning | Our free Academy courses, help centres and video tutorials |
+| Learning | Help centres and free video tutorials |
 
 Free plans and limits change, so check current details on each service.
 
@@ -25961,7 +25940,7 @@ Complete the thirty-day plan. By day thirty you should have a safe email, tidy f
 
 #### Days 31 to 60: build proof and reach out
 
-Choose one direction: a job, a freelance service or helping people locally. Build three to five pieces of practice work that match it, such as a clean CV, a Canva set, a spreadsheet template or a tidy document. Put them in one online folder or a simple profile. Send messages to twenty to thirty people or businesses, polite and personal. Take one free course in the Academy that fits your direction.
+Choose one direction: a job, a freelance service or helping people locally. Build three to five pieces of practice work that match it, such as a clean CV, a Canva set, a spreadsheet template or a tidy document. Put them in one online folder or a simple profile. Send messages to twenty to thirty people or businesses, polite and personal. Take one free beginner course that fits your direction.
 
 #### Days 61 to 90: earn and refine
 
@@ -26053,7 +26032,7 @@ Make it small, put it in your calendar and tick off what you finish. Tell one fr
 Speed is not the point. Steady practice is. Everyone learns at a different pace, and slow learners who keep going often end up the most thorough.
 
 ### Q: What should I do after I finish this guide?
-Choose a direction: a job, freelancing or a small business. Then read the guides linked below, take a free Academy course that matches it and begin reaching out.
+Choose a direction: a job, freelancing or a small business. Then read the guides linked below, take a free beginner course that matches it and begin reaching out.
 
 ## Your Checklist
 
@@ -26111,7 +26090,7 @@ So here is your next step, and it is small. Tonight, secure your email. Tomorrow
 
 When it feels slow, remember that slow is still moving. When a tool confuses you, remember that you can always search it, ask someone or try again tomorrow. When you doubt yourself, open your skills map and look at what you can already do.
 
-When you are ready to go further, here are good next reads. [30-Day Digital Skills Challenge](/blog/30-day-digital-skills-challenge.html) takes one skill and builds it into a portfolio. [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) shows you how to find your first paying work. [21 Online Skills That Can Change Your Income](/21-online-skills-that-can-change-your-income) helps you choose a specialist skill. And [Best Money-Making Skills To Learn In 2026](/blog/best-money-making-skills-2026.html) compares your options. If you like guided lessons, our free courses in the Academy are a gentle place to practise.
+When you are ready to go further, here are good next reads. [30-Day Digital Skills Challenge](/blog/30-day-digital-skills-challenge.html) takes one skill and builds it into a portfolio. [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) shows you how to find your first paying work. [21 Online Skills That Can Change Your Income](/21-online-skills-that-can-change-your-income) helps you choose a specialist skill. And [Best Money-Making Skills To Learn In 2026](/blog/best-money-making-skills-2026.html) compares your options.
 
 I am rooting for you, babe. Begin tonight, go slowly and keep going.
 `,
@@ -26131,7 +26110,6 @@ I am rooting for you, babe. Begin tonight, go slowly and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556227/file_000000003ab481f4913b2ccc89366436_ezthsu.png',
     related: ["digital-skills-for-beginners","best-money-making-skills-2026","what-to-build-before-quitting-your-9-to-5","remote-online-jobs-that-can-grow-toward-5000-a-month"],
-    academy: { id: "freelancing-foundations-academy", text: "Curious about working for yourself? The free Freelancing Foundations course shows you how to start testing it in small ways.", label: "Explore Freelancing Foundations" },
     content: `Come and sit beside me, love. If you are reading this because you have no idea what you want to do with your life, I want you to hear something first: that is not a flaw in you. It is a very normal place to stand.
 
 Nobody teaches us how to choose a career. At school, someone asks "what do you want to be when you grow up?" when you are nine, and then, as if by magic, you are expected to have an answer at seventeen or twenty-two or thirty-five. Some people do have a clear answer. Many do not. And many who thought they had one discover, years later, that it does not fit anymore.
@@ -26717,7 +26695,7 @@ Shorter programmes that teach one skill, from a few weeks to a year. Good for ad
 
 #### Self-study and free resources
 
-Many digital skills, such as design, writing, spreadsheets, marketing basics and coding, can be learned for free or at low cost online. You will need to build proof through projects, because there may be no certificate. Our free Academy courses on this site are a gentle place to start.
+Many digital skills, such as design, writing, spreadsheets, marketing basics and coding, can be learned for free or at low cost online. You will need to build proof through projects, because there may be no certificate.
 
 #### On-the-job training
 
@@ -27129,7 +27107,7 @@ You do not need much. A short list:
 | Networking | LinkedIn and your warm network |
 | CV and documents | A free document tool |
 | Tracking | A free spreadsheet |
-| Learning | Our free Academy courses and free video tutorials |
+| Learning | Free video tutorials and help centres |
 | Online safety | Strong passwords and two-step verification |
 | Calendar | A free calendar for your ninety-day review |
 
@@ -27535,7 +27513,7 @@ So here is your next step, and it is small. Tonight, write the six lenses on a p
 
 When you feel lost, remember that being lost is part of finding. When someone says no, thank them and ask the next person. When someone says yes, show up with your best self.
 
-When you are ready for more, here are some good next steps. [Digital Skills For Beginners](/blog/digital-skills-for-beginners.html) covers the everyday tools almost every career needs. [Best Money-Making Skills To Learn In 2026](/blog/best-money-making-skills-2026.html) compares skills that employers and clients pay for. [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) helps people understand who you are and what you offer. [What To Build Before Quitting Your 9 To 5](/what-to-build-before-quitting-your-9-to-5) shows how to prepare a safe transition. And our free Academy courses are a gentle place to practise new skills.
+When you are ready for more, here are some good next steps. [Digital Skills For Beginners](/blog/digital-skills-for-beginners.html) covers the everyday tools almost every career needs. [Best Money-Making Skills To Learn In 2026](/blog/best-money-making-skills-2026.html) compares skills that employers and clients pay for. [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) helps people understand who you are and what you offer. [What To Build Before Quitting Your 9 To 5](/what-to-build-before-quitting-your-9-to-5) shows how to prepare a safe transition.
 
 I am rooting for you, babe. Begin tonight, go gently and keep going.
 `,
@@ -27555,7 +27533,6 @@ I am rooting for you, babe. Begin tonight, go gently and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556224/file_000000005a48820a91267f0f11b6cef4_vnfpna.png',
     related: ["21-online-skills-that-can-change-your-income", "how-to-make-a-living-online-without-showing-your-face", "linkedin-international-opportunity", "how-to-get-your-first-freelance-client"],
-    academy: { id: 'personal-branding-academy', text: 'Want guided exercises for your brand? The Personal Branding course takes you through them step by step.', label: 'Explore Personal Branding' },
     content: `Come sit with me, love, and let me tell you about a woman named Zuri, because I have a feeling you are going to recognize the sentence she said out loud one rainy evening: "I do not have anything to brand."
 
 Zuri is twenty-eight, and she is a librarian. Not a glamorous job, according to the internet. She spends her days helping people find books and information, running a children's story hour on Saturdays and quietly rescuing strangers from the wrong section of the shelves. She is calm, precise and very good at her work. She is also the kind of person who gets nervous when a photograph is taken.
@@ -28786,7 +28763,6 @@ I am rooting for you, babe. Say clearly who you are, and let the right people fi
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556227/file_00000000f808824391fe04b7d85f1819_vcoe2z.png',
     related: ["35-semi-passive-income-streams", "30-passive-income-ideas-for-beginners", "profitable-digital-product-business", "build-your-first-3000-month-online-income-system"],
-    academy: { id: 'digital-product-business-academy', text: 'Want to build your first product alongside a course? The Digital Product Business course takes you through the stages with exercises.', label: 'Explore Digital Product Business' },
     content: `Come closer, love, and let me tell you about a woman named Adaora, because I think her story will make the whole idea of "creating a digital product" feel less like a mountain and more like a long, interesting walk.
 
 Adaora is thirty. She works as an administrator in a busy hospital, a job she is good at and tired of. Her desk is covered in sticky notes. Her lunch break is eleven minutes long. And in the evenings, she helps her younger cousin Kelechi, who is studying nursing, to stay organized, by building colourful weekly planners in a spreadsheet: lecture times, placement shifts, exam dates, little boxes for "drink water" and "call Mama." Kelechi's friends keep asking for copies.
@@ -29899,7 +29875,6 @@ I am rooting for you, babe. Make one honest, useful thing, and let it find its p
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556224/file_00000000a1148210a7ba79f652dadfd6_dfygmp.png',
     related: ["how-to-make-your-first-1000-online", "how-to-get-paid-as-a-freelancer", "personal-branding-for-beginners", "90-day-plan-to-build-your-first-online-income-stream"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want to practice these steps in order, with exercises and a capstone? The free Freelancing Foundations course walks you through them.', label: 'Explore Freelancing Foundations' },
     content: `Hey beautiful. Pull your chair closer, because we are going to talk about the thing that keeps more women from freelancing than any lack of talent: finding the first client.
 
 I know the feeling. You have a skill, maybe a few samples, maybe even a little courage. But when you imagine actually getting a stranger to pay you, your mind goes blank. Where do clients even come from? Do you just message random people? Do you wait for them to find you? What do you say? What if they say no? What if they laugh? What if you look desperate?
@@ -30869,7 +30844,6 @@ I am rooting for you, gorgeous. Go and find your first client.`,
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556255/file_00000000b53081f4bd1a60566b660b9a_pa833e.png',
     related: ["how-to-get-your-first-freelance-client", "how-to-make-your-first-1000-online", "1000-to-5000-online-income-ladder", "build-your-first-3000-month-online-income-system"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want to practise agreements, invoices and client conversations? The Freelancing Foundations course covers them step by step.', label: 'Explore Freelancing Foundations' },
     content: `Come sit with me, love, and bring a cup of something warm, because I want to tell you about a woman named Efe, and about the single most uncomfortable subject in all of freelancing: **money.**
 
 Efe is twenty-nine, a freelance graphic designer who works from a tiny corner of her sister's flat, with a second-hand monitor and a mug that says "Draft 7." She is very, very good at her work. Clients tell her so. And yet, on a Tuesday evening in the middle of the month, she is sitting on the edge of her bed, staring at her phone, with a sinking feeling that has become horribly familiar. She finished a logo and brand pack six weeks ago. The client loved it. He said "thank you so much." And he has not paid.
@@ -31948,7 +31922,6 @@ I am rooting for you, babe. Do the work beautifully, and be paid for it, on time
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556253/file_000000000a7082109e50b33ad86e2ed0_anx9u0.png',
     related: ["how-to-get-your-first-freelance-client", "1000-to-5000-online-income-ladder", "90-day-plan-to-build-your-first-online-income-stream", "how-to-get-paid-as-a-freelancer"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want to practice the client steps in order, with exercises and a capstone? The free Freelancing Foundations course walks you through them.', label: 'Explore Freelancing Foundations' },
     content: `Hey beautiful. Come sit with me for a bit. Pull your chair closer, grab a notebook or open your Notes app, and put your phone on silent if you can, because I want to talk to you the way I would if you were sitting right next to me.
 
 Here is what I think is happening. You want to make money online. Maybe you have wanted it for a while. You have watched videos, saved posts, bought a course or two, maybe started something and stopped. And somewhere in the back of your mind there is a small, tired voice saying, "What if it works for everyone except me?"
@@ -32941,7 +32914,6 @@ I am rooting for you, gorgeous. Go and make it real.`,
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556232/file_00000000d0c081f4a8ef7b3f625b7a0e_glepwi.png',
     related: ["first-2000-online","how-to-make-your-first-1000-online","digital-skills-for-beginners","budget-like-a-queen"],
-    academy: { id: "freelancing-foundations-academy", text: "Ready to practise? The free Freelancing Foundations course helps you choose an offer and find your first clients.", label: "Explore Freelancing Foundations" },
     content: `Come and sit with me, love. Before you spend one more hour or one more dollar on "make money online" advice, let us have the honest conversation that most videos, ads and course pages skip.
 
 Maybe you have already tried a few things. You watched a video, bought a course or opened a new account, and then felt stuck or confused or a little foolish. If so, please hear this first: nothing is wrong with you. The online money world is loud, fast and full of half-truths. Beginners often learn its real rules the slow, expensive way, by losing time, money and confidence before anyone explains what is actually going on.
@@ -33174,7 +33146,6 @@ Consistency is not the same as hustle. Rest is part of the plan, because a tired
 - **Tools:** many tools have free plans that are enough to begin with. Check current limits.
 - **Information:** your country's government and small business websites often have free guides about registering, taxes and starting out.
 - **Communities:** free groups can offer feedback and support, though you must be careful with advice from strangers.
-- **Our own free Academy:** the courses on this site are designed for beginners and cost nothing.
 
 #### How to learn from free resources well
 
@@ -33202,7 +33173,7 @@ Paid training can be worthwhile when you have already used free resources, you k
 | Video calls | A free video call tool |
 | Notes and tasks | A free notes or board app |
 | Cloud storage | Free cloud storage |
-| Learning | Free Academy courses and video tutorials |
+| Learning | Help centres and free video tutorials |
 | Safety | A password manager and two-step verification |
 
 Check current features and limits on each.
@@ -34293,7 +34264,7 @@ So here is your next step, and it is small. Tonight, choose your one path. Tomor
 
 When it is slow, remember that slow is still moving. When someone says no, thank them and move on. When someone says yes, deliver beautifully. And when something sounds too good to be true, pause.
 
-When you are ready for more, here are good next steps. [Girl, Let's Make Your First $2000 Online In 2026](/blog/first-2000-online.html) gives a step-by-step plan for your first milestone. [Digital Skills For Beginners](/blog/digital-skills-for-beginners.html) covers the everyday tools. [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) deepens the service route. [Budget Like A Queen](/blog/budget-like-a-queen.html) helps you manage your money. And our free Academy courses are a gentle place to practise.
+When you are ready for more, here are good next steps. [Girl, Let's Make Your First $2000 Online In 2026](/blog/first-2000-online.html) gives a step-by-step plan for your first milestone. [Digital Skills For Beginners](/blog/digital-skills-for-beginners.html) covers the everyday tools. [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) deepens the service route. [Budget Like A Queen](/blog/budget-like-a-queen.html) helps you manage your money.
 
 I am rooting for you, babe. Begin tonight, go gently and keep going.
 `,
@@ -34313,7 +34284,6 @@ I am rooting for you, babe. Begin tonight, go gently and keep going.
     difficulty: 'Beginner Friendly',
     image: 'https://res.cloudinary.com/s9jk4ddk/image/upload/w_700,q_auto,f_auto,dpr_auto/v1788556237/file_00000000cc8c8210bedd66219df8f786_tzdlsp.png',
     related: ["digital-skills-for-beginners", "best-money-making-skills-2026", "21-online-skills-that-can-change-your-income", "how-to-get-your-first-freelance-client"],
-    academy: { id: 'freelancing-foundations-academy', text: 'Want guided lessons after your 30 days? The Freelancing Foundations course walks you through finding and keeping your first clients.', label: 'Explore Freelancing Foundations' },
     content: `Come and sit beside me, love, because I want to teach you something the way I would teach my own little sister: slowly, plainly, from the very beginning, with nothing skipped and no big words left unexplained.
 
 Here is the idea. In the next thirty days, you are going to learn **one** digital skill, from absolute zero, and finish with a real piece of work you can show another human being. Not ten skills. Not "a bit of everything." One. By day thirty, you will not just have read about a money-making skill. You will have practised it every day, made something with it, and written down exactly how you would offer it to someone who might pay.
@@ -34553,7 +34523,7 @@ There are many free places to learn, and the best one is whichever you will actu
 
 - Video tutorials on YouTube. Look for "beginner" in the title, short videos, and creators who explain one thing at a time.
 - Free learning lessons built into the tool itself. Many design, writing and spreadsheet tools have their own free tutorials.
-- Free beginner courses. Our own Academy has free courses, and I will point you to the relevant one at the end of this guide.
+- Free beginner courses, from video tutorials to library classes.
 - Library books or free e-books, if you prefer reading.
 
 Choose **one main source** for the thirty days. Switching teachers every day is just skill hopping in disguise.
@@ -35642,7 +35612,7 @@ You may be ready to raise your prices or deepen your skill when:
 - You are turning down work because you are full.
 - You feel your portfolio no longer represents your current level.
 
-At that point, update your portfolio, raise your price a little for new clients and consider a more advanced course. Our free Academy courses are a gentle place to continue, and the Freelancing Foundations course can walk you through finding and keeping clients, if you want guided help.
+At that point, update your portfolio, raise your price a little for new clients and consider a more advanced course.
 
 ## Questions Girls Ask Me
 
@@ -35724,7 +35694,7 @@ So here is your next step, and it is small. Tonight, choose your skill. Write yo
 
 When the work is slow, remember that slow is still moving. When the messages go unanswered, remember that one yes is enough. When you doubt yourself, look back at your day one page and see how far you have come.
 
-If you would like guided lessons alongside this guide, our free courses in the Academy are a gentle place to practise. And when you are ready to turn your portfolio into paying work, [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) and [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) are the best next reads.
+When you are ready to turn your portfolio into paying work, [How To Get Your First Freelance Client](/blog/how-to-get-your-first-freelance-client.html) and [Personal Branding For Beginners](/blog/personal-branding-for-beginners.html) are the best next reads.
 
 I am rooting for you, babe. Choose your one skill, begin tonight and keep going.`,
   },

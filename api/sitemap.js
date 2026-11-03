@@ -8,11 +8,6 @@
 
    scripts/build.mjs also writes an identical static sitemap.xml
    at the project root; the two always list the same URLs.
-
-   Academy course pages (/pages/course.html?id=...) are left out
-   until they are pre-rendered too — they still build their content
-   in the browser, so a crawler that doesn't run JavaScript would
-   only find an empty shell there.
    ============================================= */
 
 import { ALL_ITEMS } from '../data/store.js';

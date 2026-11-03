@@ -496,10 +496,6 @@
       "destination": "/join-our-girl-gang.html"
     },
     {
-      "source": "/playbook-live",
-      "destination": "/playbook-live.html"
-    },
-    {
       "source": "/how-to-make-a-living-online-without-showing-your-face",
       "destination": "/blog/how-to-make-a-living-online-without-showing-your-face.html"
     },
@@ -538,12 +534,6 @@
     {
       "source": "/90-day-plan-to-build-your-first-online-income-stream",
       "destination": "/blog/90-day-plan-to-build-your-first-online-income-stream.html"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/playbook-live-maintenance",
-      "schedule": "17 3 * * *"
     }
   ]
 }
