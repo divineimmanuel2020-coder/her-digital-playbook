@@ -1,0 +1,200 @@
+# One-click cleanup: removes Playbook Live and The Playbook Academy from the site.
+# How to run it: GitHub repo -> Actions tab -> "Remove Playbook Live and Academy" -> Run workflow.
+# It deletes the old files, edits the site, rebuilds every page, checks the result,
+# and only then saves the change. If any check fails, nothing is changed.
+name: Remove Playbook Live and Academy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Remove the features and rebuild the site
+        run: |
+          cat > "$RUNNER_TEMP/apply_removal.py" <<'PYEOF'
+          import os, re, shutil, sys
+
+          def exists(p): return os.path.exists(p)
+
+          if not exists('playbook-live.html') and not exists('pages/academy.html'):
+              print("Playbook Live and the Academy are already removed. Nothing to do.")
+              sys.exit(0)
+
+          def rd(p):
+              with open(p, encoding='utf8') as f: return f.read()
+          def wr(p, s):
+              with open(p, 'w', encoding='utf8', newline='') as f: f.write(s)
+          def sub(path, old, new, count=1):
+              s = rd(path)
+              c = s.count(old)
+              assert c == count, f"{path}: expected {count} match(es), found {c} for: {old[:70]!r}"
+              wr(path, s.replace(old, new))
+
+          # ---------- 1. delete the files ----------
+          DELETE = """api/_playbook-live.js
+          api/playbook-live-apply.js
+          api/playbook-live-maintenance.js
+          api/playbook-live-upload-url.js
+          api/playbook-live-video.js
+          assets/playbook-live-og.png
+          css/academy.css
+          css/playbook-live.css
+          data/academy.js
+          js/academy-certificate.js
+          js/academy-engine.js
+          js/academy.js
+          js/certificate-view.js
+          js/course.js
+          js/my-academy.js
+          js/playbook-live.js
+          js/verify.js
+          pages/academy.html
+          pages/certificate.html
+          pages/course.html
+          pages/my-academy.html
+          pages/playbook-live-privacy.html
+          pages/playbook-live-safety.html
+          pages/playbook-live-terms.html
+          pages/verify.html
+          playbook-live.html
+          sections/academy-teaser.html""".split('\n')
+          for f in DELETE:
+              if exists(f): os.remove(f)
+          if exists('data/academy-courses'): shutil.rmtree('data/academy-courses')
+          print("deleted files")
+
+          # ---------- 2. menu + footer ----------
+          sub('components/nav.html', '    <li><a href="/pages/academy.html" data-nav="academy">🎓 Academy</a></li>\n    <li><a href="/playbook-live" data-nav="playbook-live">Playbook Live 🎀</a></li>\n', '')
+          sub('components/footer.html', '        <li><a href="/pages/academy.html">The Playbook Academy</a></li>\n        <li><a href="/playbook-live">Playbook Live 🎀</a></li>\n', '')
+
+          # ---------- 3. build script ----------
+          sub('scripts/build.mjs', "  html = inject(html, 'academy-teaser', read('sections/academy-teaser.html').trim());\n", '')
+          sub('scripts/build.mjs', "  // /join-our-girl-gang and /playbook-live are REWRITES, not redirects: the", "  // /join-our-girl-gang is a REWRITE, not a redirect: the")
+          sub('scripts/build.mjs', "const cleanUrlRewrites = ['/join-our-girl-gang', '/playbook-live'];", "const cleanUrlRewrites = ['/join-our-girl-gang'];")
+          sub('scripts/build.mjs', "...(cfg.rewrites || []).filter((r) => !cleanUrlRewrites.includes(r.source) && !cleanSources.has(r.source)),", "...(cfg.rewrites || []).filter((r) => !cleanUrlRewrites.includes(r.source) && !cleanSources.has(r.source) && r.source !== '/playbook-live'),")
+          s = rd('scripts/build.mjs')
+          a = s.index("  // Daily housekeeping for Playbook Live"); b = s.index("  return JSON.stringify(cfg, null, 2)")
+          s = s[:a] + "  // No scheduled jobs are used.\n  delete cfg.crons;\n\n" + s[b:]
+          a = s.index("// Playbook Live's own HTML already has all its content"); b = s.index("// 4. sitemap + redirects")
+          s = s[:a] + s[b:]
+          wr('scripts/build.mjs', s)
+
+          # ---------- 4. routes, search, main, gamify, article renderer ----------
+          sub('js/routes.js', "// Fixed pages that belong in the sitemap. my-academy, certificate and\n// verify are personal/utility pages and intentionally left out.", "// Fixed pages that belong in the sitemap.")
+          sub('js/routes.js', "  // start-here, money-path, game-room, client-simulator, templates, glossary,\n  // academy. Also left out: /playbook-live and its 3 legal pages.\n", "  // start-here, money-path, game-room, client-simulator, templates, glossary.\n")
+
+          s = rd('js/search.js')
+          a = s.index("import { ACADEMY_COURSES }"); b = s.index("import { BASE }"); s = s[:a] + s[b:]
+          a = s.index("const ACADEMY_SEARCH_ITEMS"); b = s.index("const SEARCHABLE_ITEMS"); s = s[:a] + s[b:]
+          old = "const SEARCHABLE_ITEMS = [PLAYBOOK_LIVE_SEARCH_ITEM, ...ALL_ITEMS, ...PLAYGROUND_PAGES, ...ACADEMY_SEARCH_ITEMS];"
+          assert s.count(old) == 1
+          wr('js/search.js', s.replace(old, "const SEARCHABLE_ITEMS = [...ALL_ITEMS, ...PLAYGROUND_PAGES];"))
+
+          sub('js/main.js', "    loadComponent('academy-teaser-placeholder', 'sections/academy-teaser.html'),\n", '')
+
+          s = rd('js/gamify.js')
+          s = re.sub(r"  \{ id: 'academy-(enrolled|graduate|scholar)'.*\n", "", s)
+          wr('js/gamify.js', s)
+
+          s = rd('js/article-render.js')
+          assert s.count("  const academy = item.academy;\n") == 1
+          s = s.replace("  const academy = item.academy;\n", "")
+          a = s.index("      ${academy ? `"); b = s.index("    </article>`;", a)
+          s = s[:a].rstrip(' ') + s[b:]
+          wr('js/article-render.js', s)
+
+          # ---------- 5. homepage, css, about, comments, readme ----------
+          s = rd('index.html')
+          s = s.replace('<link rel="stylesheet" href="css/academy.css">\n', '')
+          s = re.sub(r'\s*<!--hdp:academy-teaser-->[\s\S]*?<!--/hdp:academy-teaser-->\n?', '\n', s)
+          a = s.index("<!-- Playbook Live teaser (outside build markers"); b = s.index("  <!--hdp:newsletter-->")
+          s = s[:a] + s[b:]
+          wr('index.html', s)
+
+          s = rd('css/style.css')
+          i = s.index("PLAYBOOK LIVE — TEMPORARILY HIDDEN")
+          a = s.rfind("/* ====", 0, i)
+          b = s.index("display: none !important; }", i) + len("display: none !important; }")
+          s = s[:a].rstrip('\n') + '\n' + s[b:].lstrip('\n')
+          wr('css/style.css', s)
+
+          sub('api/_antispam.js', " (same convention as _playbook-live.js)", "")
+          sub('pages/about.html', "the articles, the free tools, the Playground games and the Playbook Academy courses.", "the articles, the free tools and the Playground games.")
+          sub('pages/about.html', " Our free certificates are certificates of course completion; they are not accredited qualifications.", "")
+
+          s = rd('api/sitemap.js')
+          a = s.index("   Academy course pages"); b = s.index("   ============================================= */", a)
+          wr('api/sitemap.js', s[:a].rstrip() + "\n" + s[b:])
+          s = rd('README.md')
+          a = s.index("Not pre-rendered yet: Academy")
+          wr('README.md', s[:a].rstrip() + "\n")
+
+          # ---------- 6. article data (Academy boxes + sentences) ----------
+          s = rd('data/store.js')
+          R = [
+          ("- **Free courses.** Our free Academy courses on this site are designed for beginners, and many libraries and community centres offer free classes too.", "- **Free courses.** Many libraries and community centres offer free classes for beginners."),
+          (" Spend a little time each week sharpening your weakest area. Our free Academy courses can help.", " Spend a little time each week sharpening your weakest area."),
+          ("| Learning | Free Academy courses, help centres and video tutorials |", "| Learning | Help centres and free video tutorials |"),
+          (" Improve your weakest skill with a free Academy course.", " Keep improving your weakest skill."),
+          (" And our free Academy courses are a gentle place to practise new skills.", ""),
+          (" The Playbook Academy has free courses on many of these skills, with exercises and projects.", ""),
+          (" The Playbook Academy offers free courses in many of the skills in this guide, with exercises and projects.", ""),
+          ("Our free Academy and guides are a place to start.", "Free guides and tutorials are a place to start."),
+          ("- **Free courses.** Our own free Academy on this site has beginner-friendly courses. Other sites and libraries offer free options too.", "- **Free courses.** Libraries and other sites offer free beginner options."),
+          ("| Learning | Our free Academy courses, help centres and video tutorials |", "| Learning | Help centres and free video tutorials |"),
+          ("Take one free course in the Academy that fits your direction.", "Take one free beginner course that fits your direction."),
+          ("take a free Academy course that matches it and begin reaching out", "take a free beginner course that matches it and begin reaching out"),
+          (" If you like guided lessons, our free courses in the Academy are a gentle place to practise.", ""),
+          (" Our free Academy courses on this site are a gentle place to start.", ""),
+          ("| Learning | Our free Academy courses and free video tutorials |", "| Learning | Free video tutorials and help centres |"),
+          ("| Learning | Free Academy courses and video tutorials |", "| Learning | Help centres and free video tutorials |"),
+          ("- Free beginner courses. Our own Academy has free courses, and I will point you to the relevant one at the end of this guide.", "- Free beginner courses, from video tutorials to library classes."),
+          (" Our free Academy courses are a gentle place to continue, and the Freelancing Foundations course can walk you through finding and keeping clients, if you want guided help.", ""),
+          ("If you would like guided lessons alongside this guide, our free courses in the Academy are a gentle place to practise. And when you are ready to turn your portfolio into paying work,", "When you are ready to turn your portfolio into paying work,"),
+          ]
+          for old, new in R:
+              c = s.count(old)
+              assert c >= 1, f"store.js: text not found: {old[:70]!r}"
+              if not old.startswith("| Learning"):
+                  assert c == 1, f"store.js: {c} matches for {old[:70]!r}"
+              s = s.replace(old, new)
+          s = s.replace(" And our free Academy courses are a gentle place to practise.", "")
+          for old in ["\nThe Playbook Academy offers a free Virtual Assistance course with exercises and projects.\n\n",
+                      "\n- **Our own free Academy:** the courses on this site are designed for beginners and cost nothing."]:
+              assert s.count(old) == 1, f"store.js: {old[:50]!r}"
+              s = s.replace(old, "\n" if old.endswith("\n\n") else "")
+          s = re.sub(r'^[ \t]*academy:\s*\{.*\},[ \t]*\n', '', s, flags=re.M)
+          left = re.findall(r'.{0,60}academy.{0,60}', s, re.I)
+          assert not left, f"Academy text still in store.js: {left[:3]}"
+          wr('data/store.js', s)
+          print("all edits applied")
+          PYEOF
+          python3 "$RUNNER_TEMP/apply_removal.py"
+          node scripts/build.mjs
+          node scripts/build.mjs --check
+          node scripts/check.mjs
+
+      - name: Save the change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Remove Playbook Live and The Playbook Academy" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" -m "Claude-Session: https://claude.ai/code/session_019wdJh4dHRdhsVKkvt3fTsH"
+            git push
+          fi
