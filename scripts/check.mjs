@@ -127,7 +127,7 @@ const home = read('index.html');
 for (const item of ALL_ITEMS) {
   if (!home.includes(`href="${itemPath(item)}"`)) fail('index.html', `no raw-HTML link to ${itemPath(item)}`);
 }
-if (!/<header class="header">/.test(home)) fail('index.html', 'header is not in the raw HTML');
+if (!/<header class="header[ "]/.test(home)) fail('index.html', 'header is not in the raw HTML');
 if (!/<footer class="footer">/.test(home)) fail('index.html', 'footer is not in the raw HTML');
 
 // --- sitemap ---
