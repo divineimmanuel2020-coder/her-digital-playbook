@@ -4886,9 +4886,15 @@ input:focus-visible,
 html.hdr-lock, html.hdr-lock body { overflow: hidden; }
 
 /* ---------- the header bar ---------- */
+/* fixed (not sticky) so it can never get stuck behind the page on any phone or browser */
+html { overflow-x: clip; }
+body { overflow-x: clip; padding-top: calc(var(--hdr-h) + env(safe-area-inset-top, 0px)); }
 .header.hdr {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 100;
   color: #fff;
   padding-top: env(safe-area-inset-top, 0px);
@@ -5063,32 +5069,6 @@ html.hdr-lock, html.hdr-lock body { overflow: hidden; }
 .hdr-burger.open .hdr-burger-lines i:nth-child(1) { top: 6px; transform: rotate(45deg); }
 .hdr-burger.open .hdr-burger-lines i:nth-child(2) { opacity: 0; width: 0; }
 .hdr-burger.open .hdr-burger-lines i:nth-child(3) { top: 6px; transform: rotate(-45deg); }
-
-/* the little tab you can tap when the header is tucked away */
-.hdr-peek {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  z-index: 105;
-  width: 60px;
-  height: 26px;
-  padding: 0;
-  border: 0;
-  border-radius: 0 0 18px 18px;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: linear-gradient(100deg, #fa68ac, #f860a6 50%, #ec4f95);
-  box-shadow: 0 8px 18px rgba(196, 30, 110, .38);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -110%);
-  transition: transform .4s cubic-bezier(.22, .8, .24, 1), opacity .25s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-html.hdr-hidden .hdr-peek { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
-.hdr-peek svg { margin-top: 1px; }
 
 /* reading progress */
 .hdr-progress {
@@ -5481,6 +5461,6 @@ html.has-progress .hdr-progress { opacity: 1; }
 .resume-toast button { flex: none; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--hdr-pink); color: #fff; font: 700 12.5px/1 var(--font-body, system-ui, sans-serif); cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
-  .header.hdr, .drawer, .drawer-backdrop, .sx, .sx-panel, .hdr-peek, .resume-toast, .drawer-list li, .drawer-cta { transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .header.hdr, .drawer, .drawer-backdrop, .sx, .sx-panel, .resume-toast, .drawer-list li, .drawer-cta { transition-duration: .01ms !important; transition-delay: 0s !important; }
   .hdr-heart { animation: none; }
 }

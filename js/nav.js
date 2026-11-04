@@ -3,7 +3,7 @@
    - Slide-in menu (drawer): open / close, focus, Esc, backdrop
    - Smart header: stays reachable everywhere. It tucks away while
      you read down the page and comes back the moment you reach for
-     it (scroll up, touch the top edge, tap the little tab, or reach
+     it (scroll up, touch the top edge, tap the quick buttons, or reach
      the end of the page).
    - Reading progress bar on articles
    - Remembers where you stopped reading (see resume.js)
@@ -109,11 +109,10 @@ window.addEventListener('hdr:search', () => {
 function initHeaderBehaviour() {
   const header = byId('site-header');
   if (!header) return;
-  const peek = byId('hdr-peek');
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const DOWN_TO_HIDE = 36;  // px scrolled down before the header tucks away
-  const UP_TO_SHOW = 10;    // px scrolled up before it returns
+  const UP_TO_SHOW = 4;     // px scrolled up before it returns
   const TOP_ZONE = 24;      // always visible this close to the top
   const END_ZONE = 140;     // always visible this close to the end of the page
 
@@ -128,7 +127,6 @@ function initHeaderBehaviour() {
     hidden = next;
     header.classList.toggle('is-hidden', hidden);
     root.classList.toggle('hdr-hidden', hidden);
-    if (peek) peek.setAttribute('aria-hidden', String(!hidden));
   }
   const show = () => { travelled = 0; setHidden(false); };
 
@@ -167,7 +165,6 @@ function initHeaderBehaviour() {
     if (e.pointerType === 'mouse' && e.clientY < 56) show();
   }, { passive: true });
   header.addEventListener('focusin', show);
-  if (peek) peek.addEventListener('click', show);
   window.addEventListener('hdr:overlay', () => { if (overlayOpen) show(); });
   window.addEventListener('hdr:restored', () => { quietUntil = performance.now() + 900; lastY = window.scrollY; travelled = 0; });
   window.addEventListener('resize', update, { passive: true });
