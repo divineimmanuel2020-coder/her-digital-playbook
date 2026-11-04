@@ -1,0 +1,190 @@
+# One-click: redesigns the homepage "Free Tools" section as a clean, modern card grid.
+# How to run it: GitHub repo -> Actions tab -> "Redesign free tools section" -> Run workflow.
+# Only the look changes: the tools, their links and their logic are untouched.
+# It rebuilds every page, checks the result, and only then saves the change.
+name: Redesign free tools section
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  header:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Redesign the tools section and rebuild the site
+        run: |
+          cat > "$RUNNER_TEMP/apply_tools.py" <<'PYEOF'
+          import base64, os, sys
+
+          def rd(p):
+              with open(p, encoding='utf8') as f: return f.read()
+          def wr(p, s):
+              with open(p, 'w', encoding='utf8', newline='') as f: f.write(s)
+
+          for need in ('css/style.css', 'js/tool-display.js', 'sections/free-tools.html'):
+              if not os.path.exists(need):
+                  sys.exit(f"{need} is missing. This does not look like the site folder. Nothing changed.")
+
+          TOOL_DISPLAY_JS = (
+              "LyogPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgIFRPT0wtRElTUExBWS5KUwogICBNYXJr"
+              "dXAgZm9yIHRoZSBob21lcGFnZSAiRnJlZSBUb29scyIgZ3JpZCDigJQgb25lIGNhcmQgcGVyCiAgIHRvb2wuIFNoYXJlZCBieSBz"
+              "Y3JpcHRzL2J1aWxkLm1qcyAoc3RhdGljIEhUTUwgd3JpdHRlbiBpbnRvIGluZGV4Lmh0bWwpCiAgIGFuZCBqcy9yZW5kZXIuanMg"
+              "KGJyb3dzZXIgZmFsbGJhY2spLCBzbyBib3RoIGFsd2F5cyBwcm9kdWNlIHRoZSBzYW1lIEhUTUwuCgogICBQZXItdG9vbCB3b3Jk"
+              "aW5nIGxpdmVzIGluIFRPT0xfQ09QWSBiZWxvdywga2V5ZWQgYnkgdG9vbCBpZC4gQSB0b29sIGluCiAgIGRhdGEvc3RvcmUuanMg"
+              "bWF5IGFsc28gY2FycnkgaXRzIG93biBgZGlzcGxheTogeyBtYWluLCBzdWIgfWAgYW5kIGBzaG9ydGAsCiAgIHdoaWNoIHdpbiBv"
+              "dmVyIFRPT0xfQ09QWS4gV2l0aCBuZWl0aGVyLCB0aGUgdGl0bGUgaXMgc3BsaXQgYWZ0ZXIgaXRzIGZpcnN0CiAgIHdvcmQgYW5k"
+              "IHRoZSBmdWxsIGV4Y2VycHQgaXMgdXNlZC4KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09"
+              "ICovCgpjb25zdCBFU0MgPSB7ICcmJzogJyZhbXA7JywgJzwnOiAnJmx0OycsICc+JzogJyZndDsnLCAnIic6ICcmcXVvdDsnLCAi"
+              "JyI6ICcmIzM5OycgfTsKY29uc3QgZXNjID0gKHMpID0+IFN0cmluZyhzID8/ICcnKS5yZXBsYWNlKC9bJjw+IiddL2csIChjKSA9"
+              "PiBFU0NbY10pOwoKLyogT25lIHNpbXBsZSBsaW5lIGljb24gcGVyIHRvb2wuIERlY29yYXRpdmUgb25seSAoYXJpYS1oaWRkZW4p"
+              "LiAqLwpjb25zdCBJQ09OX1BBVEhTID0gewogICdzYWxhcnktbmVnb3RpYXRpb24tY2FsY3VsYXRvcic6ICc8cGF0aCBkPSJNMyAx"
+              "N2w2LTYgNCA0IDgtOCIvPjxwYXRoIGQ9Ik0xNSA3aDZ2NiIvPicsCiAgJ2ZyZWVsYW5jZS1yYXRlLWNhbGN1bGF0b3InOiAnPGNp"
+              "cmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iOSIvPjxwYXRoIGQ9Ik0xMiA3djVsMyAyIi8+JywKICAncmVzdW1lLXJldmlldy1jaGVj"
+              "a2xpc3QnOiAnPHBhdGggZD0iTTE0IDNIN2EyIDIgMCAwIDAtMiAydjE0YTIgMiAwIDAgMCAyIDJoMTBhMiAyIDAgMCAwIDItMlY4"
+              "eiIvPjxwYXRoIGQ9Ik0xNCAzdjVoNSIvPjxwYXRoIGQ9Im05IDE0IDIgMiA0LTQiLz4nLAogICdhaS1wcm9tcHQtYnVpbGRlcic6"
+              "ICc8cGF0aCBkPSJNMTIgM2wxLjggNC43TDE4LjUgOS41bC00LjcgMS44TDEyIDE2bC0xLjgtNC43TDUuNSA5LjVsNC43LTEuOHoi"
+              "Lz48cGF0aCBkPSJNMTkgMTVsLjggMi4yTDIyIDE4bC0yLjIuOEwxOSAyMWwtLjgtMi4yTDE2IDE4bDIuMi0uOHoiLz4nLAogICdi"
+              "dXNpbmVzcy1pZGVhLXZhbGlkYXRvcic6ICc8cGF0aCBkPSJNOSAxOGg2TTEwIDIxaDQiLz48cGF0aCBkPSJNMTIgM2E2IDYgMCAw"
+              "IDAtMy41IDEwLjljLjYuNSAxIDEuMiAxIDIuMWg1YzAtLjkuNC0xLjYgMS0yLjFBNiA2IDAgMCAwIDEyIDN6Ii8+JywKICAncGVy"
+              "c29uYWwtYnVkZ2V0LXBsYW5uZXInOiAnPHBhdGggZD0iTTQgN2EyIDIgMCAwIDEgMi0yaDEydjQiLz48cGF0aCBkPSJNNCA3djEw"
+              "YTIgMiAwIDAgMCAyIDJoMTRWOUg2YTIgMiAwIDAgMS0yLTJ6Ii8+PGNpcmNsZSBjeD0iMTYuNSIgY3k9IjE0IiByPSIxIi8+JywK"
+              "fTsKY29uc3QgSUNPTl9GQUxMQkFDSyA9ICc8cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iNyIgaGVpZ2h0PSI3IiByeD0iMS41Ii8+"
+              "PHJlY3QgeD0iMTMiIHk9IjQiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxLjUiLz48cmVjdCB4PSI0IiB5PSIxMyIgd2lkdGg9"
+              "IjciIGhlaWdodD0iNyIgcng9IjEuNSIvPjxyZWN0IHg9IjEzIiB5PSIxMyIgd2lkdGg9IjciIGhlaWdodD0iNyIgcng9IjEuNSIv"
+              "Pic7CgpmdW5jdGlvbiBpY29uKGlkKSB7CiAgcmV0dXJuICc8c3ZnIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ry"
+              "b2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMS44IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9p"
+              "bj0icm91bmQiIGFyaWEtaGlkZGVuPSJ0cnVlIiBmb2N1c2FibGU9ImZhbHNlIj4nICsgKElDT05fUEFUSFNbaWRdIHx8IElDT05f"
+              "RkFMTEJBQ0spICsgJzwvc3ZnPic7Cn0KCmNvbnN0IEFSUk9XID0KICAnPHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5v"
+              "bmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxp"
+              "bmVqb2luPSJyb3VuZCIgYXJpYS1oaWRkZW49InRydWUiIGZvY3VzYWJsZT0iZmFsc2UiPjxwYXRoIGQ9Ik01IDEyaDE0TTEzIDZs"
+              "NiA2LTYgNiIvPjwvc3ZnPic7Cgpjb25zdCBUT09MX0NPUFkgPSB7CiAgJ3NhbGFyeS1uZWdvdGlhdGlvbi1jYWxjdWxhdG9yJzog"
+              "eyBtYWluOiAnU2FsYXJ5Jywgc3ViOiAnTmVnb3RpYXRpb24gQ2FsY3VsYXRvcicsIHNob3J0OiAnVHVybiB5b3VyIG9mZmVyIGlu"
+              "dG8gYW4gb3BlbmluZyBhc2ssIGEgdGFyZ2V0IGFuZCBhIGZsb29yLCB3aXRoIHRoZSB3b3JkcyB0byBzYXkuJyB9LAogICdmcmVl"
+              "bGFuY2UtcmF0ZS1jYWxjdWxhdG9yJzogeyBtYWluOiAnRnJlZWxhbmNlJywgc3ViOiAnUmF0ZSBDYWxjdWxhdG9yJywgc2hvcnQ6"
+              "ICdGaW5kIHRoZSBob3VybHkgcmF0ZSB0aGF0IGNvdmVycyB5b3VyIHRheCwgY29zdHMgYW5kIHRpbWUgb2ZmLicgfSwKICAncmVz"
+              "dW1lLXJldmlldy1jaGVja2xpc3QnOiB7IG1haW46ICdSZXN1bWUnLCBzdWI6ICdSZXZpZXcgQ2hlY2tsaXN0Jywgc2hvcnQ6ICJB"
+              "dWRpdCB5b3VyIHJlc3VtZSwgZml4IHdlYWsgYnVsbGV0cyBhbmQgbWF0Y2ggYSBqb2IgcG9zdCdzIGtleXdvcmRzLiIgfSwKICAn"
+              "YWktcHJvbXB0LWJ1aWxkZXInOiB7IG1haW46ICdBSSBQcm9tcHQnLCBzdWI6ICdCdWlsZGVyJywgc2hvcnQ6ICdUdXJuIGEgcm91"
+              "Z2ggaWRlYSBpbnRvIGEgZGV0YWlsZWQgcHJvbXB0LCB3aXRoIGEgZml2ZS1zdGVwIGNoYWluIGZvciBiaWcgam9icy4nIH0sCiAg"
+              "J2J1c2luZXNzLWlkZWEtdmFsaWRhdG9yJzogeyBtYWluOiAnQnVzaW5lc3MnLCBzdWI6ICdJZGVhIFZhbGlkYXRvcicsIHNob3J0"
+              "OiAnU2NvcmUgeW91ciBpZGVhIGFuZCB0ZXN0IHRoZSBtb25leSBpbiB0aHJlZSBzY2VuYXJpb3MgYmVmb3JlIHlvdSBidWlsZC4n"
+              "IH0sCiAgJ3BlcnNvbmFsLWJ1ZGdldC1wbGFubmVyJzogeyBtYWluOiAnUGVyc29uYWwnLCBzdWI6ICdCdWRnZXQgUGxhbm5lcics"
+              "IHNob3J0OiAnU2VlIHdoZXJlIHlvdXIgbW9uZXkgcmVhbGx5IGdvZXMgYW5kIGdldCBhIHNwbGl0IHRoYXQgZml0cyB5b3VyIGNv"
+              "c3RzLicgfSwKfTsKCmV4cG9ydCBmdW5jdGlvbiB0b29sRGlzcGxheShpdGVtKSB7CiAgY29uc3QgY29weSA9IFRPT0xfQ09QWVtp"
+              "dGVtLmlkXSB8fCB7fTsKICBjb25zdCBkID0gaXRlbS5kaXNwbGF5IHx8IGNvcHk7CiAgY29uc3Qgd29yZHMgPSBTdHJpbmcoaXRl"
+              "bS50aXRsZSB8fCAnJykudHJpbSgpLnNwbGl0KC9ccysvKTsKICByZXR1cm4gewogICAgbWFpbjogZC5tYWluIHx8IHdvcmRzWzBd"
+              "IHx8ICcnLAogICAgc3ViOiBkLnN1YiB8fCB3b3Jkcy5zbGljZSgxKS5qb2luKCcgJyksCiAgICBzaG9ydDogaXRlbS5zaG9ydCB8"
+              "fCBjb3B5LnNob3J0IHx8IGl0ZW0uZXhjZXJwdCB8fCAnJywKICB9Owp9CgovKiogT25lIGNhcmQgZm9yIHRoZSBncmlkLiBgdXJs"
+              "YCBpcyB3aGF0ZXZlciBocmVmIHRoZSBjYWxsZXIgbmVlZHMuICovCmV4cG9ydCBmdW5jdGlvbiB0b29sUm93SHRtbChpdGVtLCBp"
+              "bmRleCwgdXJsKSB7CiAgY29uc3QgeyBtYWluLCBzdWIsIHNob3J0IH0gPSB0b29sRGlzcGxheShpdGVtKTsKICBjb25zdCB0aXRs"
+              "ZSA9IGl0ZW0udGl0bGUgfHwgW21haW4sIHN1Yl0uZmlsdGVyKEJvb2xlYW4pLmpvaW4oJyAnKTsKICBjb25zdCBtaW5zID0gLyhc"
+              "ZCspXHMqbWluL2kuZXhlYygoaXRlbS50eXBvICYmIGl0ZW0udHlwby5raWNrZXIpIHx8ICcnKTsKICByZXR1cm4gKAogICAgYDxs"
+              "aSBjbGFzcz0idGNhcmQiPmAgKwogICAgYDxhIGNsYXNzPSJ0Y2FyZC1saW5rIiBocmVmPSIke2VzYyh1cmwpfSI+YCArCiAgICBg"
+              "PHNwYW4gY2xhc3M9InRjYXJkLXRvcCI+YCArCiAgICBgPHNwYW4gY2xhc3M9InRjYXJkLWljbyI+JHtpY29uKGl0ZW0uaWQpfTwv"
+              "c3Bhbj5gICsKICAgIGA8c3BhbiBjbGFzcz0idGNhcmQtbWV0YSI+YCArCiAgICAoaXRlbS5jYXRlZ29yeSA/IGA8c3BhbiBjbGFz"
+              "cz0idGNhcmQtdGFnIj4ke2VzYyhpdGVtLmNhdGVnb3J5KX08L3NwYW4+YCA6ICcnKSArCiAgICAobWlucyA/IGA8c3BhbiBjbGFz"
+              "cz0idGNhcmQtdGltZSI+JHtlc2MobWluc1sxXSl9IG1pbjwvc3Bhbj5gIDogJycpICsKICAgIGA8L3NwYW4+PC9zcGFuPmAgKwog"
+              "ICAgYDxoMyBjbGFzcz0idGNhcmQtdGl0bGUiPiR7ZXNjKHRpdGxlKX08L2gzPmAgKwogICAgYDxwIGNsYXNzPSJ0Y2FyZC1kZXNj"
+              "Ij4ke2VzYyhzaG9ydCl9PC9wPmAgKwogICAgYDxzcGFuIGNsYXNzPSJ0Y2FyZC1jdGEiPk9wZW4gdG9vbDxzcGFuIGNsYXNzPSJ0"
+              "Y2FyZC1hcnJvdyI+JHtBUlJPV308L3NwYW4+PC9zcGFuPmAgKwogICAgYDwvYT48L2xpPmAKICApOwp9Cg=="
+          )
+          TOOLS_CSS = (
+              "CgovKiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgIFRPT0xT"
+              "IFJFREVTSUdOIOKAlCBob21lcGFnZSAiRnJlZSBUb29scyIgYXMgYSBjbGVhbiBjYXJkIGdyaWQKICAgPT09PT09PT09PT09PT09"
+              "PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSAqLwoudG9vbHMgeyBwYWRkaW5nOiBjbGFtcCgy"
+              "LjVyZW0sIDZ2dywgNC41cmVtKSAwOyB9Ci50b29scy1oZWFkIHsgbWFyZ2luLWJvdHRvbTogY2xhbXAoMS41cmVtLCAzLjV2dywg"
+              "Mi4yNXJlbSk7IG1heC13aWR0aDogNDByZW07IH0KLnRvb2xzLXRpdGxlIHsKICBmb250LWZhbWlseTogdmFyKC0tZm9udC1ib2R5"
+              "KTsKICBmb250LXNpemU6IGNsYW1wKDEuN3JlbSwgNS40dncsIDIuNXJlbSk7CiAgZm9udC13ZWlnaHQ6IDcwMDsKICBsaW5lLWhl"
+              "aWdodDogMS4xMjsKICBsZXR0ZXItc3BhY2luZzogLTAuMDJlbTsKICBjb2xvcjogIzJhMTUyMDsKfQoudG9vbHMtc3ViIHsgbWFy"
+              "Z2luLXRvcDogMC42cmVtOyBmb250LXNpemU6IGNsYW1wKDAuOThyZW0sIDIuNnZ3LCAxLjA4cmVtKTsgbGluZS1oZWlnaHQ6IDEu"
+              "NTU7IGNvbG9yOiAjN2Q2NzcwOyB9CgoudG9vbHMtbGlzdCB7CiAgZGlzcGxheTogZ3JpZDsKICBncmlkLXRlbXBsYXRlLWNvbHVt"
+              "bnM6IDFmcjsKICBnYXA6IDE0cHg7CiAgbGlzdC1zdHlsZTogbm9uZTsKICBtYXJnaW46IDA7CiAgcGFkZGluZzogMDsKfQpAbWVk"
+              "aWEgKG1pbi13aWR0aDogNjQwcHgpICB7IC50b29scy1saXN0IHsgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiByZXBlYXQoMiwgbWlu"
+              "bWF4KDAsIDFmcikpOyBnYXA6IDE4cHg7IH0gfQpAbWVkaWEgKG1pbi13aWR0aDogMTA0MHB4KSB7IC50b29scy1saXN0IHsgZ3Jp"
+              "ZC10ZW1wbGF0ZS1jb2x1bW5zOiByZXBlYXQoMywgbWlubWF4KDAsIDFmcikpOyBnYXA6IDIycHg7IH0gfQoKLnRjYXJkIHsgZGlz"
+              "cGxheTogZmxleDsgfQoudGNhcmQtbGluayB7CiAgcG9zaXRpb246IHJlbGF0aXZlOwogIGRpc3BsYXk6IGZsZXg7CiAgZmxleC1k"
+              "aXJlY3Rpb246IGNvbHVtbjsKICB3aWR0aDogMTAwJTsKICBwYWRkaW5nOiAyMnB4IDIycHggMjBweDsKICBiYWNrZ3JvdW5kOiAj"
+              "ZmZmOwogIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMjM2LCA5MiwgMTMwLCAuMTYpOwogIGJvcmRlci1yYWRpdXM6IDIwcHg7CiAg"
+              "Y29sb3I6IGluaGVyaXQ7CiAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogIGJveC1zaGFkb3c6IDAgMXB4IDJweCByZ2JhKDYwLCAy"
+              "MCwgNDAsIC4wNCksIDAgMTBweCAyNnB4IC0xNHB4IHJnYmEoMTg0LCAyOSwgOTIsIC4yMCk7CiAgdHJhbnNpdGlvbjogdHJhbnNm"
+              "b3JtIC4yNXMgZWFzZSwgYm94LXNoYWRvdyAuMjVzIGVhc2UsIGJvcmRlci1jb2xvciAuMjVzIGVhc2U7CiAgLXdlYmtpdC10YXAt"
+              "aGlnaGxpZ2h0LWNvbG9yOiB0cmFuc3BhcmVudDsKfQoudGNhcmQtbGluazo6YmVmb3JlIHsKICBjb250ZW50OiAiIjsKICBwb3Np"
+              "dGlvbjogYWJzb2x1dGU7CiAgbGVmdDogMjJweDsgcmlnaHQ6IDIycHg7IHRvcDogLTFweDsKICBoZWlnaHQ6IDJweDsKICBib3Jk"
+              "ZXItcmFkaXVzOiAwIDAgMnB4IDJweDsKICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQoOTBkZWcsICNmODYwYTYsICNlMjNm"
+              "OGUpOwogIG9wYWNpdHk6IDA7CiAgdHJhbnNpdGlvbjogb3BhY2l0eSAuMjVzIGVhc2U7Cn0KLnRjYXJkLWxpbms6aG92ZXIsIC50"
+              "Y2FyZC1saW5rOmZvY3VzLXZpc2libGUgewogIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgtM3B4KTsKICBib3JkZXItY29sb3I6IHJn"
+              "YmEoMjM2LCA5MiwgMTMwLCAuNDIpOwogIGJveC1zaGFkb3c6IDAgMnB4IDRweCByZ2JhKDYwLCAyMCwgNDAsIC4wNSksIDAgMThw"
+              "eCAzNnB4IC0xNnB4IHJnYmEoMTg0LCAyOSwgOTIsIC4zNCk7Cn0KLnRjYXJkLWxpbms6aG92ZXI6OmJlZm9yZSwgLnRjYXJkLWxp"
+              "bms6Zm9jdXMtdmlzaWJsZTo6YmVmb3JlIHsgb3BhY2l0eTogMTsgfQoudGNhcmQtbGluazpmb2N1cy12aXNpYmxlIHsgb3V0bGlu"
+              "ZTogMnB4IHNvbGlkICNlMjNmOGU7IG91dGxpbmUtb2Zmc2V0OiAzcHg7IH0KCi50Y2FyZC10b3AgeyBkaXNwbGF5OiBmbGV4OyBh"
+              "bGlnbi1pdGVtczogY2VudGVyOyBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47IGdhcDogMTJweDsgbWFyZ2luLWJvdHRv"
+              "bTogMThweDsgfQoudGNhcmQtaWNvIHsKICBkaXNwbGF5OiBncmlkOwogIHBsYWNlLWl0ZW1zOiBjZW50ZXI7CiAgd2lkdGg6IDQ2"
+              "cHg7IGhlaWdodDogNDZweDsKICBib3JkZXItcmFkaXVzOiAxNHB4OwogIGNvbG9yOiAjYzQyYTczOwogIGJhY2tncm91bmQ6IGxp"
+              "bmVhci1ncmFkaWVudCgxNDVkZWcsICNmZmYwZjYsICNmZGUwZWMpOwogIGJveC1zaGFkb3c6IGluc2V0IDAgMCAwIDFweCByZ2Jh"
+              "KDIzNiwgOTIsIDEzMCwgLjE2KTsKfQoudGNhcmQtaWNvIHN2ZyB7IHdpZHRoOiAyMnB4OyBoZWlnaHQ6IDIycHg7IH0KLnRjYXJk"
+              "LW1ldGEgeyBkaXNwbGF5OiBmbGV4OyBhbGlnbi1pdGVtczogY2VudGVyOyBnYXA6IDhweDsgbWluLXdpZHRoOiAwOyB9Ci50Y2Fy"
+              "ZC10YWcgewogIHBhZGRpbmc6IDVweCAxMHB4OwogIGJvcmRlci1yYWRpdXM6IDk5OXB4OwogIGZvbnQ6IDcwMCAuNjhyZW0vMSB2"
+              "YXIoLS1mb250LWJvZHkpOwogIGxldHRlci1zcGFjaW5nOiAuMDhlbTsKICB0ZXh0LXRyYW5zZm9ybTogdXBwZXJjYXNlOwogIGNv"
+              "bG9yOiAjYjgxZDVjOwogIGJhY2tncm91bmQ6ICNmZGVhZjI7Cn0KLnRjYXJkLXRpbWUgeyBmb250OiA2MDAgLjc4cmVtLzEgdmFy"
+              "KC0tZm9udC1ib2R5KTsgY29sb3I6ICM5YTg1OTA7IHdoaXRlLXNwYWNlOiBub3dyYXA7IH0KLnRjYXJkLXRpbWU6OmJlZm9yZSB7"
+              "IGNvbnRlbnQ6ICLCtyI7IG1hcmdpbi1yaWdodDogOHB4OyBjb2xvcjogI2NkYjhjMTsgfQoKLnRjYXJkLXRpdGxlIHsKICBtYXJn"
+              "aW46IDA7CiAgZm9udC1mYW1pbHk6IHZhcigtLWZvbnQtYm9keSk7CiAgZm9udC1zaXplOiAxLjJyZW07CiAgZm9udC13ZWlnaHQ6"
+              "IDcwMDsKICBsaW5lLWhlaWdodDogMS4yNTsKICBsZXR0ZXItc3BhY2luZzogLTAuMDEyZW07CiAgY29sb3I6ICMyYTE1MjA7Cn0K"
+              "LnRjYXJkLWRlc2MgeyBtYXJnaW46IDhweCAwIDA7IGZvbnQtc2l6ZTogLjk2cmVtOyBsaW5lLWhlaWdodDogMS42OyBjb2xvcjog"
+              "IzdkNjc3MDsgfQoKLnRjYXJkLWN0YSB7CiAgZGlzcGxheTogaW5saW5lLWZsZXg7CiAgYWxpZ24taXRlbXM6IGNlbnRlcjsKICBn"
+              "YXA6IDhweDsKICBtYXJnaW4tdG9wOiBhdXRvOwogIHBhZGRpbmctdG9wOiAyMHB4OwogIGZvbnQ6IDcwMCAuOTJyZW0vMSB2YXIo"
+              "LS1mb250LWJvZHkpOwogIGNvbG9yOiAjYzQyYTczOwp9Ci50Y2FyZC1hcnJvdyB7IGRpc3BsYXk6IGlubGluZS1ncmlkOyBwbGFj"
+              "ZS1pdGVtczogY2VudGVyOyB0cmFuc2l0aW9uOiB0cmFuc2Zvcm0gLjI1cyBlYXNlOyB9Ci50Y2FyZC1hcnJvdyBzdmcgeyB3aWR0"
+              "aDogMThweDsgaGVpZ2h0OiAxOHB4OyB9Ci50Y2FyZC1saW5rOmhvdmVyIC50Y2FyZC1hcnJvdywgLnRjYXJkLWxpbms6Zm9jdXMt"
+              "dmlzaWJsZSAudGNhcmQtYXJyb3cgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZVgoNHB4KTsgfQoKQG1lZGlhIChwcmVmZXJzLXJlZHVj"
+              "ZWQtbW90aW9uOiByZWR1Y2UpIHsKICAudGNhcmQtbGluaywgLnRjYXJkLWFycm93LCAudGNhcmQtbGluazo6YmVmb3JlIHsgdHJh"
+              "bnNpdGlvbjogbm9uZTsgfQogIC50Y2FyZC1saW5rOmhvdmVyLCAudGNhcmQtbGluazpmb2N1cy12aXNpYmxlIHsgdHJhbnNmb3Jt"
+              "OiBub25lOyB9Cn0K"
+          )
+
+          wr('js/tool-display.js', base64.b64decode(TOOL_DISPLAY_JS).decode('utf8'))
+          print("wrote js/tool-display.js")
+
+          sec = rd('sections/free-tools.html')
+          sign = '    <p class="tools-sign" aria-hidden="true">Small tools. Real progress. \u2661</p>\n'
+          if sign in sec:
+              wr('sections/free-tools.html', sec.replace(sign, ''))
+              print("removed the playful sign-off line")
+
+          css = rd('css/style.css')
+          mark = css.find('TOOLS REDESIGN')
+          if mark != -1:
+              start = css.rfind('/* ====', 0, mark)
+              assert start != -1, "could not find the start of the earlier tools styles"
+              css = css[:start]
+          css = css.rstrip('\n') + base64.b64decode(TOOLS_CSS).decode('utf8')
+          wr('css/style.css', css)
+          print("all edits applied")
+          PYEOF
+          python3 "$RUNNER_TEMP/apply_tools.py"
+          node scripts/build.mjs
+          node scripts/build.mjs --check
+          node scripts/check.mjs
+
+      - name: Save the change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Redesign the homepage Free Tools section as a modern card grid" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" -m "Claude-Session: https://claude.ai/code/session_019wdJh4dHRdhsVKkvt3fTsH"
+            git push
+          fi
