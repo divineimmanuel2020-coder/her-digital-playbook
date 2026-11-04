@@ -5577,3 +5577,11 @@ html.has-progress .hdr-progress { opacity: 1; }
   .tcard-link, .tcard-arrow, .tcard-link::before { transition: none; }
   .tcard-link:hover, .tcard-link:focus-visible { transform: none; }
 }
+
+/* =============================================================
+   NEWSLETTER SPACING — trims the empty space above and below the
+   "Join Our Girl Gang" card on the homepage. Nothing inside the card changes.
+   ============================================================= */
+.newsletter { padding-top: 0; padding-bottom: 0; }
+section.pg-teaser.pgh { padding-bottom: 1.5rem; }
+body:has(#newsletter) footer.footer { padding-top: 2.5rem; }
