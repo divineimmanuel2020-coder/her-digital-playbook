@@ -1,0 +1,66 @@
+# One-click: trims the empty space above and below the "Join Our Girl Gang" card on the homepage.
+# How to run it: GitHub repo -> Actions tab -> "Trim space around Girl Gang section" -> Run workflow.
+# Only spacing changes. The card itself is not touched.
+name: Trim space around Girl Gang section
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  header:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Trim the spacing and rebuild the site
+        run: |
+          cat > "$RUNNER_TEMP/apply_spacing.py" <<'PYEOF'
+          import sys
+
+          def rd(p):
+              with open(p, encoding='utf8') as f: return f.read()
+          def wr(p, s):
+              with open(p, 'w', encoding='utf8', newline='') as f: f.write(s)
+
+          if 'NEWSLETTER SPACING' in rd('css/style.css'):
+              print("The spacing trim is already installed. Nothing to do.")
+              sys.exit(0)
+
+          BLOCK = """
+
+          /* =============================================================
+             NEWSLETTER SPACING — trims the empty space above and below the
+             "Join Our Girl Gang" card on the homepage. Nothing inside the card changes.
+             ============================================================= */
+          .newsletter { padding-top: 0; padding-bottom: 0; }
+          section.pg-teaser.pgh { padding-bottom: 1.5rem; }
+          body:has(#newsletter) footer.footer { padding-top: 2.5rem; }
+          """
+          wr('css/style.css', rd('css/style.css').rstrip('\n') + BLOCK)
+          print("added the spacing trim")
+          PYEOF
+          python3 "$RUNNER_TEMP/apply_spacing.py"
+          node scripts/build.mjs
+          node scripts/build.mjs --check
+          node scripts/check.mjs
+
+      - name: Save the change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Trim empty space above and below the Join Our Girl Gang section" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" -m "Claude-Session: https://claude.ai/code/session_019wdJh4dHRdhsVKkvt3fTsH"
+            git push
+          fi
