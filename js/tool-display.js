@@ -1,6 +1,6 @@
 /* =============================================
    TOOL-DISPLAY.JS
-   Markup for the homepage "Free Tools" list — one typographic row per
+   Markup for the homepage "Free Tools" grid — one card per
    tool. Shared by scripts/build.mjs (static HTML written into index.html)
    and js/render.js (browser fallback), so both always produce the same HTML.
 
@@ -13,18 +13,19 @@
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
 
-/* Tiny line-art ornaments. Purely decorative: aria-hidden, never clickable. */
-const SVG_OPEN = '<svg class="tool-orn tool-orn--KIND" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">';
-const ORNAMENT_PATHS = {
-  heart: '<path d="M14 23.5C7 18.8 3.5 15 3.5 10.8 3.5 8 5.6 6 8.2 6c2.2 0 4.2 1.3 5.8 3.4C15.6 7.3 17.6 6 19.8 6c2.6 0 4.7 2 4.7 4.8 0 4.2-3.5 8-10.5 12.7z"/>',
-  sparkles: '<path d="M11 3c.7 6 3 8.3 9 9-6 .7-8.3 3-9 9-.7-6-3-8.3-9-9 6-.7 8.3-3 9-9z"/><path d="M22 17c.3 2.4 1.2 3.300 3.5 3.6-2.300.3-3.2 1.2-3.5 3.6-.3-2.400-1.2-3.300-3.5-3.6 2.300-.3 3.2-1.2 3.5-3.6z"/>',
-  crown: '<path d="M4.5 21h19M5.5 21 4 9l5.5 5L14 6l4.5 8L24 9l-1.500 12"/>',
+/* One simple line icon per tool. Decorative only (aria-hidden). */
+const ICON_PATHS = {
+  'salary-negotiation-calculator': '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  'freelance-rate-calculator': '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  'resume-review-checklist': '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 14 2 2 4-4"/>',
+  'ai-prompt-builder': '<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  'business-idea-validator': '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  'personal-budget-planner': '<path d="M4 7a2 2 0 0 1 2-2h12v4"/><path d="M4 7v10a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14" r="1"/>',
 };
-const ORNAMENT_CYCLE = ['crown', 'heart', 'heart', 'sparkles', 'heart', 'sparkles'];
+const ICON_FALLBACK = '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>';
 
-function ornament(index) {
-  const kind = ORNAMENT_CYCLE[index % ORNAMENT_CYCLE.length];
-  return SVG_OPEN.replace('KIND', kind) + ORNAMENT_PATHS[kind] + '</svg>';
+function icon(id) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + (ICON_PATHS[id] || ICON_FALLBACK) + '</svg>';
 }
 
 const ARROW =
@@ -50,21 +51,23 @@ export function toolDisplay(item) {
   };
 }
 
-/** One <li> for the list. `url` is whatever href the caller needs. */
+/** One card for the grid. `url` is whatever href the caller needs. */
 export function toolRowHtml(item, index, url) {
   const { main, sub, short } = toolDisplay(item);
-  const n = Math.max(main.length + 1, 6); // +1 leaves room for the ornament
-  const num = String(index + 1).padStart(2, '0');
+  const title = item.title || [main, sub].filter(Boolean).join(' ');
+  const mins = /(\d+)\s*min/i.exec((item.typo && item.typo.kicker) || '');
   return (
-    `<li class="tool-row">` +
-    `<a class="tool-link" href="${esc(url)}">` +
-    `<span class="tool-num" aria-hidden="true">${num}</span>` +
-    `<h3 class="tool-name" style="--n:${n}">` +
-    `<span class="tool-name-main">${esc(main)}${ornament(index)}</span>` +
-    (sub ? ` <span class="tool-name-sub">${esc(sub)}</span>` : '') +
-    `</h3>` +
-    `<p class="tool-blurb">${esc(short)}</p>` +
-    `<span class="tool-arrow" aria-hidden="true">${ARROW}</span>` +
+    `<li class="tcard">` +
+    `<a class="tcard-link" href="${esc(url)}">` +
+    `<span class="tcard-top">` +
+    `<span class="tcard-ico">${icon(item.id)}</span>` +
+    `<span class="tcard-meta">` +
+    (item.category ? `<span class="tcard-tag">${esc(item.category)}</span>` : '') +
+    (mins ? `<span class="tcard-time">${esc(mins[1])} min</span>` : '') +
+    `</span></span>` +
+    `<h3 class="tcard-title">${esc(title)}</h3>` +
+    `<p class="tcard-desc">${esc(short)}</p>` +
+    `<span class="tcard-cta">Open tool<span class="tcard-arrow">${ARROW}</span></span>` +
     `</a></li>`
   );
 }
