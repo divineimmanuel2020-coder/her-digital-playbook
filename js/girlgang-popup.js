@@ -43,6 +43,10 @@ export function initGirlGangPopup() {
   const overlay = document.getElementById('girlgang-popup-overlay');
   if (!overlay) return;
 
+  // Never interrupt the trust pages, the 404 page or the invite page itself.
+  const QUIET_PAGES = /^\/(pages\/(about|contact|privacy|terms|404|article)\.html|join-our-girl-gang(\.html)?)\/?$/;
+  if (QUIET_PAGES.test(window.location.pathname)) { overlay.hidden = true; return; }
+
   const closeBtn = document.getElementById('girlgang-popup-close');
   const dismissBtn = document.getElementById('girlgang-popup-dismiss');
   const cta = document.getElementById('girlgang-popup-cta');
@@ -83,8 +87,18 @@ export function initGirlGangPopup() {
   // even if the popup is already open in this same session.
   window.addEventListener('hdp:subscribed', hidePopup);
 
+  // Homepage: a few seconds after the splash. Articles: only once the reader
+  // is really reading (40% down the page, or one minute on it).
   function scheduleShow() {
-    window.setTimeout(showPopup, SHOW_DELAY_MS);
+    if (hasSplash) { window.setTimeout(showPopup, 8000); return; }
+    let shown = false;
+    const go = () => { if (shown) return; shown = true; window.removeEventListener('scroll', onScroll); showPopup(); };
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0 && window.scrollY / max >= 0.4) go();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.setTimeout(go, 60000);
   }
 
   // Only the homepage has a splash screen — article pages and static

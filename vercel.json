@@ -535,5 +535,16 @@
       "source": "/90-day-plan-to-build-your-first-online-income-stream",
       "destination": "/blog/90-day-plan-to-build-your-first-online-income-stream.html"
     }
+  ],
+  "headers": [
+    {
+      "source": "/pinterest-665e5.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
   ]
 }

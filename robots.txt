@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /pinterest-665e5.html
 
 User-agent: Mediapartners-Google
 Allow: /

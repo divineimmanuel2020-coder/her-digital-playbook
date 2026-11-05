@@ -225,7 +225,7 @@ ${FONTS}
 <link rel="stylesheet" href="${up}css/style.css">
 <link rel="stylesheet" href="${up}css/animations.css">
 <link rel="stylesheet" href="${up}css/responsive.css">
-${ADSENSE}
+${item.type === 'tool' ? '' : ADSENSE}
 <script type="application/ld+json">${jsonForScript(schema)}</script>
 </head>
 <body>
@@ -347,7 +347,7 @@ ${GA}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, follow">
 <link rel="icon" type="image/png" href="${ICON}">
 <link rel="apple-touch-icon" href="${ICON}">
 <meta property="og:site_name" content="Her Digital Playbook">
