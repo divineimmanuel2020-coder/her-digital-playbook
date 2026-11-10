@@ -22,6 +22,7 @@ export function optimizeImages(scope = document) {
   const cardImgs = scope.querySelectorAll('.card-img img');
 
   scope.querySelectorAll('img').forEach((img) => {
+    if (img.closest('.feed-cover')) return; // homepage covers load straight away (set in the card markup)
     const isPriority = img.closest('.hero-img, .splash-logo-img, .logo') || img.classList.contains('hero-img');
     // The first 3 cards of each visible grid are on-screen without
     // scrolling on most devices, so they load eagerly too — only cards

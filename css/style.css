@@ -5585,3 +5585,84 @@ html.has-progress .hdr-progress { opacity: 1; }
 .newsletter { padding-top: 0; padding-bottom: 0; }
 section.pg-teaser.pgh { padding-bottom: 1.5rem; }
 body:has(#newsletter) footer.footer { padding-top: 2.5rem; }
+
+/* =============================================================
+   LOOK UPDATE — colourful Free Tools cards + faster-feeling feed images
+   ============================================================= */
+
+/* ---- Free Tools: rich colour cards instead of plain white ---- */
+.tcard { --c1: #e8458f; --c2: #b81d5c; --glow: rgba(184, 29, 92, .45); }
+.tcard:nth-child(6n+2) { --c1: #b8409a; --c2: #6f1d66; --glow: rgba(111, 29, 102, .45); }
+.tcard:nth-child(6n+3) { --c1: #f2677e; --c2: #c2285a; --glow: rgba(194, 40, 90, .45); }
+.tcard:nth-child(6n+4) { --c1: #d0348c; --c2: #8c1561; --glow: rgba(140, 21, 97, .45); }
+.tcard:nth-child(6n+5) { --c1: #b32358; --c2: #5e1242; --glow: rgba(94, 18, 66, .45); }
+.tcard:nth-child(6n+6) { --c1: #c4479e; --c2: #7c2b7b; --glow: rgba(124, 43, 123, .45); }
+
+.tcard-link {
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(145deg, var(--c1) 0%, var(--c2) 100%);
+  border: 1px solid rgba(255, 255, 255, .22);
+  box-shadow: 0 14px 30px -14px var(--glow), inset 0 1px 0 rgba(255, 255, 255, .28);
+}
+/* soft light in the corner + a faint ring, for depth */
+.tcard-link::before {
+  content: "";
+  position: absolute;
+  inset: auto;
+  top: -60px; right: -50px; left: auto;
+  width: 190px; height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 68%);
+  opacity: 1;
+  pointer-events: none;
+}
+.tcard-link::after {
+  content: "";
+  position: absolute;
+  bottom: -70px; left: -40px;
+  width: 170px; height: 170px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .16);
+  box-shadow: 0 0 0 26px rgba(255, 255, 255, .04);
+  pointer-events: none;
+}
+.tcard-link:hover, .tcard-link:focus-visible {
+  border-color: rgba(255, 255, 255, .5);
+  box-shadow: 0 22px 40px -14px var(--glow), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.tcard-link:hover::before, .tcard-link:focus-visible::before { opacity: 1; }
+.tcard-link:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+.tcard-top, .tcard-title, .tcard-desc, .tcard-cta { position: relative; z-index: 1; }
+
+.tcard-ico {
+  color: #fff;
+  background: rgba(255, 255, 255, .18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.tcard-tag { color: #fff; background: rgba(255, 255, 255, .20); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+.tcard-time { color: rgba(255, 255, 255, .86); }
+.tcard-time::before { color: rgba(255, 255, 255, .55); }
+.tcard-title { color: #fff; text-shadow: 0 1px 2px rgba(60, 10, 40, .18); }
+.tcard-desc { color: rgba(255, 255, 255, .94); }
+
+.tcard-cta {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 11px 16px;
+  border-radius: 999px;
+  color: var(--c2);
+  background: #fff;
+  box-shadow: 0 8px 18px -8px rgba(40, 0, 25, .5);
+}
+.tcard-link { padding-bottom: 20px; }
+.tcard-desc { margin-bottom: 20px; }
+
+/* ---- Homepage article covers: no waiting on the fade ---- */
+@media (scripting: enabled) {
+  .feed-cover img { animation-delay: 1.5s; }
+  .feed-cover.is-loaded img { transition-duration: .18s; }
+}

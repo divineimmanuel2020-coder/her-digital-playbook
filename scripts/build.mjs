@@ -275,7 +275,7 @@ function storyCard(item) {
 }
 
 /* Homepage masonry feed card: cover, title, description, reading time. */
-function feedCard(item) {
+function feedCard(item, index = 0) {
   const url = itemPath(item);
   const L = 'feed card template';
   const image = feedImage(item.image);
@@ -283,7 +283,7 @@ function feedCard(item) {
   let h = FEED_TPL;
   h = must(h, '<article class="feed-card" data-category="">', `<article class="feed-card" data-category="${esc(item.category || '')}">`, L);
   h = must(h, '<a class="feed-link" href="#">', `<a class="feed-link" href="${url}">`, L);
-  h = must(h, '<img src="" alt="">', `<img src="${esc(image.src)}"${responsive} alt="${esc(item.title)}" loading="lazy" decoding="async">`, L);
+  h = must(h, '<img src="" alt="">', `<img src="${esc(image.src)}"${responsive} alt="${esc(item.title)}" loading="eager" fetchpriority="${index < 8 ? 'high' : 'low'}" decoding="async">`, L);
   h = must(h, '<h3 class="feed-title"></h3>', `<h3 class="feed-title">${esc(item.title)}</h3>`, L);
   h = must(h, '<p class="feed-desc"></p>', item.excerpt ? `<p class="feed-desc">${esc(item.excerpt)}</p>` : '', L);
   h = must(h, '<span class="feed-time"></span>', `<span class="feed-time">${esc(readingTime(item))}</span>`, L);

@@ -52,7 +52,7 @@ function fillFeedCard(item) {
     img.sizes = image.sizes;
   }
   img.alt = item.title;
-  img.loading = 'lazy';
+  img.loading = 'eager';
   img.decoding = 'async';
   card.dataset.category = item.category || '';
   card.querySelector('.feed-link').href = detailUrl;
