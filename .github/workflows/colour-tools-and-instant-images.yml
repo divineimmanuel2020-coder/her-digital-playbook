@@ -1,0 +1,126 @@
+# One-click: (1) colourful Free Tools cards on the homepage, (2) homepage article images that
+# load straight away and are pre-warmed on the image server.
+# How to run it: GitHub repo -> Actions tab -> "Colour tools and instant images" -> Run workflow.
+# Only the look and the image loading change. The tools and articles themselves are untouched.
+# It rebuilds every page, checks the result, and only then saves the change.
+name: Colour tools and instant images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  look:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply the changes and rebuild the site
+        run: |
+          cat > "$RUNNER_TEMP/payload.b64" <<'B64EOF'
+          aW1wb3J0IG9zLCByZSwgc3lzCgpkZWYgcmQocCk6CiAgICB3aXRoIG9wZW4ocCwgZW5jb2Rpbmc9J3V0ZjgnKSBhcyBmOiByZXR1
+          cm4gZi5yZWFkKCkKZGVmIHdyKHAsIHMpOgogICAgd2l0aCBvcGVuKHAsICd3JywgZW5jb2Rpbmc9J3V0ZjgnLCBuZXdsaW5lPScn
+          KSBhcyBmOiBmLndyaXRlKHMpCmRlZiBzdWIocGF0aCwgb2xkLCBuZXcpOgogICAgcyA9IHJkKHBhdGgpCiAgICBhc3NlcnQgcy5j
+          b3VudChvbGQpID09IDEsIGYie3BhdGh9OiBleHBlY3RlZCBleGFjdGx5IG9uZSBtYXRjaCBmb3Ige29sZFs6NzBdIXJ9LCBmb3Vu
+          ZCB7cy5jb3VudChvbGQpfSIKICAgIHdyKHBhdGgsIHMucmVwbGFjZShvbGQsIG5ldykpCgpMT09LX0NTUyA9ICIiIgoKLyogPT09
+          PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICBMT09LIFVQREFURSDi
+          gJQgY29sb3VyZnVsIEZyZWUgVG9vbHMgY2FyZHMgKyBmYXN0ZXItZmVlbGluZyBmZWVkIGltYWdlcwogICA9PT09PT09PT09PT09
+          PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ICovCgovKiAtLS0tIEZyZWUgVG9vbHM6IHJp
+          Y2ggY29sb3VyIGNhcmRzIGluc3RlYWQgb2YgcGxhaW4gd2hpdGUgLS0tLSAqLwoudGNhcmQgeyAtLWMxOiAjZTg0NThmOyAtLWMy
+          OiAjYjgxZDVjOyAtLWdsb3c6IHJnYmEoMTg0LCAyOSwgOTIsIC40NSk7IH0KLnRjYXJkOm50aC1jaGlsZCg2bisyKSB7IC0tYzE6
+          ICNiODQwOWE7IC0tYzI6ICM2ZjFkNjY7IC0tZ2xvdzogcmdiYSgxMTEsIDI5LCAxMDIsIC40NSk7IH0KLnRjYXJkOm50aC1jaGls
+          ZCg2biszKSB7IC0tYzE6ICNmMjY3N2U7IC0tYzI6ICNjMjI4NWE7IC0tZ2xvdzogcmdiYSgxOTQsIDQwLCA5MCwgLjQ1KTsgfQou
+          dGNhcmQ6bnRoLWNoaWxkKDZuKzQpIHsgLS1jMTogI2QwMzQ4YzsgLS1jMjogIzhjMTU2MTsgLS1nbG93OiByZ2JhKDE0MCwgMjEs
+          IDk3LCAuNDUpOyB9Ci50Y2FyZDpudGgtY2hpbGQoNm4rNSkgeyAtLWMxOiAjYjMyMzU4OyAtLWMyOiAjNWUxMjQyOyAtLWdsb3c6
+          IHJnYmEoOTQsIDE4LCA2NiwgLjQ1KTsgfQoudGNhcmQ6bnRoLWNoaWxkKDZuKzYpIHsgLS1jMTogI2M0NDc5ZTsgLS1jMjogIzdj
+          MmI3YjsgLS1nbG93OiByZ2JhKDEyNCwgNDMsIDEyMywgLjQ1KTsgfQoKLnRjYXJkLWxpbmsgewogIG92ZXJmbG93OiBoaWRkZW47
+          CiAgY29sb3I6ICNmZmY7CiAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDE0NWRlZywgdmFyKC0tYzEpIDAlLCB2YXIoLS1j
+          MikgMTAwJSk7CiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyNTUsIDI1NSwgMjU1LCAuMjIpOwogIGJveC1zaGFkb3c6IDAgMTRw
+          eCAzMHB4IC0xNHB4IHZhcigtLWdsb3cpLCBpbnNldCAwIDFweCAwIHJnYmEoMjU1LCAyNTUsIDI1NSwgLjI4KTsKfQovKiBzb2Z0
+          IGxpZ2h0IGluIHRoZSBjb3JuZXIgKyBhIGZhaW50IHJpbmcsIGZvciBkZXB0aCAqLwoudGNhcmQtbGluazo6YmVmb3JlIHsKICBj
+          b250ZW50OiAiIjsKICBwb3NpdGlvbjogYWJzb2x1dGU7CiAgaW5zZXQ6IGF1dG87CiAgdG9wOiAtNjBweDsgcmlnaHQ6IC01MHB4
+          OyBsZWZ0OiBhdXRvOwogIHdpZHRoOiAxOTBweDsgaGVpZ2h0OiAxOTBweDsKICBib3JkZXItcmFkaXVzOiA1MCU7CiAgYmFja2dy
+          b3VuZDogcmFkaWFsLWdyYWRpZW50KGNpcmNsZSBhdCAzNSUgMzUlLCByZ2JhKDI1NSwgMjU1LCAyNTUsIC4zMCksIHJnYmEoMjU1
+          LCAyNTUsIDI1NSwgMCkgNjglKTsKICBvcGFjaXR5OiAxOwogIHBvaW50ZXItZXZlbnRzOiBub25lOwp9Ci50Y2FyZC1saW5rOjph
+          ZnRlciB7CiAgY29udGVudDogIiI7CiAgcG9zaXRpb246IGFic29sdXRlOwogIGJvdHRvbTogLTcwcHg7IGxlZnQ6IC00MHB4Owog
+          IHdpZHRoOiAxNzBweDsgaGVpZ2h0OiAxNzBweDsKICBib3JkZXItcmFkaXVzOiA1MCU7CiAgYm9yZGVyOiAxcHggc29saWQgcmdi
+          YSgyNTUsIDI1NSwgMjU1LCAuMTYpOwogIGJveC1zaGFkb3c6IDAgMCAwIDI2cHggcmdiYSgyNTUsIDI1NSwgMjU1LCAuMDQpOwog
+          IHBvaW50ZXItZXZlbnRzOiBub25lOwp9Ci50Y2FyZC1saW5rOmhvdmVyLCAudGNhcmQtbGluazpmb2N1cy12aXNpYmxlIHsKICBi
+          b3JkZXItY29sb3I6IHJnYmEoMjU1LCAyNTUsIDI1NSwgLjUpOwogIGJveC1zaGFkb3c6IDAgMjJweCA0MHB4IC0xNHB4IHZhcigt
+          LWdsb3cpLCBpbnNldCAwIDFweCAwIHJnYmEoMjU1LCAyNTUsIDI1NSwgLjM1KTsKfQoudGNhcmQtbGluazpob3Zlcjo6YmVmb3Jl
+          LCAudGNhcmQtbGluazpmb2N1cy12aXNpYmxlOjpiZWZvcmUgeyBvcGFjaXR5OiAxOyB9Ci50Y2FyZC1saW5rOmZvY3VzLXZpc2li
+          bGUgeyBvdXRsaW5lOiAycHggc29saWQgI2ZmZjsgb3V0bGluZS1vZmZzZXQ6IDNweDsgfQoKLnRjYXJkLXRvcCwgLnRjYXJkLXRp
+          dGxlLCAudGNhcmQtZGVzYywgLnRjYXJkLWN0YSB7IHBvc2l0aW9uOiByZWxhdGl2ZTsgei1pbmRleDogMTsgfQoKLnRjYXJkLWlj
+          byB7CiAgY29sb3I6ICNmZmY7CiAgYmFja2dyb3VuZDogcmdiYSgyNTUsIDI1NSwgMjU1LCAuMTgpOwogIGJveC1zaGFkb3c6IGlu
+          c2V0IDAgMCAwIDFweCByZ2JhKDI1NSwgMjU1LCAyNTUsIC4zNSk7CiAgLXdlYmtpdC1iYWNrZHJvcC1maWx0ZXI6IGJsdXIoNHB4
+          KTsKICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoNHB4KTsKfQoudGNhcmQtdGFnIHsgY29sb3I6ICNmZmY7IGJhY2tncm91bmQ6IHJn
+          YmEoMjU1LCAyNTUsIDI1NSwgLjIwKTsgYm94LXNoYWRvdzogaW5zZXQgMCAwIDAgMXB4IHJnYmEoMjU1LCAyNTUsIDI1NSwgLjI4
+          KTsgfQoudGNhcmQtdGltZSB7IGNvbG9yOiByZ2JhKDI1NSwgMjU1LCAyNTUsIC44Nik7IH0KLnRjYXJkLXRpbWU6OmJlZm9yZSB7
+          IGNvbG9yOiByZ2JhKDI1NSwgMjU1LCAyNTUsIC41NSk7IH0KLnRjYXJkLXRpdGxlIHsgY29sb3I6ICNmZmY7IHRleHQtc2hhZG93
+          OiAwIDFweCAycHggcmdiYSg2MCwgMTAsIDQwLCAuMTgpOyB9Ci50Y2FyZC1kZXNjIHsgY29sb3I6IHJnYmEoMjU1LCAyNTUsIDI1
+          NSwgLjk0KTsgfQoKLnRjYXJkLWN0YSB7CiAgYWxpZ24tc2VsZjogZmxleC1zdGFydDsKICBtYXJnaW4tdG9wOiBhdXRvOwogIHBh
+          ZGRpbmc6IDExcHggMTZweDsKICBib3JkZXItcmFkaXVzOiA5OTlweDsKICBjb2xvcjogdmFyKC0tYzIpOwogIGJhY2tncm91bmQ6
+          ICNmZmY7CiAgYm94LXNoYWRvdzogMCA4cHggMThweCAtOHB4IHJnYmEoNDAsIDAsIDI1LCAuNSk7Cn0KLnRjYXJkLWxpbmsgeyBw
+          YWRkaW5nLWJvdHRvbTogMjBweDsgfQoudGNhcmQtZGVzYyB7IG1hcmdpbi1ib3R0b206IDIwcHg7IH0KCi8qIC0tLS0gSG9tZXBh
+          Z2UgYXJ0aWNsZSBjb3ZlcnM6IG5vIHdhaXRpbmcgb24gdGhlIGZhZGUgLS0tLSAqLwpAbWVkaWEgKHNjcmlwdGluZzogZW5hYmxl
+          ZCkgewogIC5mZWVkLWNvdmVyIGltZyB7IGFuaW1hdGlvbi1kZWxheTogMS41czsgfQogIC5mZWVkLWNvdmVyLmlzLWxvYWRlZCBp
+          bWcgeyB0cmFuc2l0aW9uLWR1cmF0aW9uOiAuMThzOyB9Cn0KIiIiCgpmb3IgbmVlZCBpbiAoJ2Nzcy9zdHlsZS5jc3MnLCAnc2Ny
+          aXB0cy9idWlsZC5tanMnLCAnanMvcmVuZGVyLmpzJywgJ2pzL2ltYWdlcy5qcycpOgogICAgaWYgbm90IG9zLnBhdGguZXhpc3Rz
+          KG5lZWQpOgogICAgICAgIHN5cy5leGl0KGYie25lZWR9IGlzIG1pc3NpbmcuIFRoaXMgZG9lcyBub3QgbG9vayBsaWtlIHRoZSBz
+          aXRlIGZvbGRlci4gTm90aGluZyBjaGFuZ2VkLiIpCgojIDEuIEhvbWVwYWdlIGFydGljbGUgY292ZXJzOiBldmVyeSBjb3ZlciBz
+          dGFydHMgZG93bmxvYWRpbmcgc3RyYWlnaHQgYXdheQpiID0gcmQoJ3NjcmlwdHMvYnVpbGQubWpzJykKaWYgJ2ZldGNocHJpb3Jp
+          dHknIG5vdCBpbiBiLnNwbGl0KCdmdW5jdGlvbiBmZWVkQ2FyZCcpWzFdLnNwbGl0KCdmdW5jdGlvbiB0b29sQ2FyZCcpWzBdOgog
+          ICAgc3ViKCdzY3JpcHRzL2J1aWxkLm1qcycsICdmdW5jdGlvbiBmZWVkQ2FyZChpdGVtKSB7JywgJ2Z1bmN0aW9uIGZlZWRDYXJk
+          KGl0ZW0sIGluZGV4ID0gMCkgeycpCiAgICBzdWIoJ3NjcmlwdHMvYnVpbGQubWpzJywKICAgICAgICAnYWx0PSIke2VzYyhpdGVt
+          LnRpdGxlKX0iIGxvYWRpbmc9ImxhenkiIGRlY29kaW5nPSJhc3luYyI+YCwgTCk7XG4gIGggPSBtdXN0KGgsIFwnPGgzIGNsYXNz
+          PSJmZWVkLXRpdGxlIj48L2gzPlwnJywKICAgICAgICAnYWx0PSIke2VzYyhpdGVtLnRpdGxlKX0iIGxvYWRpbmc9ImVhZ2VyIiBm
+          ZXRjaHByaW9yaXR5PSIke2luZGV4IDwgOCA/IFwnaGlnaFwnIDogXCdsb3dcJ30iIGRlY29kaW5nPSJhc3luYyI+YCwgTCk7XG4g
+          IGggPSBtdXN0KGgsIFwnPGgzIGNsYXNzPSJmZWVkLXRpdGxlIj48L2gzPlwnJykKciA9IHJkKCdqcy9yZW5kZXIuanMnKQppZiAi
+          aW1nLmxvYWRpbmcgPSAnbGF6eSc7XG4gIGltZy5kZWNvZGluZyA9ICdhc3luYyc7XG4gIGNhcmQuZGF0YXNldC5jYXRlZ29yeSIg
+          aW4gcjoKICAgIHdyKCdqcy9yZW5kZXIuanMnLCByLnJlcGxhY2UoImltZy5sb2FkaW5nID0gJ2xhenknO1xuICBpbWcuZGVjb2Rp
+          bmcgPSAnYXN5bmMnO1xuICBjYXJkLmRhdGFzZXQuY2F0ZWdvcnkiLCAiaW1nLmxvYWRpbmcgPSAnZWFnZXInO1xuICBpbWcuZGVj
+          b2RpbmcgPSAnYXN5bmMnO1xuICBjYXJkLmRhdGFzZXQuY2F0ZWdvcnkiKSkKCiMgMi4gaW1hZ2VzLmpzIG11c3Qgbm90IHR1cm4g
+          dGhlIGNvdmVycyBiYWNrIGludG8gbGF6eSBpbWFnZXMKaW0gPSByZCgnanMvaW1hZ2VzLmpzJykKaWYgImNsb3Nlc3QoJy5mZWVk
+          LWNvdmVyJykpIHJldHVybjsiIG5vdCBpbiBpbToKICAgIHN1YignanMvaW1hZ2VzLmpzJywgIiAgc2NvcGUucXVlcnlTZWxlY3Rv
+          ckFsbCgnaW1nJykuZm9yRWFjaCgoaW1nKSA9PiB7XG4iLCAiICBzY29wZS5xdWVyeVNlbGVjdG9yQWxsKCdpbWcnKS5mb3JFYWNo
+          KChpbWcpID0+IHtcbiAgICBpZiAoaW1nLmNsb3Nlc3QoJy5mZWVkLWNvdmVyJykpIHJldHVybjsgLy8gaG9tZXBhZ2UgY292ZXJz
+          IGxvYWQgc3RyYWlnaHQgYXdheSAoc2V0IGluIHRoZSBjYXJkIG1hcmt1cClcbiIpCgojIDMuIENTUwpjc3MgPSByZCgnY3NzL3N0
+          eWxlLmNzcycpCmlmICdMT09LIFVQREFURScgbm90IGluIGNzczoKICAgIHdyKCdjc3Mvc3R5bGUuY3NzJywgY3NzLnJzdHJpcCgn
+          XG4nKSArIExPT0tfQ1NTKQpwcmludCgiYWxsIGVkaXRzIGFwcGxpZWQiKQo=
+          B64EOF
+          base64 -d "$RUNNER_TEMP/payload.b64" > "$RUNNER_TEMP/apply_look.py"
+          python3 "$RUNNER_TEMP/apply_look.py"
+          node scripts/build.mjs
+          node scripts/build.mjs --check
+          node scripts/check.mjs
+
+      - name: Save the change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Colourful Free Tools cards; homepage article covers load immediately" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" -m "Claude-Session: https://claude.ai/code/session_019wdJh4dHRdhsVKkvt3fTsH"
+            git push
+          fi
+
+      - name: Pre-warm the article images
+        continue-on-error: true
+        run: |
+          # The image host makes each size the first time anyone asks for it, which is the slow part.
+          # Ask for every homepage size once now, so real visitors get them instantly.
+          grep -oE 'https://res\.cloudinary\.com/[^" ]+' index.html | sort -u > "$RUNNER_TEMP/img-urls.txt"
+          echo "Warming $(wc -l < "$RUNNER_TEMP/img-urls.txt") image links"
+          for accept in "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" "image/webp,image/*,*/*;q=0.8"; do
+            xargs -P 6 -I{} curl -s -o /dev/null -m 90 -w "%{http_code} {}\n" -H "Accept: $accept" {} < "$RUNNER_TEMP/img-urls.txt" | awk '{print $1}' | sort | uniq -c
+          done
